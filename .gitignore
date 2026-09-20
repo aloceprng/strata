@@ -1,7 +1,6 @@
-# Generated artifacts — rebuilt by tools/build_tokens.py
 /dist/
 
-# Secrets — .env.example is committed, .env never is
+# .env
 .env
 .env.*
 !.env.example
@@ -19,6 +18,8 @@ node_modules/
 .next/
 out/
 .env*.local
+frontend/AGENTS.md
+frontend/CLAUDE.md
 
 # OS / editor
 .DS_Store
