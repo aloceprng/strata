@@ -12,22 +12,11 @@ from strata_core import StrataError, resolve_document
 
 from ...models import Brand, TokenSet
 
+# sector and principle not decided yet
 BRANDS = {
-    "croftwell": {
-        "name": "Croftwell",
-        "sector": "Grocery",
-        "principle": "Density is a feature; never trade information for elegance.",
-    },
-    "halden": {
-        "name": "Halden & Co.",
-        "sector": "Apparel",
-        "principle": "One action per screen, unmissable.",
-    },
-    "meridian": {
-        "name": "Meridian Rail",
-        "sector": "Travel",
-        "principle": "Never rush the traveller.",
-    },
+    "clementine": {"name": "Clementine", "sector": "", "principle": ""},
+    "pomelo": {"name": "Pomelo", "sector": "", "principle": ""},
+    "kumquat": {"name": "Kumquat", "sector": "", "principle": ""},
 }
 
 

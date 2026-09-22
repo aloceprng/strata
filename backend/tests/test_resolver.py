@@ -16,9 +16,24 @@ TOKENS_DIR = Path(__file__).resolve().parents[2] / "tokens"
 
 
 @pytest.fixture
-def croftwell():
-    source = TOKENS_DIR / "croftwell.tokens.json"
-    return resolve_document(json.loads(source.read_text(encoding="utf-8")))
+def sample():
+    '''A minimal brand with one token of every kind the emitters care about.'''
+    return resolve_document({
+        "primitive": {
+            "colour": {"$type": "color", "green": {"600": {"$value": "#2f7a3f"}}},
+            "font": {"family": {"$type": "fontFamily", "sans": {
+                "$value": ["Inter", "Helvetica Neue", "Arial", "sans-serif"]}}},
+        },
+        "semantic": {
+            "colour": {"$type": "color", "action": {
+                "bg": {"$value": "{primitive.colour.green.600}"},
+                "border": {"$value": "{semantic.colour.action.bg}"},
+            }},
+            "font": {"body": {"family": {"$type": "fontFamily",
+                                         "$value": "{primitive.font.family.sans}"}}},
+        },
+        "component": {"button": {"variant": {"$type": "string", "$value": "secondary"}}},
+    })
 
 
 class TestReferences:
@@ -149,32 +164,54 @@ class TestParsing:
 
 
 class TestEmitters:
-    def test_semantic_tokens_drop_the_layer_prefix(self, croftwell):
-        assert "--colour-action-bg: #2f7a3f;" in emit_css(croftwell, "croftwell")
+    def test_semantic_tokens_drop_the_layer_prefix(self, sample):
+        assert "--colour-action-bg: #2f7a3f;" in emit_css(sample, "sample")
 
-    def test_primitives_are_namespaced_so_misuse_is_visible(self, croftwell):
-        assert "--p-colour-green-600:" in emit_css(croftwell, "croftwell")
+    def test_primitives_are_namespaced_so_misuse_is_visible(self, sample):
+        assert "--p-colour-green-600:" in emit_css(sample, "sample")
 
-    def test_no_references_survive_resolution(self, croftwell):
-        for token in croftwell.tokens.values():
+    def test_no_references_survive_resolution(self, sample):
+        for token in sample.tokens.values():
             assert "{" not in str(token.value), token.path
 
-    def test_font_family_lists_are_quoted_where_needed(self, croftwell):
-        assert '"Helvetica Neue"' in emit_css(croftwell, "croftwell")
+    def test_font_family_lists_are_quoted_where_needed(self, sample):
+        assert '"Helvetica Neue"' in emit_css(sample, "sample")
 
-    def test_the_brand_can_be_scoped_to_one_column(self, croftwell):
-        assert '[data-brand="croftwell"]' in emit_css(croftwell, "croftwell")
+    def test_the_brand_can_be_scoped_to_one_column(self, sample):
+        assert '[data-brand="sample"]' in emit_css(sample, "sample")
 
-    def test_component_defaults_are_nested_for_consumers(self, croftwell):
-        bundle = json.loads(emit_json(croftwell, "croftwell"))
+    def test_component_defaults_are_nested_for_consumers(self, sample):
+        bundle = json.loads(emit_json(sample, "sample"))
         assert bundle["componentDefaults"]["button"]["variant"] == "secondary"
 
-    def test_the_bundle_is_byte_stable_across_builds(self, croftwell):
+    def test_the_bundle_is_byte_stable_across_builds(self, sample):
         '''No timestamp inside an artifact, or its checksum means nothing.'''
-        assert emit_json(croftwell, "croftwell") == emit_json(croftwell, "croftwell")
+        assert emit_json(sample, "sample") == emit_json(sample, "sample")
 
 
 BRAND_FILES = sorted(TOKENS_DIR.glob("*.tokens.json"))
+
+# The 52 keys in tokens/CONTRACT.md. Change both together.
+REQUIRED_SEMANTIC = {"semantic." + key for key in """
+    colour.surface.page colour.surface.raised colour.surface.sunken
+    colour.text.primary colour.text.secondary colour.text.muted colour.text.inverse
+    colour.action.bg colour.action.bg-hover colour.action.fg colour.action.border
+    colour.secondary.bg colour.secondary.bg-hover colour.secondary.fg colour.secondary.border
+    colour.border.subtle colour.border.default colour.border.strong
+    colour.focus.ring colour.status.danger colour.status.warning
+    space.control.padding-x space.control.padding-y space.control.gap
+    space.stack.gap space.stack.gap-loose space.card.padding space.card.gap space.field.gap
+    radius.control radius.card radius.pill
+    border.control border.card border.divider size.control
+    font.body.family font.body.size font.body.weight font.body.lineheight
+    font.heading.family font.heading.size font.heading.weight font.heading.lineheight
+    font.control.size font.control.weight font.caption.size font.caption.weight
+    motion.control motion.theme elevation.control elevation.card
+""".split()}
+
+
+def test_the_contract_list_has_52_keys():
+    assert len(REQUIRED_SEMANTIC) == 52
 
 
 class TestRealBrandFiles:
@@ -183,7 +220,7 @@ class TestRealBrandFiles:
         resolve_document(json.loads(source.read_text(encoding="utf-8")))
 
     @pytest.mark.parametrize("source", BRAND_FILES, ids=lambda p: p.name)
-    def test_every_brand_defines_the_same_semantic_tokens(self, source, croftwell):
+    def test_every_brand_defines_the_contract_semantic_tokens(self, source):
         '''A component reads one name on every brand, or the demo is a lie.'''
-        other = resolve_document(json.loads(source.read_text(encoding="utf-8")))
-        assert set(croftwell.layer("semantic")) == set(other.layer("semantic"))
+        brand = resolve_document(json.loads(source.read_text(encoding="utf-8")))
+        assert set(brand.layer("semantic")) == REQUIRED_SEMANTIC
