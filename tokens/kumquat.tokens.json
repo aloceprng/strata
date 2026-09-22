@@ -1,0 +1,85 @@
+{
+  "$description": "Kumquat — colour primitives exported from the Figma strata file (scales collection, kumquat mode). Semantic and component tokens not assigned yet.",
+  "primitive": {
+    "colour": {
+      "$type": "color",
+      "neutral": {
+        "100": { "$value": "#f1ece0", "$description": "Base: kumquat/white in Figma primitives" },
+        "200": { "$value": "#cec9c0" },
+        "300": { "$value": "#aba8a0" },
+        "400": { "$value": "#8b8882" },
+        "500": { "$value": "#6b6965" },
+        "600": { "$value": "#4d4b49" },
+        "700": { "$value": "#31302f" },
+        "800": { "$value": "#171718" },
+        "900": { "$value": "#030304", "$description": "Base: kumquat/black in Figma primitives" }
+      },
+      "brand-1": {
+        "100": { "$value": "#eaebfa" },
+        "200": { "$value": "#cdcef4" },
+        "300": { "$value": "#a3a5eb" },
+        "400": { "$value": "#6c70df" },
+        "500": { "$value": "#353bd3" },
+        "600": { "$value": "#262baf" },
+        "700": { "$value": "#1d2185", "$description": "Base: kumquat/blue in Figma primitives" },
+        "800": { "$value": "#14175c" },
+        "900": { "$value": "#0b0c32" }
+      },
+      "brand-2": {
+        "100": { "$value": "#e9f5fb" },
+        "200": { "$value": "#c1e2f4", "$description": "Base: kumquat/light blue in Figma primitives" },
+        "300": { "$value": "#97ceed" },
+        "400": { "$value": "#60b5e3" },
+        "500": { "$value": "#2a9bd9" },
+        "600": { "$value": "#207eb2" },
+        "700": { "$value": "#186088" },
+        "800": { "$value": "#11435e" },
+        "900": { "$value": "#092534" }
+      },
+      "brand-3": {
+        "100": { "$value": "#fdf7e7" },
+        "200": { "$value": "#fae9be" },
+        "300": { "$value": "#f5d583", "$description": "Base: kumquat/yellow in Figma primitives" },
+        "400": { "$value": "#f0c24a" },
+        "500": { "$value": "#e9ad13" },
+        "600": { "$value": "#bd8c0f" },
+        "700": { "$value": "#916c0c" },
+        "800": { "$value": "#654b08" },
+        "900": { "$value": "#392a05" }
+      },
+      "red": {
+        "100": { "$value": "#fbebea" },
+        "200": { "$value": "#f5d0cd" },
+        "300": { "$value": "#ecaaa5" },
+        "400": { "$value": "#e17870" },
+        "500": { "$value": "#d5473b" },
+        "600": { "$value": "#b83227", "$description": "Base: kumquat/red in Figma primitives" },
+        "700": { "$value": "#8b261e" },
+        "800": { "$value": "#5f1a14" },
+        "900": { "$value": "#320e0b" }
+      },
+      "green": {
+        "100": { "$value": "#edf7f1" },
+        "200": { "$value": "#d4ebdc" },
+        "300": { "$value": "#afdbbf" },
+        "400": { "$value": "#7fc598" },
+        "500": { "$value": "#50af72" },
+        "600": { "$value": "#3f8a5a", "$description": "Base: kumquat/green in Figma primitives" },
+        "700": { "$value": "#306a45" },
+        "800": { "$value": "#224a30" },
+        "900": { "$value": "#132a1b" }
+      },
+      "amber": {
+        "100": { "$value": "#fbf5e9" },
+        "200": { "$value": "#f6e6ca" },
+        "300": { "$value": "#eed09e" },
+        "400": { "$value": "#e3b565" },
+        "500": { "$value": "#d9992b", "$description": "Base: kumquat/amber in Figma primitives" },
+        "600": { "$value": "#b27520" },
+        "700": { "$value": "#885418" },
+        "800": { "$value": "#5e3611" },
+        "900": { "$value": "#341c09" }
+      }
+    }
+  }
+}
