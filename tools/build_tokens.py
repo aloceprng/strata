@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
     python tools/build_tokens.py                 # every brand, to dist/
-    python tools/build_tokens.py croftwell       # one brand
+    python tools/build_tokens.py clementine      # one brand
     python tools/build_tokens.py --version v2    # write dist/<brand>/v2/ too
 """
 

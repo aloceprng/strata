@@ -4,14 +4,15 @@
     "colour": {
       "$type": "color",
       "neutral": {
-        "100": { "$value": "#edfafe", "$description": "Base: clementine/white in Figma primitives" },
-        "200": { "$value": "#d1dbdb" },
-        "300": { "$value": "#b5bcb9" },
-        "400": { "$value": "#9b9f98" },
-        "500": { "$value": "#818278" },
-        "600": { "$value": "#68675a" },
-        "700": { "$value": "#4f4c3d" },
-        "800": { "$value": "#393321" },
+        "0": { "$value": "#ffffff" },
+        "100": { "$value": "#f5f5f5", "$description": "Base: clementine/white in Figma primitives" },
+        "200": { "$value": "#d8d6d3" },
+        "300": { "$value": "#bbb9b3" },
+        "400": { "$value": "#9f9c93" },
+        "500": { "$value": "#848074" },
+        "600": { "$value": "#6a6557" },
+        "700": { "$value": "#514b3b" },
+        "800": { "$value": "#393320" },
         "900": { "$value": "#231c07", "$description": "Base: clementine/black in Figma primitives" }
       },
       "brand-1": {

@@ -154,7 +154,9 @@ because pure-hue dark yellows go olive.
 
 How these differ from the table above, all still open:
 
-- **No `0` or `50`.** `neutral.100` is the brand's own white, not `#ffffff`.
+- **`0` but no `50`.** `neutral.0` is pure `#ffffff`, for surfaces that sit on
+  the page; `neutral.100` is the brand's own white and aliases its Figma
+  primitive. There is no `50` step.
 - **`green` has no semantic key.** `red` and `amber` map to `status.danger`
   and `status.warning`; there is no `status.success` to receive `green`. It
   stays a primitive until one is added to every brand.

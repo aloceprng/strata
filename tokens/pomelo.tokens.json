@@ -4,6 +4,7 @@
     "colour": {
       "$type": "color",
       "neutral": {
+        "0": { "$value": "#ffffff" },
         "100": { "$value": "#f1f1f1", "$description": "Base: pomelo/white in Figma primitives" },
         "200": { "$value": "#dcd7d2" },
         "300": { "$value": "#c7bdb4" },
