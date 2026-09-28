@@ -1,6 +1,6 @@
 # The token contract
 
-**Semantic tokens are a contract.** Every brand defines *exactly* these 52 keys —
+**Semantic tokens are a contract.** Every brand defines *exactly* these 55 keys —
 different values, identical names. A component asks for `--colour-action-bg`; a
 brand that omits it renders that component wrong on that brand alone.
 `test_every_brand_defines_the_contract_semantic_tokens` asserts this against
@@ -23,7 +23,7 @@ devtools instead of invisible.
 
 ## Semantic — required
 
-### Colour — 21
+### Colour — 22
 
 | Token | Figma type | Purpose |
 | --- | --- | --- |
@@ -34,6 +34,7 @@ devtools instead of invisible.
 | `colour.text.secondary` | COLOR | Supporting text, field labels |
 | `colour.text.muted` | COLOR | Captions, placeholders |
 | `colour.text.inverse` | COLOR | Text on a filled action surface |
+| `colour.text.accent` | COLOR | Numbers, prices, captions and inline links |
 | `colour.action.bg` | COLOR | Primary button fill |
 | `colour.action.bg-hover` | COLOR | Primary button hover |
 | `colour.action.fg` | COLOR | Primary button label |
@@ -74,7 +75,7 @@ devtools instead of invisible.
 | `border.divider` | FLOAT | Rule width |
 | `size.control` | FLOAT | Minimum button and input height |
 
-### Type — 12
+### Type — 14
 
 | Token | Figma type | Purpose |
 | --- | --- | --- |
@@ -82,10 +83,12 @@ devtools instead of invisible.
 | `font.body.size` | FLOAT | Body size — the brand's base |
 | `font.body.weight` | FLOAT | Usually 400 |
 | `font.body.lineheight` | FLOAT | Unitless, e.g. 1.4 |
+| `font.body.tracking` | FLOAT | Letter spacing, percent in Figma, `em` in the files |
 | `font.heading.family` | STRING | Heading typeface; may differ from body |
 | `font.heading.size` | FLOAT | Heading size |
 | `font.heading.weight` | FLOAT | 600 / 700 / 900 |
 | `font.heading.lineheight` | FLOAT | Unitless, tighter than body |
+| `font.heading.tracking` | FLOAT | Letter spacing, percent in Figma, `em` in the files |
 | `font.control.size` | FLOAT | Button and input label |
 | `font.control.weight` | FLOAT | Usually 500–700 |
 | `font.caption.size` | FLOAT | Captions, helper text |
@@ -116,20 +119,22 @@ they are read from `tokens.json`, not from `theme.css`.
 
 ## Primitives — shape required
 
-Roughly 50 per brand. Coverage is what matters.
+104 per brand. Every brand has the same primitive names, so one Figma
+collection can hold all three as modes.
 
 | Group | Count | Notes |
 | --- | --- | --- |
-| Neutral ramp | ~8 | `0, 50, 100, 200, 300, 500, 700, 900` |
-| Brand accent ramp | ~6 | Needs a base, a hover one step darker, and two tints |
-| Status hues | 4 | danger / warning, each a 600 and a 50 |
-| Space scale | 8 | From the base unit — 4px or 8px — then multiples |
+| Neutral ramp | 10 | `0` (pure white), then `100`–`900` |
+| Brand ramps | 27 | `brand-1`, `brand-2`, `brand-3`, each `100`–`900` |
+| Status ramps | 27 | `red`, `green`, `amber`, each `100`–`900` |
+| Space scale | 11 | 4px base: `0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 14` |
 | Radius scale | 5 | `none, sm, md, lg, full` |
-| Sizes | 2 | Control height, border width |
-| Font families | 1–2 | One if the brand pairs by weight, two if headings differ |
-| Font sizes | 7 | `xs` → `2xl`, generated from the brand's ratio |
-| Font weights | 4 | regular, medium, semibold, bold |
-| Line heights | 2 | tight, normal |
+| Sizes | 2 | `control`, `border` |
+| Font family | 1 | `sans`, with a `sans-serif` fallback |
+| Font sizes | 7 | `xs` → `2xl` |
+| Font weights | 5 | light, regular, medium, semibold, bold |
+| Line heights | 3 | display, tight, normal |
+| Letter spacing | 4 | display, heading, body, wide |
 | Durations | 2 | fast, base |
 
 ### Clementine, Pomelo, Kumquat
@@ -152,7 +157,21 @@ Ramps keep the base colour's HSL hue and saturation and vary lightness only. The
 exception is `amber`: steps below the base drift 3° per step toward orange,
 because pure-hue dark yellows go olive.
 
-How these differ from the table above, all still open:
+Semantic values were taken from the final screens on the Figma "example screens"
+page. Where the brands differ most:
+
+| | Clementine | Pomelo | Kumquat |
+| --- | --- | --- | --- |
+| Font | Inter | DM Sans | Inter |
+| Heading | 40px, 700, −2.5% | 104px, 700, −5% | 128px, 300, −3.5% |
+| `colour.action.bg` / `fg` | `brand-1.600` / `neutral.0` | `brand-1.500` / `neutral.900` | `brand-1.800` / `brand-3.300` |
+| `colour.text.accent` | `brand-1.700` | `brand-2.600` | `brand-1.800` |
+| `radius.control` / `radius.card` | 9999px / 20px | 4px / 0px | 12px / 10px |
+| `size.control` | 44px | 52px | 56px |
+| `elevation.card` | soft shadow | none | none |
+| `component.card.elevation` | raised | flat | flat |
+
+Still open:
 
 - **`0` but no `50`.** `neutral.0` is pure `#ffffff`, for surfaces that sit on
   the page; `neutral.100` is the brand's own white and aliases its Figma
@@ -160,11 +179,17 @@ How these differ from the table above, all still open:
 - **`green` has no semantic key.** `red` and `amber` map to `status.danger`
   and `status.warning`; there is no `status.success` to receive `green`. It
   stays a primitive until one is added to every brand.
-- **No space, radius, size, font or duration primitives yet.** They are needed
-  before the 52 semantic keys can be assigned.
-- **No semantic or component tokens yet**, so
-  `test_every_brand_defines_the_same_semantic_tokens` fails for all three
-  until they are written. That failure is expected until then.
+- **Kumquat uses four surface and ink pairings.** The semantic tokens hold the
+  yellow plan pairing. Results (light blue), ticket (cream) and on board (navy)
+  need either a mode per pairing or a page-level override of
+  `colour.surface.page`, `colour.text.primary`, `colour.action.bg` and
+  `colour.action.fg`.
+
+In Figma the tokens live in three collections, each with a mode per brand:
+`scales` (colour primitives), `type & space` (every other primitive) and
+`semantic` (the 55 keys plus the three component defaults). A frame that uses
+semantic colours needs its `scales` mode set as well as its `semantic` mode,
+because an alias resolves in the referenced collection's own mode.
 
 ## Format
 
@@ -199,7 +224,9 @@ primitive. A chain that loops back on itself is a hard error reporting the path
 that closes it.
 
 `$type: "string"` is a Strata extension, used for elevation and component
-defaults. DTCG has no base type for either.
+defaults. DTCG has no base type for either. `$type` values are DTCG keywords,
+so a colour token is `"$type": "color"` even though every group and path in
+these files says `colour`.
 
 ## Notes
 
@@ -216,9 +243,10 @@ Decide before building, not halfway through.
 
 **FLOAT carries no unit.** Figma stores `16`, not `16px`; the export step
 appends `px`. Line heights and font weights are the exception — genuinely
-unitless, so they pass through unchanged.
+unitless, so they pass through unchanged. Letter spacing is stored as a
+percent of the font size and exported as `em`: `-3.5` becomes `-0.035em`.
 
-**Six of the 52 have no consumer yet** — `border.divider`,
+**Six of the 55 have no consumer yet** — `border.divider`,
 `colour.border.strong`, the two `colour.status.*`, `colour.text.inverse` and
 `radius.pill`. They are reserved for components not yet written: Select needs a
 divider, Field needs a danger state, a badge needs the pill. Define them now

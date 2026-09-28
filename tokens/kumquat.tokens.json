@@ -1,86 +1,268 @@
 {
-  "$description": "Kumquat — colour primitives exported from the Figma strata file (scales collection, kumquat mode). Semantic and component tokens not assigned yet.",
   "primitive": {
     "colour": {
       "$type": "color",
       "neutral": {
-        "0": { "$value": "#ffffff" },
-        "100": { "$value": "#f1ece0", "$description": "Base: kumquat/white in Figma primitives" },
-        "200": { "$value": "#cec9c0" },
-        "300": { "$value": "#aba8a0" },
-        "400": { "$value": "#8b8882" },
-        "500": { "$value": "#6b6965" },
-        "600": { "$value": "#4d4b49" },
-        "700": { "$value": "#31302f" },
-        "800": { "$value": "#171718" },
-        "900": { "$value": "#030304", "$description": "Base: kumquat/black in Figma primitives" }
+        "0": {"$value": "#ffffff"},
+        "100": {"$value": "#f1ece0", "$description": "Base: kumquat/white in Figma primitives"},
+        "200": {"$value": "#cec9c0"},
+        "300": {"$value": "#aba8a0"},
+        "400": {"$value": "#8b8882"},
+        "500": {"$value": "#6b6965"},
+        "600": {"$value": "#4d4b49"},
+        "700": {"$value": "#31302f"},
+        "800": {"$value": "#171718"},
+        "900": {"$value": "#030304", "$description": "Base: kumquat/black in Figma primitives"}
       },
       "brand-1": {
-        "100": { "$value": "#eaebfa" },
-        "200": { "$value": "#cdcef4" },
-        "300": { "$value": "#a3a5eb" },
-        "400": { "$value": "#6c70df" },
-        "500": { "$value": "#353bd3" },
-        "600": { "$value": "#262baf" },
-        "700": { "$value": "#1d2185", "$description": "Base: kumquat/blue in Figma primitives" },
-        "800": { "$value": "#14175c" },
-        "900": { "$value": "#0b0c32" }
+        "100": {"$value": "#eaebfa"},
+        "200": {"$value": "#cdcef4"},
+        "300": {"$value": "#a3a5eb"},
+        "400": {"$value": "#6c70df"},
+        "500": {"$value": "#353bd3"},
+        "600": {"$value": "#262baf"},
+        "700": {"$value": "#1d2185", "$description": "Base: kumquat/blue in Figma primitives"},
+        "800": {"$value": "#14175c"},
+        "900": {"$value": "#0b0c32"}
       },
       "brand-2": {
-        "100": { "$value": "#e9f5fb" },
-        "200": { "$value": "#c1e2f4", "$description": "Base: kumquat/light blue in Figma primitives" },
-        "300": { "$value": "#97ceed" },
-        "400": { "$value": "#60b5e3" },
-        "500": { "$value": "#2a9bd9" },
-        "600": { "$value": "#207eb2" },
-        "700": { "$value": "#186088" },
-        "800": { "$value": "#11435e" },
-        "900": { "$value": "#092534" }
+        "100": {"$value": "#e9f5fb"},
+        "200": {"$value": "#c1e2f4", "$description": "Base: kumquat/light blue in Figma primitives"},
+        "300": {"$value": "#97ceed"},
+        "400": {"$value": "#60b5e3"},
+        "500": {"$value": "#2a9bd9"},
+        "600": {"$value": "#207eb2"},
+        "700": {"$value": "#186088"},
+        "800": {"$value": "#11435e"},
+        "900": {"$value": "#092534"}
       },
       "brand-3": {
-        "100": { "$value": "#fdf7e7" },
-        "200": { "$value": "#fae9be" },
-        "300": { "$value": "#f5d583", "$description": "Base: kumquat/yellow in Figma primitives" },
-        "400": { "$value": "#f0c24a" },
-        "500": { "$value": "#e9ad13" },
-        "600": { "$value": "#bd8c0f" },
-        "700": { "$value": "#916c0c" },
-        "800": { "$value": "#654b08" },
-        "900": { "$value": "#392a05" }
+        "100": {"$value": "#fdf7e7"},
+        "200": {"$value": "#fae9be"},
+        "300": {"$value": "#f5d583", "$description": "Base: kumquat/yellow in Figma primitives"},
+        "400": {"$value": "#f0c24a"},
+        "500": {"$value": "#e9ad13"},
+        "600": {"$value": "#bd8c0f"},
+        "700": {"$value": "#916c0c"},
+        "800": {"$value": "#654b08"},
+        "900": {"$value": "#392a05"}
       },
       "red": {
-        "100": { "$value": "#fbebea" },
-        "200": { "$value": "#f5d0cd" },
-        "300": { "$value": "#ecaaa5" },
-        "400": { "$value": "#e17870" },
-        "500": { "$value": "#d5473b" },
-        "600": { "$value": "#b83227", "$description": "Base: kumquat/red in Figma primitives" },
-        "700": { "$value": "#8b261e" },
-        "800": { "$value": "#5f1a14" },
-        "900": { "$value": "#320e0b" }
+        "100": {"$value": "#fbebea"},
+        "200": {"$value": "#f5d0cd"},
+        "300": {"$value": "#ecaaa5"},
+        "400": {"$value": "#e17870"},
+        "500": {"$value": "#d5473b"},
+        "600": {"$value": "#b83227", "$description": "Base: kumquat/red in Figma primitives"},
+        "700": {"$value": "#8b261e"},
+        "800": {"$value": "#5f1a14"},
+        "900": {"$value": "#320e0b"}
       },
       "green": {
-        "100": { "$value": "#edf7f1" },
-        "200": { "$value": "#d4ebdc" },
-        "300": { "$value": "#afdbbf" },
-        "400": { "$value": "#7fc598" },
-        "500": { "$value": "#50af72" },
-        "600": { "$value": "#3f8a5a", "$description": "Base: kumquat/green in Figma primitives" },
-        "700": { "$value": "#306a45" },
-        "800": { "$value": "#224a30" },
-        "900": { "$value": "#132a1b" }
+        "100": {"$value": "#edf7f1"},
+        "200": {"$value": "#d4ebdc"},
+        "300": {"$value": "#afdbbf"},
+        "400": {"$value": "#7fc598"},
+        "500": {"$value": "#50af72"},
+        "600": {"$value": "#3f8a5a", "$description": "Base: kumquat/green in Figma primitives"},
+        "700": {"$value": "#306a45"},
+        "800": {"$value": "#224a30"},
+        "900": {"$value": "#132a1b"}
       },
       "amber": {
-        "100": { "$value": "#fbf5e9" },
-        "200": { "$value": "#f6e6ca" },
-        "300": { "$value": "#eed09e" },
-        "400": { "$value": "#e3b565" },
-        "500": { "$value": "#d9992b", "$description": "Base: kumquat/amber in Figma primitives" },
-        "600": { "$value": "#b27520" },
-        "700": { "$value": "#885418" },
-        "800": { "$value": "#5e3611" },
-        "900": { "$value": "#341c09" }
+        "100": {"$value": "#fbf5e9"},
+        "200": {"$value": "#f6e6ca"},
+        "300": {"$value": "#eed09e"},
+        "400": {"$value": "#e3b565"},
+        "500": {"$value": "#d9992b", "$description": "Base: kumquat/amber in Figma primitives"},
+        "600": {"$value": "#b27520"},
+        "700": {"$value": "#885418"},
+        "800": {"$value": "#5e3611"},
+        "900": {"$value": "#341c09"}
       }
+    },
+    "space": {
+      "$type": "dimension",
+      "0": {"$value": "0px"},
+      "1": {"$value": "4px"},
+      "2": {"$value": "8px"},
+      "3": {"$value": "12px"},
+      "4": {"$value": "16px"},
+      "5": {"$value": "20px"},
+      "6": {"$value": "24px"},
+      "8": {"$value": "32px"},
+      "10": {"$value": "40px"},
+      "12": {"$value": "48px"},
+      "14": {"$value": "56px"}
+    },
+    "radius": {
+      "$type": "dimension",
+      "none": {"$value": "0px"},
+      "sm": {"$value": "6px"},
+      "md": {"$value": "10px"},
+      "lg": {"$value": "12px"},
+      "full": {"$value": "9999px"}
+    },
+    "size": {
+      "$type": "dimension",
+      "control": {"$value": "56px"},
+      "border": {"$value": "1px"}
+    },
+    "font": {
+      "family": {
+        "$type": "fontFamily",
+        "sans": {"$value": ["Inter", "sans-serif"]}
+      },
+      "size": {
+        "$type": "dimension",
+        "xs": {"$value": "11px"},
+        "sm": {"$value": "13px"},
+        "base": {"$value": "15px"},
+        "md": {"$value": "22px"},
+        "lg": {"$value": "40px"},
+        "xl": {"$value": "64px"},
+        "2xl": {"$value": "128px"}
+      },
+      "weight": {
+        "$type": "fontWeight",
+        "light": {"$value": 300},
+        "regular": {"$value": 400},
+        "medium": {"$value": 500},
+        "semibold": {"$value": 600},
+        "bold": {"$value": 700}
+      },
+      "lineheight": {
+        "$type": "number",
+        "display": {"$value": 0.95},
+        "tight": {"$value": 1.2},
+        "normal": {"$value": 1.2}
+      },
+      "tracking": {
+        "$type": "dimension",
+        "display": {"$value": "-0.05em"},
+        "heading": {"$value": "-0.035em"},
+        "body": {"$value": "-0.01em"},
+        "wide": {"$value": "0.08em"}
+      }
+    },
+    "duration": {
+      "$type": "duration",
+      "fast": {"$value": "120ms"},
+      "base": {"$value": "240ms"}
+    }
+  },
+  "semantic": {
+    "colour": {
+      "$type": "color",
+      "surface": {
+        "page": {"$value": "{primitive.colour.brand-3.300}"},
+        "raised": {"$value": "{primitive.colour.brand-3.300}"},
+        "sunken": {"$value": "{primitive.colour.brand-3.200}"}
+      },
+      "text": {
+        "primary": {"$value": "{primitive.colour.brand-1.800}"},
+        "secondary": {"$value": "{primitive.colour.brand-1.800}"},
+        "muted": {"$value": "{primitive.colour.brand-1.700}"},
+        "inverse": {"$value": "{primitive.colour.brand-3.300}"},
+        "accent": {"$value": "{primitive.colour.brand-1.800}"}
+      },
+      "action": {
+        "bg": {"$value": "{primitive.colour.brand-1.800}"},
+        "bg-hover": {"$value": "{primitive.colour.brand-1.700}"},
+        "fg": {"$value": "{primitive.colour.brand-3.300}"},
+        "border": {"$value": "{primitive.colour.brand-1.800}"}
+      },
+      "secondary": {
+        "bg": {"$value": "{primitive.colour.brand-3.300}"},
+        "bg-hover": {"$value": "{primitive.colour.brand-3.200}"},
+        "fg": {"$value": "{primitive.colour.brand-1.800}"},
+        "border": {"$value": "{primitive.colour.brand-1.800}"}
+      },
+      "border": {
+        "subtle": {"$value": "{primitive.colour.brand-3.500}"},
+        "default": {"$value": "{primitive.colour.brand-1.800}"},
+        "strong": {"$value": "{primitive.colour.brand-1.800}"}
+      },
+      "focus": {
+        "ring": {"$value": "{primitive.colour.brand-1.500}"}
+      },
+      "status": {
+        "danger": {"$value": "{primitive.colour.red.700}"},
+        "warning": {"$value": "{primitive.colour.amber.800}"}
+      }
+    },
+    "space": {
+      "control": {
+        "padding-x": {"$type": "dimension", "$value": "{primitive.space.5}"},
+        "padding-y": {"$type": "dimension", "$value": "{primitive.space.4}"},
+        "gap": {"$type": "dimension", "$value": "{primitive.space.3}"}
+      },
+      "stack": {
+        "gap": {"$type": "dimension", "$value": "{primitive.space.2}"},
+        "gap-loose": {"$type": "dimension", "$value": "{primitive.space.12}"}
+      },
+      "card": {
+        "padding": {"$type": "dimension", "$value": "{primitive.space.4}"},
+        "gap": {"$type": "dimension", "$value": "{primitive.space.6}"}
+      },
+      "field": {
+        "gap": {"$type": "dimension", "$value": "{primitive.space.2}"}
+      }
+    },
+    "radius": {
+      "control": {"$type": "dimension", "$value": "{primitive.radius.lg}"},
+      "card": {"$type": "dimension", "$value": "{primitive.radius.md}"},
+      "pill": {"$type": "dimension", "$value": "{primitive.radius.full}"}
+    },
+    "border": {
+      "control": {"$type": "dimension", "$value": "{primitive.size.border}"},
+      "card": {"$type": "dimension", "$value": "{primitive.size.border}"},
+      "divider": {"$type": "dimension", "$value": "{primitive.size.border}"}
+    },
+    "size": {
+      "control": {"$type": "dimension", "$value": "{primitive.size.control}"}
+    },
+    "font": {
+      "body": {
+        "family": {"$type": "fontFamily", "$value": "{primitive.font.family.sans}"},
+        "size": {"$type": "dimension", "$value": "{primitive.font.size.base}"},
+        "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.regular}"},
+        "lineheight": {"$type": "number", "$value": "{primitive.font.lineheight.normal}"},
+        "tracking": {"$type": "dimension", "$value": "{primitive.font.tracking.body}"}
+      },
+      "heading": {
+        "family": {"$type": "fontFamily", "$value": "{primitive.font.family.sans}"},
+        "size": {"$type": "dimension", "$value": "{primitive.font.size.2xl}"},
+        "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.light}"},
+        "lineheight": {"$type": "number", "$value": "{primitive.font.lineheight.display}"},
+        "tracking": {"$type": "dimension", "$value": "{primitive.font.tracking.heading}"}
+      },
+      "control": {
+        "size": {"$type": "dimension", "$value": "{primitive.font.size.md}"},
+        "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.light}"}
+      },
+      "caption": {
+        "size": {"$type": "dimension", "$value": "{primitive.font.size.xs}"},
+        "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.regular}"}
+      }
+    },
+    "motion": {
+      "control": {"$type": "duration", "$value": "{primitive.duration.fast}"},
+      "theme": {"$type": "duration", "$value": "{primitive.duration.base}"}
+    },
+    "elevation": {
+      "control": {"$type": "string", "$value": "none"},
+      "card": {"$type": "string", "$value": "none"}
+    }
+  },
+  "component": {
+    "$type": "string",
+    "button": {
+      "variant": {"$value": "primary"},
+      "size": {"$value": "lg"}
+    },
+    "card": {
+      "elevation": {"$value": "flat"}
     }
   }
 }

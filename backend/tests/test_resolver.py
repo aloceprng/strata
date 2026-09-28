@@ -191,10 +191,10 @@ class TestEmitters:
 
 BRAND_FILES = sorted(TOKENS_DIR.glob("*.tokens.json"))
 
-# The 52 keys in tokens/CONTRACT.md. Change both together.
+# The 55 keys in tokens/CONTRACT.md. Change both together.
 REQUIRED_SEMANTIC = {"semantic." + key for key in """
     colour.surface.page colour.surface.raised colour.surface.sunken
-    colour.text.primary colour.text.secondary colour.text.muted colour.text.inverse
+    colour.text.primary colour.text.secondary colour.text.muted colour.text.inverse colour.text.accent
     colour.action.bg colour.action.bg-hover colour.action.fg colour.action.border
     colour.secondary.bg colour.secondary.bg-hover colour.secondary.fg colour.secondary.border
     colour.border.subtle colour.border.default colour.border.strong
@@ -203,15 +203,15 @@ REQUIRED_SEMANTIC = {"semantic." + key for key in """
     space.stack.gap space.stack.gap-loose space.card.padding space.card.gap space.field.gap
     radius.control radius.card radius.pill
     border.control border.card border.divider size.control
-    font.body.family font.body.size font.body.weight font.body.lineheight
-    font.heading.family font.heading.size font.heading.weight font.heading.lineheight
+    font.body.family font.body.size font.body.weight font.body.lineheight font.body.tracking
+    font.heading.family font.heading.size font.heading.weight font.heading.lineheight font.heading.tracking
     font.control.size font.control.weight font.caption.size font.caption.weight
     motion.control motion.theme elevation.control elevation.card
 """.split()}
 
 
-def test_the_contract_list_has_52_keys():
-    assert len(REQUIRED_SEMANTIC) == 52
+def test_the_contract_list_has_55_keys():
+    assert len(REQUIRED_SEMANTIC) == 55
 
 
 class TestRealBrandFiles:
