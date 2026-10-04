@@ -1,0 +1,268 @@
+
+
+.strata-text {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: var(--font-body-size);
+  font-weight: var(--font-body-weight);
+  line-height: var(--font-body-lineheight);
+  letter-spacing: var(--font-body-tracking);
+  color: var(--colour-text-primary);
+}
+
+.strata-text[data-tone="secondary"] { color: var(--colour-text-secondary); }
+.strata-text[data-tone="accent"]    { color: var(--colour-text-accent); }
+.strata-text[data-tone="inverse"]   { color: var(--colour-text-inverse); }
+.strata-text[data-tone="danger"]    { color: var(--colour-status-danger); }
+
+.strata-text[data-size="caption"] {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  color: var(--colour-text-muted);
+}
+
+.strata-heading {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: var(--font-heading-size);
+  font-weight: var(--font-heading-weight);
+  line-height: var(--font-heading-lineheight);
+  letter-spacing: var(--font-heading-tracking);
+  color: var(--colour-text-primary);
+}
+
+.strata-heading[data-level="2"] {
+  font-size: max(calc(var(--font-heading-size) * 0.55), calc(var(--font-body-size) * 1.75));
+}
+.strata-heading[data-level="3"] {
+  font-size: max(calc(var(--font-heading-size) * 0.38), calc(var(--font-body-size) * 1.4));
+}
+.strata-heading[data-level="4"] {
+  font-size: max(calc(var(--font-heading-size) * 0.26), calc(var(--font-body-size) * 1.15));
+}
+
+.strata-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-gap);
+}
+
+.strata-stack[data-direction="row"] {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.strata-stack[data-gap="loose"] { gap: var(--space-stack-gap-loose); }
+.strata-stack[data-gap="tight"] { gap: var(--space-control-gap); }
+
+.strata-stack[data-align="start"]   { align-items: flex-start; }
+.strata-stack[data-align="end"]     { align-items: flex-end; }
+.strata-stack[data-justify="between"] { justify-content: space-between; }
+
+.strata-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-control-gap);
+  min-height: var(--size-control);
+  padding: var(--space-control-padding-y) var(--space-control-padding-x);
+  border-radius: var(--radius-control);
+  border: var(--border-control) solid transparent;
+  box-shadow: var(--elevation-control);
+  font-family: var(--font-body-family);
+  font-size: var(--font-control-size);
+  font-weight: var(--font-control-weight);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.strata-button[data-variant="primary"] {
+  background: var(--colour-action-bg);
+  border-color: var(--colour-action-border);
+  color: var(--colour-action-fg);
+}
+.strata-button[data-variant="primary"]:hover { background: var(--colour-action-bg-hover); }
+
+.strata-button[data-variant="secondary"] {
+  background: var(--colour-secondary-bg);
+  border-color: var(--colour-secondary-border);
+  color: var(--colour-secondary-fg);
+}
+.strata-button[data-variant="secondary"]:hover { background: var(--colour-secondary-bg-hover); }
+
+.strata-button[data-size="sm"] {
+  min-height: calc(var(--size-control) * 0.72);
+  padding: calc(var(--space-control-padding-y) * 0.6) calc(var(--space-control-padding-x) * 0.7);
+  font-size: var(--font-caption-size);
+}
+.strata-button[data-size="lg"] {
+  min-height: calc(var(--size-control) * 1.2);
+  padding: calc(var(--space-control-padding-y) * 1.2) calc(var(--space-control-padding-x) * 1.3);
+}
+
+.strata-button:focus-visible,
+.strata-icon-button:focus-visible {
+  outline: 2px solid var(--colour-focus-ring);
+  outline-offset: 2px;
+}
+
+.strata-button:disabled,
+.strata-icon-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.strata-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-control);
+  height: var(--size-control);
+  padding: 0;
+  border-radius: var(--radius-control);
+  border: var(--border-control) solid transparent;
+  box-shadow: var(--elevation-control);
+  font-family: var(--font-body-family);
+  font-size: var(--font-control-size);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.strata-icon-button[data-variant="primary"] {
+  background: var(--colour-action-bg);
+  border-color: var(--colour-action-border);
+  color: var(--colour-action-fg);
+}
+.strata-icon-button[data-variant="primary"]:hover { background: var(--colour-action-bg-hover); }
+
+.strata-icon-button[data-variant="secondary"] {
+  background: var(--colour-secondary-bg);
+  border-color: var(--colour-secondary-border);
+  color: var(--colour-secondary-fg);
+}
+.strata-icon-button[data-variant="secondary"]:hover { background: var(--colour-secondary-bg-hover); }
+
+.strata-icon-button[data-shape="circle"] { border-radius: var(--radius-pill); }
+
+.strata-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--space-control-gap) * 0.5);
+  padding: calc(var(--space-control-padding-y) * 0.35) calc(var(--space-control-padding-x) * 0.4);
+  border-radius: var(--radius-pill);
+  border: var(--border-control) solid transparent;
+  font-family: var(--font-body-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.strata-badge[data-tone="neutral"] {
+  background: var(--colour-secondary-bg);
+  border-color: var(--colour-secondary-border);
+  color: var(--colour-secondary-fg);
+}
+.strata-badge[data-tone="accent"] {
+  background: var(--colour-action-bg);
+  color: var(--colour-action-fg);
+}
+.strata-badge[data-tone="danger"] {
+  background: var(--colour-status-danger);
+  color: var(--colour-text-inverse);
+}
+.strata-badge[data-shape="square"] { border-radius: var(--radius-control); }
+
+.strata-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-field-gap);
+}
+
+.strata-field-label {
+  font-family: var(--font-body-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  letter-spacing: var(--font-body-tracking);
+  color: var(--colour-text-secondary);
+}
+
+.strata-field-description {
+  font-family: var(--font-body-family);
+  font-size: var(--font-caption-size);
+  color: var(--colour-text-muted);
+}
+
+.strata-field[data-invalid="true"] .strata-field-description { color: var(--colour-status-danger); }
+.strata-field[data-invalid="true"] .strata-input,
+.strata-field[data-invalid="true"] .strata-select { border-color: var(--colour-status-danger); }
+
+.strata-input,
+.strata-select {
+  width: 100%;
+  min-height: var(--size-control);
+  padding: var(--space-control-padding-y) var(--space-control-padding-x);
+  border-radius: var(--radius-control);
+  
+  border: var(--border-control) solid var(--colour-border-default);
+  background: var(--colour-surface-sunken);
+  color: var(--colour-text-primary);
+  font-family: var(--font-body-family);
+  font-size: var(--font-control-size);
+}
+
+.strata-input::placeholder { color: var(--colour-text-muted); }
+
+.strata-input:focus-visible,
+.strata-select:focus-visible {
+  outline: 2px solid var(--colour-focus-ring);
+  outline-offset: 1px;
+  border-color: var(--colour-focus-ring);
+}
+
+.strata-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-card-gap);
+  padding: var(--space-card-padding);
+  border-radius: var(--radius-card);
+  border: var(--border-card) solid var(--colour-border-subtle);
+  background: var(--colour-surface-raised);
+}
+
+.strata-card[data-elevation="raised"] { box-shadow: var(--elevation-card); }
+.strata-card[data-elevation="flat"]   { box-shadow: none; }
+
+.strata-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-control-gap);
+  width: 100%;
+  padding: var(--space-control-padding-y) 0;
+  border-bottom: var(--border-divider) solid var(--colour-border-subtle);
+  font-family: var(--font-body-family);
+}
+
+.strata-row:last-child { border-bottom: 0; }
+
+.strata-row-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--font-body-size);
+  color: var(--colour-text-primary);
+}
+
+.strata-row-meta {
+  flex: 0 0 auto;
+  font-size: var(--font-caption-size);
+  color: var(--colour-text-muted);
+}
+
+.strata-row-value {
+  flex: 0 0 auto;
+  font-size: var(--font-body-size);
+  font-weight: var(--font-control-weight);
+  color: var(--colour-text-primary);
+}
