@@ -23,10 +23,8 @@ from strata_core.storage import LocalArtifactStore, versioned_path  # noqa: E402
 TOKENS_DIR = ROOT / "tokens"
 DIST_DIR = ROOT / "dist"
 
-
 def brands() -> list[str]:
     return sorted(p.name.removesuffix(".tokens.json") for p in TOKENS_DIR.glob("*.tokens.json"))
-
 
 def build_brand(brand: str, store: LocalArtifactStore, version: str | None) -> bool:
     source = TOKENS_DIR / f"{brand}.tokens.json"
@@ -63,7 +61,6 @@ def build_brand(brand: str, store: LocalArtifactStore, version: str | None) -> b
         print(f"      {artifact.path}  {artifact.size:>6}B  {artifact.checksum[:12]}")
     return True
 
-
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("brand", nargs="*", help="brand slug; omit for all")
@@ -81,7 +78,6 @@ def main() -> int:
 
     ok = all([build_brand(brand, store, args.version) for brand in selected])
     return 0 if ok else 1
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 
 from .models import Brand, TokenSet
 
-
 class TokenSetInline(admin.TabularInline):
     model = TokenSet
     extra = 0
@@ -12,13 +11,11 @@ class TokenSetInline(admin.TabularInline):
     show_change_link = True
     can_delete = False
 
-
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):
     list_display = ("name", "slug", "sector", "principle")
     prepopulated_fields = {"slug": ("name",)}
     inlines = [TokenSetInline]
-
 
 @admin.register(TokenSet)
 class TokenSetAdmin(admin.ModelAdmin):

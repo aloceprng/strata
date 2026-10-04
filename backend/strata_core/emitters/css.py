@@ -12,12 +12,10 @@ PROPERTY_SYNTAX = {
 
 LAYER_PREFIX = {"primitive": "p-", "semantic": "", "component": "component-"}
 
-
 def variable_name(token: ResolvedToken) -> str:
     layer, _, rest = token.path.partition(".")
     prefix = LAYER_PREFIX.get(layer, f"{layer}-")
     return "--" + prefix + rest.replace(".", "-")
-
 
 def format_value(value: Any) -> str:
     if isinstance(value, list):
@@ -26,13 +24,10 @@ def format_value(value: Any) -> str:
         return "true" if value else "false"
     return str(value)
 
-
 def _quote(name: str) -> str:
     return f'"{name}"' if " " in name else name
 
-
 def emit_css(resolved: ResolvedSet, brand: str, *, register_properties: bool = True) -> str:
-    '''Return the full text of a brand's ``theme.css``.'''
     lines = [
         f"/* Strata — {brand}",
         f" * Generated from the token source. Do not edit; edit the tokens.",
@@ -66,9 +61,7 @@ def emit_css(resolved: ResolvedSet, brand: str, *, register_properties: bool = T
     lines.append("")
     return "\n".join(lines)
 
-
 def _property_registrations(resolved: ResolvedSet) -> list[str]:
-    '''``@property`` blocks for the semantic tokens that can interpolate.'''
 
     lines = [
         "/* Registered so a brand switch interpolates rather than snapping. */",

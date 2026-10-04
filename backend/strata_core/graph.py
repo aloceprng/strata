@@ -6,9 +6,7 @@ from .parse import Token
 LAYER_RANK = {"primitive": 0, "semantic": 1, "component": 2}
 WHITE, GREY, BLACK = 0, 1, 2
 
-
 def dependencies(tokens: dict[str, Token]) -> dict[str, list[str]]:
-    '''Each token's references, order preserved.'''
 
     deps: dict[str, list[str]] = {}
     for path, token in tokens.items():
@@ -21,9 +19,7 @@ def dependencies(tokens: dict[str, Token]) -> dict[str, list[str]]:
         deps[path] = seen
     return deps
 
-
 def check_layering(tokens: dict[str, Token], deps: dict[str, list[str]]) -> None:
-    '''A token may depend on its own layer or a lower one, never a higher one.'''
 
     for path, refs in deps.items():
         rank = LAYER_RANK.get(tokens[path].layer)
@@ -34,9 +30,7 @@ def check_layering(tokens: dict[str, Token], deps: dict[str, list[str]]) -> None
             if ref_rank is not None and ref_rank > rank:
                 raise LayerViolationError(path, ref)
 
-
 def detect_cycles(deps: dict[str, list[str]]) -> None:
-    '''DFS with colour marking.'''
 
     colour = dict.fromkeys(deps, WHITE)
 
@@ -68,9 +62,7 @@ def detect_cycles(deps: dict[str, list[str]]) -> None:
                 stack.pop()
                 path.pop()
 
-
 def topological_order(deps: dict[str, list[str]]) -> list[str]:
-    '''Kahn's algorithm, alphabetical among ties so builds are reproducible.'''
 
     dependents: dict[str, list[str]] = {path: [] for path in deps}
     indegree = {path: len(refs) for path, refs in deps.items()}

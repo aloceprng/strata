@@ -9,7 +9,6 @@ from .parse import REFERENCE, Token, parse
 
 WHOLE_REFERENCE = re.compile(r"^\{([^{}]+)\}$")
 
-
 @dataclass
 class ResolvedToken:
     path: str
@@ -21,7 +20,6 @@ class ResolvedToken:
     @property
     def layer(self) -> str:
         return self.path.split(".", 1)[0]
-
 
 @dataclass
 class ResolvedSet:
@@ -35,10 +33,8 @@ class ResolvedSet:
     def __len__(self) -> int:
         return len(self.tokens)
 
-
 def resolve_document(document: dict) -> ResolvedSet:
     return resolve(parse(document))
-
 
 def resolve(tokens: dict[str, Token]) -> ResolvedSet:
     deps = dependencies(tokens)
@@ -78,9 +74,7 @@ def resolve(tokens: dict[str, Token]) -> ResolvedSet:
         max_chain_depth=max(depth.values(), default=0),
     )
 
-
 def _substitute(value: Any, resolved: dict[str, ResolvedToken]) -> Any:
-    '''Replace references embedded inside a larger value.'''
     
     if isinstance(value, str):
         return REFERENCE.sub(lambda m: _as_text(resolved[m.group(1)].value), value)
@@ -89,7 +83,6 @@ def _substitute(value: Any, resolved: dict[str, ResolvedToken]) -> Any:
     if isinstance(value, dict):
         return {k: _substitute(v, resolved) for k, v in value.items()}
     return value
-
 
 def _as_text(value: Any) -> str:
     if isinstance(value, list):

@@ -1,4 +1,3 @@
-"""Output formats. One resolved tree in, several files out."""
 
 from .css import emit_css, format_value, variable_name
 from .json_bundle import build_bundle, emit_json

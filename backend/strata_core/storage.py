@@ -4,12 +4,10 @@ import hashlib
 from pathlib import Path
 from typing import Protocol
 
-
 class ArtifactStore(Protocol):
     def write(self, path: str, content: str) -> "StoredArtifact": ...
 
     def url_for(self, path: str) -> str: ...
-
 
 class StoredArtifact:
     def __init__(self, path: str, url: str, size: int, checksum: str):
@@ -20,7 +18,6 @@ class StoredArtifact:
 
     def __repr__(self) -> str:
         return f"<StoredArtifact {self.path} {self.size}B {self.checksum[:8]}>"
-
 
 class LocalArtifactStore:
     def __init__(self, root: Path | str, base_url: str = "/artifacts"):
@@ -41,7 +38,6 @@ class LocalArtifactStore:
 
     def url_for(self, path: str) -> str:
         return f"{self.base_url}/{path}"
-
 
 def versioned_path(brand: str, version: str, filename: str) -> str:
     return f"{brand}/{version}/{filename}"

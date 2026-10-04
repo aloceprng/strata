@@ -1,4 +1,3 @@
-# turn a DTCG token document into a flat list of tokens.
 
 from __future__ import annotations
 
@@ -11,10 +10,8 @@ from .errors import TokenFileError
 REFERENCE = re.compile(r"\{([^{}]+)\}")
 LAYERS = ("primitive", "semantic", "component")
 
-
 @dataclass
 class Token:
-    '''Token before resolution.'''
 
     path: str
     type: str | None
@@ -26,9 +23,7 @@ class Token:
     def layer(self) -> str:
         return self.path.split(".", 1)[0]
 
-
 def find_references(value: Any) -> list[str]:
-    '''Every {token.path} inside a value, in the order it appears.'''
 
     if isinstance(value, str):
         return REFERENCE.findall(value)
@@ -38,9 +33,7 @@ def find_references(value: Any) -> list[str]:
         return [ref for item in value.values() for ref in find_references(item)]
     return []
 
-
 def parse(document: dict) -> dict[str, Token]:
-    '''Flatten a DTCG document to ``{"semantic.colour.action.bg": Token, ...}``.'''
 
     if not isinstance(document, dict):
         raise TokenFileError("token document must be a JSON object")
@@ -50,7 +43,6 @@ def parse(document: dict) -> dict[str, Token]:
     if not tokens:
         raise TokenFileError("token document contains no tokens ($value keys)")
     return tokens
-
 
 def _walk(node: dict, prefix: tuple[str, ...], inherited_type: str | None,
           out: dict[str, Token]) -> None:

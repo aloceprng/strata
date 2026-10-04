@@ -1,4 +1,3 @@
-# token set -> JSON
 
 from __future__ import annotations
 
@@ -6,7 +5,6 @@ import json
 
 from ..resolver import ResolvedSet
 from .css import format_value, variable_name
-
 
 def build_bundle(resolved: ResolvedSet, brand: str) -> dict:
     tokens = {}
@@ -33,9 +31,7 @@ def build_bundle(resolved: ResolvedSet, brand: str) -> dict:
         "componentDefaults": _component_defaults(resolved),
     }
 
-
 def _component_defaults(resolved: ResolvedSet) -> dict:
-    '''Nest ``component.button.variant`` back into ``{"button": {"variant": ...}}``.'''
 
     defaults: dict = {}
     for path, token in resolved.layer("component").items():
@@ -45,7 +41,6 @@ def _component_defaults(resolved: ResolvedSet) -> dict:
             cursor = cursor.setdefault(part, {})
         cursor[parts[-1]] = token.value
     return defaults
-
 
 def emit_json(resolved: ResolvedSet, brand: str) -> str:
     return json.dumps(build_bundle(resolved, brand), indent=2, ensure_ascii=False) + "\n"

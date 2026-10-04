@@ -1,6 +1,3 @@
-'''to rebuild the whole system from nothing:
-    python manage.py seed
-'''
 
 import json
 
@@ -12,13 +9,11 @@ from strata_core import StrataError, resolve_document
 
 from ...models import Brand, TokenSet
 
-# sector and principle not decided yet
 BRANDS = {
     "clementine": {"name": "Clementine", "sector": "", "principle": ""},
     "pomelo": {"name": "Pomelo", "sector": "", "principle": ""},
     "kumquat": {"name": "Kumquat", "sector": "", "principle": ""},
 }
-
 
 class Command(BaseCommand):
     help = "Load the hand-authored token files as published v1 token sets."

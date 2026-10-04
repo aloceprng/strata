@@ -3,14 +3,12 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
-
 class Brand(models.Model):
     slug = models.SlugField(unique=True)
     name = models.CharField(max_length=120)
     principle = models.CharField(
         max_length=200,
         help_text=(
-            # token explanations later
         ),
     )
     sector = models.CharField(max_length=80, blank=True)
@@ -29,13 +27,7 @@ class Brand(models.Model):
     def latest_published(self) -> "TokenSet | None":
         return self.published_sets.order_by("-version").first()
 
-
 class TokenSet(models.Model):
-    '''One brand's complete token tree, at one version.
-
-    (Immutable once published. Editing in place would delete versioning,
-    diffing, rollback and pinning in a single decision)
-    '''
 
     class Status(models.TextChoices):
         DRAFT = "draft", "Draft"
@@ -80,7 +72,6 @@ class TokenSet(models.Model):
         super().save(*args, **kwargs)
 
     def clean(self):
-        '''Refuse an edit to a published set.'''
         
         if not self.pk:
             return
@@ -103,7 +94,6 @@ class TokenSet(models.Model):
         return (highest["version__max"] or 0) + 1
 
     def publish(self) -> "TokenSet":
-        '''Mark this draft published. The build itself is a separate step.'''
 
         if self.status != self.Status.DRAFT:
             raise ValidationError(f"{self} is not a draft")
@@ -113,7 +103,6 @@ class TokenSet(models.Model):
         return self
 
     def fork(self, note: str = "") -> "TokenSet":
-        '''Start the next draft from this set's tokens.'''
 
         return TokenSet.objects.create(
             brand=self.brand,

@@ -14,10 +14,8 @@ from strata_core.emitters import emit_css, emit_json
 
 TOKENS_DIR = Path(__file__).resolve().parents[2] / "tokens"
 
-
 @pytest.fixture
 def sample():
-    '''A minimal brand with one token of every kind the emitters care about.'''
     return resolve_document({
         "primitive": {
             "colour": {"$type": "color", "green": {"600": {"$value": "#2f7a3f"}}},
@@ -35,7 +33,6 @@ def sample():
         "component": {"button": {"variant": {"$type": "string", "$value": "secondary"}}},
     })
 
-
 class TestReferences:
     def test_resolves_a_single_alias(self):
         resolved = resolve_document({
@@ -45,7 +42,6 @@ class TestReferences:
         assert resolved.tokens["semantic.colour.action.bg"].value == "#2f7a3f"
 
     def test_resolves_a_chain_of_aliases(self):
-        '''space.4 -> space.base -> 16px. Chains are normal, not exotic.'''
         resolved = resolve_document({
             "primitive": {
                 "space": {
@@ -67,7 +63,6 @@ class TestReferences:
         assert resolved.tokens["semantic.colour.text"].type == "color"
 
     def test_an_alias_keeps_a_list_a_list(self):
-        '''A fontFamily must not be flattened into a string by resolution.'''
         resolved = resolve_document({
             "primitive": {"font": {"family": {"sans": {
                 "$type": "fontFamily", "$value": ["Inter", "Arial"]}}}},
@@ -92,7 +87,6 @@ class TestReferences:
         assert exc.value.source == "semantic.colour.bg"
         assert exc.value.target == "primitive.colour.nope"
 
-
 class TestCycles:
     def test_a_two_token_cycle_is_an_error_not_a_hang(self):
         with pytest.raises(CycleError) as exc:
@@ -106,7 +100,6 @@ class TestCycles:
         assert set(exc.value.path) == {"semantic.space.a", "semantic.space.b"}
 
     def test_the_reported_path_is_the_whole_loop(self):
-        ''''A cycle exists' is useless. 'a -> b -> c -> a' is debuggable.'''
         with pytest.raises(CycleError) as exc:
             resolve_document({
                 "semantic": {"x": {
@@ -123,14 +116,12 @@ class TestCycles:
             resolve_document({"semantic": {"a": {"$value": "{semantic.a}"}}})
 
     def test_a_long_chain_does_not_exhaust_the_stack(self):
-        '''Depth should be limited by the tokens, not by Python's recursion.'''
         depth = 5000
         group = {"0": {"$type": "dimension", "$value": "1px"}}
         for i in range(1, depth):
             group[str(i)] = {"$value": "{primitive.chain." + str(i - 1) + "}"}
         resolved = resolve_document({"primitive": {"chain": group}})
         assert resolved.tokens["primitive.chain." + str(depth - 1)].value == "1px"
-
 
 class TestLayering:
     def test_a_primitive_may_not_reference_a_semantic_token(self):
@@ -150,7 +141,6 @@ class TestLayering:
         })
         assert resolved.tokens["semantic.colour.focus.ring"].value == "#2f7a3f"
 
-
 class TestParsing:
     def test_group_type_is_inherited_by_its_tokens(self):
         tokens = parse({"primitive": {"space": {
@@ -161,7 +151,6 @@ class TestParsing:
         tokens = parse({"primitive": {"x": {
             "$type": "dimension", "a": {"$type": "color", "$value": "#000"}}}})
         assert tokens["primitive.x.a"].type == "color"
-
 
 class TestEmitters:
     def test_semantic_tokens_drop_the_layer_prefix(self, sample):
@@ -185,13 +174,10 @@ class TestEmitters:
         assert bundle["componentDefaults"]["button"]["variant"] == "secondary"
 
     def test_the_bundle_is_byte_stable_across_builds(self, sample):
-        '''No timestamp inside an artifact, or its checksum means nothing.'''
         assert emit_json(sample, "sample") == emit_json(sample, "sample")
-
 
 BRAND_FILES = sorted(TOKENS_DIR.glob("*.tokens.json"))
 
-# The 55 keys in tokens/CONTRACT.md. Change both together.
 REQUIRED_SEMANTIC = {"semantic." + key for key in """
     colour.surface.page colour.surface.raised colour.surface.sunken
     colour.text.primary colour.text.secondary colour.text.muted colour.text.inverse colour.text.accent
@@ -209,10 +195,8 @@ REQUIRED_SEMANTIC = {"semantic." + key for key in """
     motion.control motion.theme elevation.control elevation.card
 """.split()}
 
-
 def test_the_contract_list_has_55_keys():
     assert len(REQUIRED_SEMANTIC) == 55
-
 
 class TestRealBrandFiles:
     @pytest.mark.parametrize("source", BRAND_FILES, ids=lambda p: p.name)
@@ -221,6 +205,5 @@ class TestRealBrandFiles:
 
     @pytest.mark.parametrize("source", BRAND_FILES, ids=lambda p: p.name)
     def test_every_brand_defines_the_contract_semantic_tokens(self, source):
-        '''A component reads one name on every brand, or the demo is a lie.'''
         brand = resolve_document(json.loads(source.read_text(encoding="utf-8")))
         assert set(brand.layer("semantic")) == REQUIRED_SEMANTIC
