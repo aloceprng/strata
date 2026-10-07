@@ -1,7 +1,9 @@
 from django.contrib.postgres.indexes import GinIndex
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
+
+from .build import render, write
 
 class Brand(models.Model):
     slug = models.SlugField(unique=True)
@@ -93,14 +95,19 @@ class TokenSet(models.Model):
         highest = TokenSet.objects.filter(brand=brand).aggregate(models.Max("version"))
         return (highest["version__max"] or 0) + 1
 
-    def publish(self) -> "TokenSet":
-
+    def publish(self, store=None) -> "TokenSet":
         if self.status != self.Status.DRAFT:
             raise ValidationError(f"{self} is not a draft")
-        self.status = self.Status.PUBLISHED
-        self.published_at = timezone.now()
-        self.save(update_fields=["status", "published_at"])
+        outputs = render(self)
+        with transaction.atomic():
+            self.status = self.Status.PUBLISHED
+            self.published_at = timezone.now()
+            self.save(update_fields=["status", "published_at"])
+            write(self, outputs, store)
         return self
+
+    def is_latest_published(self) -> bool:
+        return not self.brand.published_sets.filter(version__gt=self.version).exists()
 
     def fork(self, note: str = "") -> "TokenSet":
 
