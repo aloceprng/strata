@@ -73,8 +73,10 @@ def main() -> int:
         print(f"No token files found in {TOKENS_DIR}")
         return 1
 
-    store = LocalArtifactStore(args.out)
-    print(f"Building {len(selected)} brand(s) into {Path(args.out).relative_to(ROOT)}/")
+    out = Path(args.out).resolve()
+    store = LocalArtifactStore(out)
+    shown = out.relative_to(ROOT) if out.is_relative_to(ROOT) else out
+    print(f"Building {len(selected)} brand(s) into {shown.as_posix()}/")
 
     ok = all([build_brand(brand, store, args.version) for brand in selected])
     return 0 if ok else 1
