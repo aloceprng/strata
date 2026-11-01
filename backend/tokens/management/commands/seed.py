@@ -9,10 +9,12 @@ from strata_core import StrataError, resolve_document
 
 from ...models import Brand, TokenSet
 
+PLACEHOLDER = "Placeholder: write this brand's principle before designing its values."
+
 BRANDS = {
-    "clementine": {"name": "Clementine", "sector": "", "principle": ""},
-    "pomelo": {"name": "Pomelo", "sector": "", "principle": ""},
-    "kumquat": {"name": "Kumquat", "sector": "", "principle": ""},
+    "clementine": {"name": "Clementine", "sector": "TBD", "principle": PLACEHOLDER},
+    "pomelo": {"name": "Pomelo", "sector": "TBD", "principle": PLACEHOLDER},
+    "kumquat": {"name": "Kumquat", "sector": "TBD", "principle": PLACEHOLDER},
 }
 
 class Command(BaseCommand):

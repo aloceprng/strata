@@ -66,24 +66,24 @@ export function BrandProvider({
   scope?: boolean;
   children: ReactNode;
 }) {
-  const [bundle, setBundle] = useState<Bundle | null>(() => CACHE.get(brand) ?? null);
+  const [fetched, setFetched] = useState<Bundle | null>(null);
+  const bundle = CACHE.get(brand) ?? (fetched?.brand === brand ? fetched : null);
 
   useEffect(() => {
-    const cached = CACHE.get(brand);
-    if (cached) {
-      setBundle(cached);
-      return;
-    }
+    if (CACHE.has(brand)) return;
     let cancelled = false;
-    fetch(`/artifacts/${brand}/latest/tokens.json`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((loaded: Bundle | null) => {
-        if (!loaded) return;
-        CACHE.set(brand, loaded);
-        if (!cancelled) setBundle(loaded);
+    const url = `/artifacts/${brand}/latest/tokens.json`;
+    fetch(url)
+      .then((r) => {
+        if (!r.ok) throw new Error(`${url} returned ${r.status}`);
+        return r.json();
       })
-      .catch(() => {
-        
+      .then((loaded: Bundle) => {
+        CACHE.set(brand, loaded);
+        if (!cancelled) setFetched(loaded);
+      })
+      .catch((error: unknown) => {
+        console.error(`[strata] ${brand}: component defaults unavailable`, error);
       });
     return () => {
       cancelled = true;
@@ -100,6 +100,5 @@ export function BrandProvider({
 }
 
 export function BrandStylesheet({ brand }: { brand: string }) {
-  // eslint-disable-next-line @next/next/no-css-tags
   return <link rel="stylesheet" href={`/artifacts/${brand}/latest/theme.css`} />;
 }

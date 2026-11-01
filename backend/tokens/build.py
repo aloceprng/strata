@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
-from strata_core import StrataError, resolve_document
+from strata_core import Report, StrataError, classify_diff, diff_documents, resolve_document
 from strata_core.emitters import emit_css, emit_json
 from strata_core.storage import LocalArtifactStore, StoredArtifact, versioned_path
 
@@ -19,6 +19,12 @@ def render(token_set) -> dict[str, str]:
         "theme.css": emit_css(resolved, brand),
         "tokens.json": emit_json(resolved, brand),
     }
+
+def compare(token_set, baseline) -> Report:
+    try:
+        return classify_diff(diff_documents(baseline.tokens, token_set.tokens))
+    except StrataError as exc:
+        raise ValidationError(f"cannot diff {token_set} against {baseline}: {exc}") from exc
 
 def write(token_set, outputs: dict[str, str], store=None) -> list[StoredArtifact]:
     store = store or default_store()

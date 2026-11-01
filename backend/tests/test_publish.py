@@ -6,7 +6,7 @@ from pathlib import Path
 from django.core.exceptions import ValidationError
 from django.test import TestCase, override_settings
 
-from .models import Brand, TokenSet
+from tokens.models import Brand, TokenSet
 
 DOCUMENT = {
     "primitive": {"colour": {"$type": "color", "green": {"600": {"$value": "#2f7a3f"}}}},

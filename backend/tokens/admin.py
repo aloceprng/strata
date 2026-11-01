@@ -1,5 +1,6 @@
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
+from django.utils.html import format_html_join
 
 from .build import build
 from .models import Brand, TokenSet
@@ -20,10 +21,14 @@ class BrandAdmin(admin.ModelAdmin):
 
 @admin.register(TokenSet)
 class TokenSetAdmin(admin.ModelAdmin):
-    list_display = ("brand", "version", "status", "note", "published_at")
-    list_filter = ("brand", "status")
-    readonly_fields = ("version", "status", "published_at", "created_at")
-    actions = ["publish_selected", "fork_selected", "rebuild_selected"]
+    list_display = ("brand", "version", "status", "severity", "note", "published_at")
+    list_filter = ("brand", "status", "severity")
+    exclude = ("changes",)
+    readonly_fields = (
+        "version", "status", "published_at", "created_at",
+        "compared_to", "severity", "change_report",
+    )
+    actions = ["publish_selected", "publish_allowing_major", "fork_selected", "rebuild_selected"]
 
     def get_readonly_fields(self, request, obj=None):
         fields = list(super().get_readonly_fields(request, obj))
@@ -35,15 +40,39 @@ class TokenSetAdmin(admin.ModelAdmin):
         obj.full_clean(exclude=None, validate_unique=False)
         super().save_model(request, obj, form, change)
 
+    @admin.display(description="Changes")
+    def change_report(self, obj):
+        if not obj.changes:
+            return "—"
+        return format_html_join(
+            "", "<div><b>{}</b> {} — {}</div>",
+            ((c["severity"], c["path"], c["reason"]) for c in obj.changes),
+        )
+
     @admin.action(description="Publish selected drafts")
     def publish_selected(self, request, queryset):
+        self._publish(request, queryset, allow_major=False)
+
+    @admin.action(description="Publish selected drafts, accepting major changes")
+    def publish_allowing_major(self, request, queryset):
+        self._publish(request, queryset, allow_major=True)
+
+    def _publish(self, request, queryset, *, allow_major):
         published = 0
         for token_set in queryset.order_by("brand", "version"):
             try:
-                token_set.publish()
+                token_set.publish(allow_major=allow_major)
                 published += 1
             except ValidationError as exc:
                 self.message_user(request, f"{token_set}: {exc.message}", messages.WARNING)
+                continue
+            if token_set.severity:
+                self.message_user(
+                    request,
+                    f"{token_set}: {token_set.severity} release against v{token_set.compared_to} "
+                    f"({len(token_set.changes)} change(s)).",
+                    messages.INFO,
+                )
         if published:
             self.message_user(
                 request, f"Published and built {published} set(s).", messages.SUCCESS

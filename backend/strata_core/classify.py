@@ -35,6 +35,22 @@ class Report:
     def counts(self) -> dict[str, int]:
         return {s: len(self.of_severity(s)) for s in (MAJOR, MINOR, PATCH)}
 
+    def as_records(self) -> list[dict]:
+        return [_record(item) for item in self.items]
+
+def _record(item: Classified) -> dict:
+    change = item.change
+    return {
+        "path": change.path,
+        "kind": change.kind,
+        "severity": item.severity,
+        "reason": item.reason,
+        "cause": change.cause,
+        "upstream": list(change.upstream),
+        "before": change.before.value if change.before else None,
+        "after": change.after.value if change.after else None,
+    }
+
 def classify(change: Change) -> Classified:
     if change.kind == ADDED:
         return Classified(change, MINOR, "added; nothing existing depends on it")
