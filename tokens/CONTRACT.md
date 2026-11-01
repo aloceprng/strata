@@ -1,11 +1,18 @@
 # The token contract
 
-**Semantic tokens are a contract.** Every brand defines *exactly* these 55 keys —
-different values, identical names. A component asks for `--colour-action-bg`; a
-brand that omits it renders that component wrong on that brand alone.
-`test_every_brand_defines_the_contract_semantic_tokens` asserts this against
-`REQUIRED_SEMANTIC` in `backend/tests/test_resolver.py`, so a missing key fails
-the suite rather than the page. Change that list and this file together.
+**Semantic tokens are a contract.** A brand needs every token read by the
+components it renders. Shared components read the 55 core keys below, so every
+brand defines those — different values, identical names. A component asks for
+`--colour-action-bg`; a brand that omits it renders that component wrong on that
+brand alone. `test_every_brand_defines_the_core_semantic_tokens` asserts this
+against `REQUIRED_SEMANTIC` in `backend/tests/test_resolver.py`, so a missing
+key fails the suite rather than the page. Change that list and this file
+together.
+
+**Brands may have more.** A section lists the tokens it reads in
+`contracts/components.json`, and publish refuses a layout whose brand lacks
+them. A section used by one brand needs its tokens on that brand alone, and any
+brand may define extra tokens of its own. See [DESIGN.md](../DESIGN.md).
 
 **Primitives are free.** Clementine, Pomelo and Kumquat share `colour.brand-1.*` 
 and `colour.red.*`. The only rule the resolver enforces is direction: a primitive 
@@ -21,7 +28,7 @@ Components read semantic tokens only. Primitives are emitted under a `--p-`
 prefix precisely so a component reaching into the lower stratum is visible in
 devtools instead of invisible.
 
-## Semantic — required
+## Semantic — core
 
 ### Colour — 22
 
@@ -119,8 +126,9 @@ they are read from `tokens.json`, not from `theme.css`.
 
 ## Primitives — shape required
 
-104 per brand. Every brand has the same primitive names, so one Figma
-collection can hold all three as modes.
+104 per brand today. Sharing names lets one Figma collection hold all three as
+modes. A variable exists in every mode of its collection, so a single-brand
+token still appears on the others with an unused value.
 
 | Group | Count | Notes |
 | --- | --- | --- |

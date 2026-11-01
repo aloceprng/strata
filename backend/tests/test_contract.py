@@ -31,22 +31,15 @@ def test_there_are_three_brands(brands):
 @pytest.mark.parametrize("source", BRAND_FILES, ids=lambda p: p.name)
 def test_every_component_default_is_set_to_an_allowed_value(source):
     defaults = load(source).layer("component")
-    assert set(defaults) == set(COMPONENT_DEFAULTS)
+    assert set(defaults) >= set(COMPONENT_DEFAULTS)
     for path, allowed in COMPONENT_DEFAULTS.items():
         assert defaults[path].value in allowed, f"{path} = {defaults[path].value!r}"
 
 
-def test_every_brand_has_the_same_primitive_names(brands):
-    shapes = {name: set(brand.layer("primitive")) for name, brand in brands.items()}
-    first = next(iter(shapes.values()))
-    assert all(shape == first for shape in shapes.values())
-    assert len(first) == 104
-
-
-def test_every_brand_has_the_same_types_per_token(brands):
-    typed = {name: {p: t.type for p, t in b.tokens.items()} for name, b in brands.items()}
-    first = next(iter(typed.values()))
-    assert all(types == first for types in typed.values())
+def test_a_token_shared_by_brands_has_one_type(brands):
+    typed = [{p: t.type for p, t in b.tokens.items()} for b in brands.values()]
+    shared = set(typed[0]).intersection(*typed[1:])
+    assert all(len({types[path] for types in typed}) == 1 for path in shared)
 
 
 @pytest.mark.parametrize("source", BRAND_FILES, ids=lambda p: p.name)

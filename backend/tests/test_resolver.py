@@ -204,6 +204,6 @@ class TestRealBrandFiles:
         resolve_document(json.loads(source.read_text(encoding="utf-8")))
 
     @pytest.mark.parametrize("source", BRAND_FILES, ids=lambda p: p.name)
-    def test_every_brand_defines_the_contract_semantic_tokens(self, source):
+    def test_every_brand_defines_the_core_semantic_tokens(self, source):
         brand = resolve_document(json.loads(source.read_text(encoding="utf-8")))
-        assert set(brand.layer("semantic")) == REQUIRED_SEMANTIC
+        assert set(brand.layer("semantic")) >= REQUIRED_SEMANTIC
