@@ -10,7 +10,7 @@ from .diff import ADDED, CHANGED, REMOVED
 from .errors import LayoutError
 from .resolver import ResolvedSet
 
-SCREEN_NAME = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+SCREEN_NAME = re.compile(r"[a-z0-9]+(-[a-z0-9]+)*")
 
 def load_contract(path: Path | str) -> dict:
     return json.loads(Path(path).read_text(encoding="utf-8"))
@@ -22,7 +22,7 @@ def validate_layouts(layouts: dict, contract: dict, resolved: ResolvedSet) -> No
         _validate_screen(screen, layout, contract, resolved)
 
 def _validate_screen(screen: str, layout: Any, contract: dict, resolved: ResolvedSet) -> None:
-    if not SCREEN_NAME.match(screen):
+    if not SCREEN_NAME.fullmatch(screen):
         raise LayoutError(f"{screen!r} is not a valid screen name")
     if not isinstance(layout, dict):
         raise LayoutError(f"{screen} must be an object")
@@ -52,7 +52,7 @@ def _validate_screen(screen: str, layout: Any, contract: dict, resolved: Resolve
 
 def _validate_section(where: str, section: dict, contract: dict, resolved: ResolvedSet) -> None:
     kind = section.get("type")
-    definition = contract["sections"].get(kind)
+    definition = contract["sections"].get(kind) if isinstance(kind, str) else None
     if definition is None:
         raise LayoutError(f"{where} has the unknown section type {kind!r}")
 

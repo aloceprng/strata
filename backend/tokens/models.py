@@ -138,7 +138,7 @@ class TokenSet(models.Model):
             breaking = ", ".join(r["path"] for r in records if r["severity"] == severity)
             raise ValidationError(
                 f"{self} is a major change against {baseline.label} ({breaking}). "
-                f"Publish it with major changes allowed, or restore those tokens."
+                f"Publish it with major changes allowed, or undo those changes."
             )
 
         with transaction.atomic():
