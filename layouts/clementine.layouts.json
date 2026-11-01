@@ -1,0 +1,18 @@
+{
+  "home": {
+    "schemaVersion": 1,
+    "screen": "home",
+    "sections": [
+      {
+        "id": "autumn-harvest",
+        "type": "Intro",
+        "props": {
+          "title": "Autumn harvest.",
+          "body": "20% off seasonal veg.",
+          "tone": "secondary",
+          "gap": "space.stack.gap"
+        }
+      }
+    ]
+  }
+}

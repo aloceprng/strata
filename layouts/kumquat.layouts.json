@@ -1,0 +1,18 @@
+{
+  "home": {
+    "schemaVersion": 1,
+    "screen": "home",
+    "sections": [
+      {
+        "id": "where-to",
+        "type": "Intro",
+        "props": {
+          "title": "Where to?",
+          "body": "Tickets from 1,700 stations.",
+          "tone": "secondary",
+          "gap": "space.stack.gap"
+        }
+      }
+    ]
+  }
+}

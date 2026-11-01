@@ -16,11 +16,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 
-from strata_core import StrataError, resolve_document  # noqa: E402
+from strata_core import (  # noqa: E402
+    StrataError,
+    emit_layout,
+    load_contract,
+    resolve_document,
+    validate_layouts,
+)
 from strata_core.emitters import emit_css, emit_json  # noqa: E402
 from strata_core.storage import LocalArtifactStore, versioned_path  # noqa: E402
 
 TOKENS_DIR = ROOT / "tokens"
+LAYOUTS_DIR = ROOT / "layouts"
+CONTRACT = ROOT / "contracts" / "components.json"
 DIST_DIR = ROOT / "dist"
 
 def brands() -> list[str]:
@@ -33,10 +41,15 @@ def build_brand(brand: str, store: LocalArtifactStore, version: str | None) -> b
         return False
 
     document = json.loads(source.read_text(encoding="utf-8"))
+    layout_source = LAYOUTS_DIR / f"{brand}.layouts.json"
+    layouts = (
+        json.loads(layout_source.read_text(encoding="utf-8")) if layout_source.exists() else {}
+    )
 
     started = time.perf_counter()
     try:
         resolved = resolve_document(document)
+        validate_layouts(layouts, load_contract(CONTRACT), resolved)
     except StrataError as exc:
         print(f"  {brand}: FAILED — {exc}")
         return False
@@ -46,10 +59,14 @@ def build_brand(brand: str, store: LocalArtifactStore, version: str | None) -> b
         "theme.css": emit_css(resolved, brand),
         "tokens.json": emit_json(resolved, brand),
     }
+    for screen, layout in layouts.items():
+        outputs[f"screens/{screen}.json"] = emit_layout(layout)
 
     targets = ["latest"] + ([version] if version else [])
     written = []
     for target in targets:
+        if target == "latest":
+            store.clear(versioned_path(brand, target, "screens"))
         for filename, content in outputs.items():
             written.append(store.write(versioned_path(brand, target, filename), content))
 

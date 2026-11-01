@@ -44,6 +44,11 @@ class Command(BaseCommand):
                 continue
 
             document = json.loads(source.read_text(encoding="utf-8"))
+            layout_source = settings.LAYOUT_SOURCE_DIR / f"{slug}.layouts.json"
+            layouts = (
+                json.loads(layout_source.read_text(encoding="utf-8"))
+                if layout_source.exists() else {}
+            )
 
             try:
                 resolved = resolve_document(document)
@@ -63,6 +68,7 @@ class Command(BaseCommand):
                 brand=brand,
                 version=1,
                 tokens=document,
+                layouts=layouts,
                 note="seeded from the hand-authored file",
             )
             token_set.publish()

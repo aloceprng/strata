@@ -3,7 +3,9 @@ from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.utils import timezone
 
-from .build import compare, render, write
+from strata_core import worst_severity
+
+from .build import changes, render, write
 
 class Brand(models.Model):
     slug = models.SlugField(unique=True)
@@ -49,6 +51,7 @@ class TokenSet(models.Model):
     status = models.CharField(max_length=16, choices=Status.choices, default=Status.DRAFT)
 
     tokens = models.JSONField(default=dict)
+    layouts = models.JSONField(default=dict, blank=True)
 
     note = models.CharField(max_length=200, blank=True)
 
@@ -86,6 +89,8 @@ class TokenSet(models.Model):
     def save(self, *args, **kwargs):
         if self.version is None:
             self.version = self.next_version(self.brand)
+        if self.layouts is None:
+            self.layouts = {}
         self.check_immutable()
         super().save(*args, **kwargs)
 
@@ -99,7 +104,7 @@ class TokenSet(models.Model):
         if previous and previous.status == self.Status.PUBLISHED:
             changed = [
                 field
-                for field in ("tokens", "version", "brand_id")
+                for field in ("tokens", "layouts", "version", "brand_id")
                 if getattr(previous, field) != getattr(self, field)
             ]
             if changed:
@@ -127,10 +132,10 @@ class TokenSet(models.Model):
         outputs = render(self)
 
         baseline = self.baseline()
-        report = compare(self, baseline) if baseline else None
-        severity = (report.severity if report else None) or ""
+        records = changes(self, baseline) if baseline else []
+        severity = worst_severity(records)
         if severity == self.Severity.MAJOR and not allow_major:
-            breaking = ", ".join(item.path for item in report.of_severity(self.Severity.MAJOR))
+            breaking = ", ".join(r["path"] for r in records if r["severity"] == severity)
             raise ValidationError(
                 f"{self} is a major change against {baseline.label} ({breaking}). "
                 f"Publish it with major changes allowed, or restore those tokens."
@@ -141,7 +146,7 @@ class TokenSet(models.Model):
             self.published_at = timezone.now()
             self.compared_to = baseline.version if baseline else None
             self.severity = severity
-            self.changes = report.as_records() if report else []
+            self.changes = records
             self.save(update_fields=[
                 "status", "published_at", "compared_to", "severity", "changes",
             ])
@@ -157,6 +162,7 @@ class TokenSet(models.Model):
             brand=self.brand,
             version=self.next_version(self.brand),
             tokens=self.tokens,
+            layouts=self.layouts,
             note=note,
             status=self.Status.DRAFT,
         )

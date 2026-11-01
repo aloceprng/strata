@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import shutil
 from pathlib import Path
 from typing import Protocol
 
@@ -8,6 +9,8 @@ class ArtifactStore(Protocol):
     def write(self, path: str, content: str) -> "StoredArtifact": ...
 
     def url_for(self, path: str) -> str: ...
+
+    def clear(self, path: str) -> None: ...
 
 class StoredArtifact:
     def __init__(self, path: str, url: str, size: int, checksum: str):
@@ -38,6 +41,9 @@ class LocalArtifactStore:
 
     def url_for(self, path: str) -> str:
         return f"{self.base_url}/{path}"
+
+    def clear(self, path: str) -> None:
+        shutil.rmtree(self.root / path, ignore_errors=True)
 
 def versioned_path(brand: str, version: str, filename: str) -> str:
     return f"{brand}/{version}/{filename}"
