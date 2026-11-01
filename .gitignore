@@ -26,3 +26,9 @@ frontend/CLAUDE.md
 Thumbs.db
 .vscode/
 .idea/
+
+# Coverage
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
