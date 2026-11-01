@@ -113,8 +113,16 @@ invalidating every session on each deploy.
 ## Tests
 
 ```bash
-python -m pytest backend -q
+docker compose up -d db
+cd backend
+python -m pytest
 ```
+
+The Django tests need Postgres; the `strata_core` tests do not. Every run
+prints a coverage table, writes `backend/htmlcov/` and `backend/coverage.xml`,
+and fails below 85% line-and-branch coverage. CI runs the same command against
+a Postgres service, posts the coverage table to the run summary and uploads the
+HTML report as the `coverage-report` artifact.
 
 The tests are about the ways the graph can be wrong, not the ways the happy
 path can be right: missing references, two- and three-token cycles, a token
@@ -133,8 +141,10 @@ component set is a fiction.
 | `Brand` / `TokenSet` models, admin, seed | done — needs Postgres running |
 | Publish from admin rewrites `theme.css` / `tokens.json` | done — synchronous |
 | Headless React components, the matrix page | done |
-| Semantic diffing, severity classification | done in `strata_core`; not yet wired into publish |
-| Spacing, radius, type, default button, semantic values | not assigned — see `tokens/CONTRACT.md` |
+| Semantic diffing, severity classification | done — every publish is diffed against the previous version; major changes need explicit approval |
+| Spacing, radius, type, default button, semantic values | assigned for all three brands — first-pass values, final designs pending |
+| Brand sector and principle | placeholders in `seed.py` |
+| CI: tests, 85% coverage gate, coverage report | done — `.github/workflows/ci.yml` |
 | Celery build pipeline, SSE progress | next (week 3) |
 | Figma variable sync | week 5 — verify Variables API plan access first |
 
@@ -148,8 +158,9 @@ Invented, and meant to differ as *systems* rather than as palettes.
 | Pomelo | yellow | red | green |
 | Kumquat | navy | light blue | sand yellow |
 
-Colour primitives are exported from Figma. Sector, principle, spacing, radius,
-type scale, default button and semantic tokens are not assigned yet; see
+Colour primitives are exported from Figma. Spacing, radius, type scale,
+default button and semantic tokens have first-pass values, to be replaced once
+each brand is designed; sector and principle are placeholders. See
 [tokens/CONTRACT.md](tokens/CONTRACT.md).
 
 The default button matters more than it looks. A brand that can change a
