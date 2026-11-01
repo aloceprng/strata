@@ -76,7 +76,7 @@ jobs:
           if-no-files-found: warn
 
   frontend:
-    name: Frontend lint and typecheck
+    name: Frontend lint, typecheck and tests
     runs-on: ubuntu-latest
 
     defaults:
@@ -95,3 +95,4 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npx tsc --noEmit
+      - run: npm test
