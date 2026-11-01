@@ -4,6 +4,9 @@ class StrataError(Exception):
 class TokenFileError(StrataError):
     pass
 
+class LayoutError(StrataError):
+    pass
+
 class UnknownReferenceError(StrataError):
 
     def __init__(self, source: str, target: str):
