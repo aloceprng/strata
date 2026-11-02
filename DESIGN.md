@@ -1,20 +1,21 @@
 # Design
 
-Strata publishes tokens today. This document covers the next step: publishing
-screens, so the server decides what a page contains as well as how it looks.
+Strata publishes tokens and screens, so the server decides what a page contains
+as well as how it looks. This document covers how screens work and what is
+left to build.
 
-**Goal:** `/brands/<brand>` renders that brand's home screen from a published
-layout. Publishing a new layout changes the page's structure with no frontend
-deploy.
+**Goal:** Clementine and Pomelo each have a home, product details and cart
+screen, rendered from published layouts. Publishing a new layout changes a
+page's structure with no frontend deploy. Only the home route exists today.
 
 ## Component layers
 
 | Layer | Examples | Defined in | Changed by |
 | --- | --- | --- | --- |
 | Atoms | `Button`, `Input`, `Badge`, `Grid`, `Illustration`, `Price` | React | Code |
-| Composites | `ProductCard`, `SectionHeader`, `SiteHeader`, `JourneyField` | React | Code |
-| Sections | `PromoHero`, `CategoryTiles`, `DealRow`, `ProductFigures`, `RouteList` | React | Code |
-| Screens | Each brand's home | `layout.json` | Published data |
+| Composites | `ProductCard`, `SectionHeader`, `SiteHeader`, `JourneyField`, `QuantityStepper`, `CartLineItem` | React | Code |
+| Sections | `PromoHero`, `CategoryTiles`, `DealRow`, `ProductFigures`, `RouteList`, `ProductGallery`, `ProductSummary`, `ProductDetails`, `CartItems`, `OrderSummary` | React | Code |
+| Screens | Each brand's home, product details and cart | `layout.json` | Published data |
 
 A screen built from existing pieces is a data change. A new piece is code and a
 frontend deploy.
@@ -78,6 +79,22 @@ invalid prop, an unknown or missing token, or a duplicate section `id`.
 | Screen or section added, or sections reordered | Minor |
 | Prop or content changed | Patch |
 
+## Planned: product and cart screens
+
+Not built yet. The storage model already holds several screens per brand.
+
+- **Routes:** `/brands/<brand>/<screen>` replaces the fixed `home` fetch.
+- **Sample data:** six to eight fake products per brand. There is no catalogue
+  or real product data.
+- **Contract:** props gain number, list and action types.
+- **Actions:** a layout can give a control an action from a fixed list:
+  `addToCart`, `removeFromCart` and links between screens. Publish refuses any
+  other action.
+- **Cart:** add, change quantity, remove and updated totals, kept in the
+  browser. The checkout button is shown disabled.
+
+Both brands must sell things, so Pomelo's brief needs to make it a shop.
+
 ## Rendering
 
 A server component fetches the screen from Django and maps each section to its
@@ -89,16 +106,19 @@ logged, so an older frontend survives newer data.
 
 | Phase | Work | Finished when |
 | --- | --- | --- |
-| 1. Pipeline | Validation, diff, publish, renderer, one simple section | A published change appears without a deploy |
-| 2. Clementine | Remaining atoms, composites and sections | Home matches Figma on desktop |
-| 3. Pomelo | `ProductFigures`, `SpecNotes`, title rail, illustrations | Home matches Figma on desktop |
+| 1. Pipeline (done) | Validation, diff, publish, renderer, one simple section, `/pipeline` dry-run page | A published change appears without a deploy |
+| 2. Clementine | Screen routes, sample data, actions, cart state, remaining atoms, composites and sections | Home, product and cart match Figma on desktop, and the cart works |
+| 3. Pomelo | `ProductFigures`, `SpecNotes`, title rail, illustrations, its product and cart sections | Home, product and cart match Figma on desktop, and the cart works |
 | 4. Kumquat | Sections for whatever the brand becomes | Three different pages from one renderer |
-| 5. Demo | README walkthrough; drag editor optional | The idea lands in thirty seconds |
+| 5. Demo | Authenticated publish from `/pipeline`, hosted site, README walkthrough | The idea lands in thirty seconds |
 
 Kumquat's sector is decided just before phase 4. Token names do not depend on
 it.
 
 ## Out of scope for now
 
-Nested layouts, working forms and actions, mobile, personalization and real
-product data.
+Nested layouts, mobile, personalization, real product data, checkout, accounts,
+payments, a server-side cart, and any forms or actions beyond the planned list.
+
+Deferred until after the demo: the Celery build pipeline and SSE progress, the
+Figma variable sync, and a drag editor.

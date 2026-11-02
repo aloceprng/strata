@@ -37,6 +37,11 @@ rebuild.
 `python tools/build_tokens.py` resolves the token files into `dist/` without
 Django or a database.
 
+<http://127.0.0.1:3000/pipeline> shows the publish pipeline. Edit a brand's
+layout to see a live preview, the changes against the published version, and
+whether publish would accept it. It is a dry run through the real checks and
+saves nothing; publishing happens in the admin.
+
 ## The token model
 
 Two layers, and components only ever read the upper one.
@@ -69,6 +74,9 @@ frontend/               Next.js app
   app/strata.css        the headless component layer, identical on every brand
   app/components/       BrandProvider (loads theme.css by URL), primitives
   app/matrix/           the design system page
+  app/brands/[brand]/   a brand's published home screen
+  app/pipeline/         the publish dry-run page
+  app/sections/         section components and ScreenRenderer
 backend/
   strata_core/          the pipeline. Pure Python, no Django imports.
     parse.py            DTCG document → flat tokens
@@ -77,16 +85,18 @@ backend/
     diff.py             what changed between two token documents
     classify.py         patch / minor / major for each change
     emitters/           CSS custom properties, JSON bundle
+    layout.py           validate and diff published screens
     storage.py          the one place artifacts are written
   config/               Django project; serves artifacts/ in DEBUG
-  tokens/               Django app: Brand, TokenSet, admin, publish, seed
+  tokens/               Django app: Brand, TokenSet, admin, publish, seed, API
   tests/                resolver, diff and classify tests
-docker-compose.yml      Postgres on 5433 (Redis joins in week 3)
+contracts/              the section types publish accepts
+layouts/                starter screens, one file per brand
+docker-compose.yml      Postgres on 5433
 ```
 
-`strata_core` is deliberately free of framework imports. The same code runs
-from the command line today and inside a Celery task in week 3, without being
-rewritten.
+`strata_core` is deliberately free of framework imports, so the same code runs
+from the command line and inside Django.
 
 ## Running the backend
 
@@ -128,8 +138,8 @@ The tests are about the ways the graph can be wrong, not the ways the happy
 path can be right: missing references, two- and three-token cycles, a token
 referencing itself, a 5,000-deep chain that must not exhaust the stack, a
 primitive illegally reaching up into the semantic layer, and the rule that
-every brand defines an identical semantic surface — without which one
-component set is a fiction.
+every brand defines the core semantic tokens — without which one component
+set is a fiction.
 
 ## Status
 
@@ -146,8 +156,12 @@ component set is a fiction.
 | Brand sector and principle | placeholders in `seed.py` |
 | CI: tests, 85% coverage gate, coverage report | done — `.github/workflows/ci.yml` |
 | Server-published screens | pipeline done, one section type — see [DESIGN.md](DESIGN.md) |
-| Celery build pipeline, SSE progress | next (week 3) |
-| Figma variable sync | week 5 — verify Variables API plan access first |
+| Publish dry-run page | done — `/pipeline` |
+| Clementine and Pomelo home, product and cart screens | next — needs final designs; the cart stays in the browser, with no checkout |
+| Publish from `/pipeline`, hosted demo, walkthrough | after the home screens |
+| Celery build pipeline, SSE progress | deferred |
+| Figma variable sync | deferred — verify Variables API plan access first |
+| Drag editor | deferred |
 
 ## The three brands
 
