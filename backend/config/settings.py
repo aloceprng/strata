@@ -127,3 +127,5 @@ ARTIFACT_ROOT = Path(os.environ.get('STRATA_ARTIFACT_ROOT', REPO_ROOT / 'dist'))
 ARTIFACT_URL = '/artifacts/'
 
 TOKEN_SOURCE_DIR = REPO_ROOT / 'tokens'
+LAYOUT_SOURCE_DIR = REPO_ROOT / 'layouts'
+COMPONENT_CONTRACT = REPO_ROOT / 'contracts' / 'components.json'

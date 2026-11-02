@@ -1,0 +1,18 @@
+{
+  "home": {
+    "schemaVersion": 1,
+    "screen": "home",
+    "sections": [
+      {
+        "id": "the-orchard",
+        "type": "Intro",
+        "props": {
+          "title": "The Orchard",
+          "body": "Collection 04, autumn 2026.",
+          "tone": "secondary",
+          "gap": "space.stack.gap"
+        }
+      }
+    ]
+  }
+}

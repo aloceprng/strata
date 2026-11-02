@@ -145,6 +145,7 @@ component set is a fiction.
 | Spacing, radius, type, default button, semantic values | assigned for all three brands — first-pass values, final designs pending |
 | Brand sector and principle | placeholders in `seed.py` |
 | CI: tests, 85% coverage gate, coverage report | done — `.github/workflows/ci.yml` |
+| Server-published screens | pipeline done, one section type — see [DESIGN.md](DESIGN.md) |
 | Celery build pipeline, SSE progress | next (week 3) |
 | Figma variable sync | week 5 — verify Variables API plan access first |
 

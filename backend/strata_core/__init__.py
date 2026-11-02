@@ -3,10 +3,12 @@ from .diff import Change, Diff, diff, diff_documents
 from .errors import (
     CycleError,
     LayerViolationError,
+    LayoutError,
     StrataError,
     TokenFileError,
     UnknownReferenceError,
 )
+from .layout import diff_layouts, emit_layout, load_contract, validate_layouts, worst_severity
 from .parse import Token, parse
 from .resolver import ResolvedSet, ResolvedToken, resolve, resolve_document
 
@@ -16,6 +18,7 @@ __all__ = [
     "CycleError",
     "Diff",
     "LayerViolationError",
+    "LayoutError",
     "Report",
     "ResolvedSet",
     "ResolvedToken",
@@ -27,7 +30,12 @@ __all__ = [
     "classify_diff",
     "diff",
     "diff_documents",
+    "diff_layouts",
+    "emit_layout",
+    "load_contract",
     "parse",
     "resolve",
     "resolve_document",
+    "validate_layouts",
+    "worst_severity",
 ]

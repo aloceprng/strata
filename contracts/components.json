@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "sections": {
+    "Intro": {
+      "tokens": [
+        "colour.text.primary",
+        "colour.text.secondary",
+        "font.heading.size",
+        "font.body.size"
+      ],
+      "props": {
+        "title": {"type": "string", "required": true},
+        "body": {"type": "string"},
+        "tone": {"type": "enum", "values": ["secondary", "accent"]},
+        "gap": {"type": "token", "group": "space.stack"}
+      }
+    }
+  }
+}
