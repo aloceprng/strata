@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         source: "/artifacts/:path*",
         destination: `${ARTIFACT_STORE}/artifacts/:path*`,
       },
+      {
+        source: "/api/:path*",
+        destination: `${ARTIFACT_STORE}/api/:path*`,
+      },
     ];
   },
 };
