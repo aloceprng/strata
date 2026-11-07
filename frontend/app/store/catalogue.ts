@@ -1,8 +1,3 @@
-/**
- * The published catalogue and the maths of a basket. Pure functions only, so the
- * Figma totals can be checked in a unit test.
- */
-
 export type TagTone = "deal" | "alert" | "info" | "inverse";
 export type Label = { label: string; tone?: TagTone };
 
@@ -54,7 +49,6 @@ export const EMPTY_CATALOGUE: Catalogue = {
   products: {},
 };
 
-/** The starting basket, saved items and ticked extras a catalogue ships with. */
 export function seedCart(catalogue: Catalogue): Cart {
   return {
     lines: (catalogue.basket ?? []).map((line) => ({ ...line })),
@@ -63,7 +57,6 @@ export function seedCart(catalogue: Catalogue): Cart {
   };
 }
 
-/** Drop anything a newer catalogue no longer sells, so a stale browser cart cannot break a page. */
 export function reconcile(cart: Cart, catalogue: Catalogue): Cart {
   const extras = new Set((catalogue.extras ?? []).map((extra) => extra.id));
   return {
@@ -77,7 +70,6 @@ export const lineKey = (line: { product: string; option?: string }) => `${line.p
 
 const cents = (amount: number) => Math.round(amount * 100);
 
-/** What a quantity of one product costs once its offer is applied, in cents. */
 export function linePrice(product: CatalogueProduct, quantity: number) {
   const unit = cents(product.price);
   const full = unit * quantity;
@@ -134,7 +126,6 @@ export function priceBasket(catalogue: Catalogue, cart: Cart): BasketTotals {
   };
 }
 
-/** Cents to "$1,110" or "$0.89", using the catalogue's decimals. A negative gets a true minus. */
 export function formatMoney(amount: number, currency: Catalogue["currency"]) {
   const text = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -145,14 +136,12 @@ export function formatMoney(amount: number, currency: Catalogue["currency"]) {
   return amount < 0 ? `−${text}` : text;
 }
 
-/** Fill {units}, {lines} and {products} in layout copy such as "Basket ({lines})". */
 export function fill(template: string, values: Partial<Record<"units" | "lines" | "products", number>>) {
   return template.replace(/\{(units|lines|products)\}/g, (match, name: keyof typeof values) =>
     values[name] === undefined ? match : String(values[name]),
   );
 }
 
-/** A layout link is a screen name or product/<id>; the URL shape lives here alone. */
 export function hrefFor(brand: string, link: string | undefined) {
   if (!link) return undefined;
   if (link.startsWith("product/")) return `/brands/${brand}/products/${link.slice("product/".length)}`;

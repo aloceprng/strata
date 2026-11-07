@@ -13,7 +13,6 @@ export type CatalogueGridProps = {
   products: string[];
 };
 
-/** Pomelo's listing: a display title, quiet text tabs, and a hairline grid of pieces. */
 export function CatalogueGrid({ title, count, filters = [], sortLabel, products }: CatalogueGridProps) {
   const [filter, setFilter] = useState(filters[0]?.label ?? "");
   return (

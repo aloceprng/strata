@@ -7,7 +7,6 @@ export type CategoryCarouselProps = {
   categories: Category[];
 };
 
-/** A row that runs off the page edge; the clipped last tile says it scrolls. */
 export function CategoryCarousel({ title, linkLabel, link, categories }: CategoryCarouselProps) {
   return (
     <section className="strata-category-carousel">

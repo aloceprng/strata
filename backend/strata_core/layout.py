@@ -18,14 +18,12 @@ ASSET_PATH = re.compile(r"/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*[a-z0-9]+(?:-[a-z0-9]+)
 def load_contract(path: Path | str) -> dict:
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
-# The product screen is a template: the frontend renders it once per catalogue product.
+# product is a template screen, rendered once per catalogue product
 PRODUCT_SCREEN = "product"
 PRODUCT_LINK = re.compile(r"product/([a-z0-9]+(?:-[a-z0-9]+)*)")
 
 
 class _Context:
-    """What a prop may point at: this version's tokens, screens and products."""
-
     def __init__(self, resolved: ResolvedSet, layouts: dict, catalogue: dict | None):
         self.resolved = resolved
         self.screens = set(layouts) - {PRODUCT_SCREEN}
@@ -150,7 +148,6 @@ def _validate_product(where: str, value: Any, context: _Context) -> None:
         raise LayoutError(f"{where} refers to the product {value!r}, which is not in the catalogue")
 
 def _validate_link(where: str, value: Any, context: _Context) -> None:
-    """A link names a screen of this version, or product/<id>. Nothing else is allowed."""
     if not isinstance(value, str):
         raise LayoutError(f"{where} must be a screen name or product/<id>")
     product = PRODUCT_LINK.fullmatch(value)

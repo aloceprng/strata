@@ -15,12 +15,11 @@ export type ProductGridProps = {
   products: string[];
 };
 
-/** Clementine's listing: filter chips over a dense grid of add-to-basket cards. */
 export function ProductGrid({ title, subtitle, filters = [], sortLabel, columns = 4, products }: ProductGridProps) {
   const store = useStore();
   const view = useProductView();
   const [filter, setFilter] = useState(filters[0]?.label ?? "");
-  // The first chip shows everything; any other keeps products that list it in their filters.
+  // first chip shows everything
   const shown = products.filter(
     (id) => filter === filters[0]?.label || (store?.product(id)?.filters ?? []).includes(filter),
   );

@@ -8,7 +8,6 @@ import type { PricedLine } from "../store/catalogue";
 import { useStore } from "../store/StoreProvider";
 
 export type BasketProps = {
-  /** compact: many short lines beside a totals panel. detailed: few large lines, totals beneath. */
   layout: "compact" | "detailed";
   summaryTitle?: string;
   checkoutLabel: string;
@@ -187,7 +186,6 @@ function Totals({ store }: { store: Store }) {
   );
 }
 
-/** Promo codes are out of scope: the field takes input but applies nothing. */
 function PromoCode() {
   return (
     <form className="strata-promo" onSubmit={(event) => event.preventDefault()}>
@@ -199,7 +197,6 @@ function PromoCode() {
   );
 }
 
-/** Checkout is out of scope, so the button explains instead of acting. */
 function Checkout({ label }: { label: string }) {
   const [asked, setAsked] = useState(false);
   return (

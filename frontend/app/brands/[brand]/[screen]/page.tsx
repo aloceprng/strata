@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { BrandScreen } from "../../BrandScreen";
 
-// home has its own URL and product is a template that needs an id.
+// home and product have their own routes
 const ROUTED_ELSEWHERE = new Set(["home", "product"]);
 
 export default async function BrandPage({ params }: { params: Promise<{ brand: string; screen: string }> }) {

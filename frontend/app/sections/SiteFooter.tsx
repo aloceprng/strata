@@ -11,7 +11,6 @@ export type SiteFooterProps = {
   copyright?: string;
 };
 
-/** Full-bleed footer. The newsletter form is for show and sends nothing. */
 export function SiteFooter({ newsletterTitle, newsletterBody, columns = [], wordmark, wordmarkAlt = "", copyright }: SiteFooterProps) {
   return (
     <footer className="strata-site-footer">
@@ -43,7 +42,7 @@ export function SiteFooter({ newsletterTitle, newsletterBody, columns = [], word
       </div>
       <div className="strata-footer-mark">
         {wordmark ? (
-          // Masked so the wordmark takes the footer's colour token rather than the file's own fill.
+          // masked so the wordmark takes the footer token colour
           <span
             className="strata-footer-wordmark"
             role="img"

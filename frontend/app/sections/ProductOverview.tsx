@@ -10,7 +10,6 @@ import { useAdded } from "./useAdded";
 
 export type ProductOverviewProps = { addLabel?: string; addedLabel?: string };
 
-/** Clementine's product page: decide quickly, with the offer and the delivery slot in view. */
 export function ProductOverview({ addLabel = "Add to basket", addedLabel = "Added to basket" }: ProductOverviewProps) {
   const store = useStore();
   const [quantity, setQuantity] = useState(1);

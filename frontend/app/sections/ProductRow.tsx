@@ -9,7 +9,6 @@ export type ProductRowProps = {
   linkLabel?: string;
   link?: string;
   columns?: number;
-  /** "related" shows the current product's companions on a product screen. */
   source?: "list" | "related";
   products?: string[];
 };

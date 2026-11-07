@@ -1,10 +1,5 @@
 import { reconcile, seedCart, type Cart, type Catalogue } from "./catalogue";
 
-/**
- * The browser-only basket, one per brand, kept in localStorage. It lives outside React
- * so every page and tab reads the same cart; components subscribe with useSyncExternalStore.
- */
-
 type Listener = () => void;
 type Entry = { cart: Cart; catalogue: Catalogue; listeners: Set<Listener> };
 
@@ -15,9 +10,7 @@ function read(brand: string, catalogue: Catalogue): Cart {
   try {
     const raw = window.localStorage.getItem(storageKey(brand));
     if (raw) return reconcile(JSON.parse(raw) as Cart, catalogue);
-  } catch {
-    // Unreadable or blocked storage: start from the catalogue's sample basket.
-  }
+  } catch {}
   return seedCart(catalogue);
 }
 
@@ -27,7 +20,7 @@ function entry(brand: string, catalogue: Catalogue): Entry {
     found = { cart: read(brand, catalogue), catalogue, listeners: new Set() };
     entries.set(brand, found);
   } else if (found.catalogue !== catalogue) {
-    // A newer catalogue (another page, or the preview's late load): re-read against it.
+    // re-read when the catalogue changes
     found.cart = read(brand, catalogue);
     found.catalogue = catalogue;
   }
@@ -52,22 +45,20 @@ export function cartStore(brand: string, catalogue: Catalogue) {
       };
     },
     getSnapshot: () => entry(brand, catalogue).cart,
-    /** The server, and the first client render, show the sample basket so hydration matches. */
+    // sample basket on the server so hydration matches
     getServerSnapshot: () => server,
     update(change: (cart: Cart) => Cart) {
       const current = entry(brand, catalogue);
       current.cart = change(current.cart);
       try {
         window.localStorage.setItem(storageKey(brand), JSON.stringify(current.cart));
-      } catch {
-        // Private mode or full storage: the basket still works for this visit.
-      }
+      } catch {}
       current.listeners.forEach((listener) => listener());
     },
   };
 }
 
-/** For tests: forget every in-memory basket. */
+// for tests
 export function resetCarts() {
   entries.clear();
 }

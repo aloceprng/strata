@@ -5,7 +5,6 @@ import { useStore } from "../store/StoreProvider";
 
 export type BreadcrumbTrailProps = {
   items?: Crumb[];
-  /** On a product screen, append the product's category and its name. */
   withProduct?: boolean;
 };
 

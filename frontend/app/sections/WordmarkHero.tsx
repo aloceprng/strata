@@ -8,7 +8,6 @@ export type WordmarkHeroProps = {
   actions?: { label: string; variant?: "primary" | "secondary"; link?: string }[];
 };
 
-/** Pomelo's home: one large piece, the wordmark across it, two quiet actions. */
 export function WordmarkHero({ wordmark, wordmarkAlt = "", image, imageAlt = "", actions = [] }: WordmarkHeroProps) {
   return (
     <section className="strata-wordmark-hero">

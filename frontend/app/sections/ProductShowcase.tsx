@@ -14,7 +14,6 @@ export type ProductShowcaseProps = {
   addedLabel?: string;
 };
 
-/** Pomelo's product page: options to one side, two large views, a long read with the specs. */
 export function ProductShowcase({
   optionsLabel = "Other colours",
   specsLabel = "Parameters",

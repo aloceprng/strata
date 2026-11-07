@@ -6,7 +6,6 @@ import { useStore } from "../store/StoreProvider";
 
 export type PageTitleProps = {
   title: string;
-  /** May use {units} or {lines} from the basket, e.g. "{units} items" or "({lines})". */
   count?: string;
   style?: "inline" | "display";
   breadcrumb?: Crumb[];

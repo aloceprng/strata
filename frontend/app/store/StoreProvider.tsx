@@ -19,7 +19,6 @@ import {
 type Store = {
   brand: string;
   catalogue: Catalogue;
-  /** The product a product screen is showing, if any. */
   current: string | null;
   cart: Cart;
   totals: BasketTotals;
@@ -35,7 +34,6 @@ type Store = {
 
 const Context = createContext<Store | null>(null);
 
-/** The store, or null outside a brand page (the token comparison renders cards on their own). */
 export function useStore() {
   return useContext(Context);
 }

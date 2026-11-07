@@ -25,7 +25,7 @@ export type IconName =
 const HEART =
   "M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z";
 
-/** Glyphs drawn on Figma's 20px grid, scaled into the 24px box with the same 2px-at-24 stroke. */
+// figma 20px glyphs scaled into the 24px box
 const onTwenty = (glyph: ReactNode) => (
   <g transform="scale(1.2)" strokeWidth={5 / 3}>
     {glyph}
@@ -75,10 +75,6 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   );
 }
 
-/**
- * A layout link (a screen name or product/<id>). Outside a brand page, or with no
- * link, it renders the same element without navigation.
- */
 export function LinkTo({
   link,
   children,
@@ -116,7 +112,6 @@ export function OfferTag({ tone = "deal", children }: { tone?: TagTone; children
   );
 }
 
-/** Saved state lives in the store when there is one, so a heart matches across pages. */
 export function SaveButton({ product, saved: initial = false, label }: { product?: string; saved?: boolean; label: string }) {
   const store = useStore();
   const [local, setLocal] = useState(initial);
@@ -168,7 +163,6 @@ export function Avatar({ initials }: { initials: string }) {
   );
 }
 
-/** The running basket. On a brand page it reads the live cart; elsewhere it shows the given values. */
 export function BasketButton({ total, count }: { total?: string; count?: number }) {
   const store = useStore();
   const shownTotal = store ? store.money(store.totals.total) : (total ?? "");
@@ -190,7 +184,6 @@ export function Price({ amount, unit }: { amount: string; unit?: string }) {
   );
 }
 
-/** A product as a card shows it: display strings, already formatted. */
 export type Product = {
   id?: string;
   name: string;
@@ -245,7 +238,6 @@ export function ProductCard({ product }: { product: Product }) {
   );
 }
 
-/** Pomelo's catalogue cell: a large cut-out, name and material, and the price top right. */
 export function CatalogueCard({ id }: { id: string }) {
   const store = useStore();
   const item = store?.product(id);
@@ -337,7 +329,6 @@ export function ArrowButton({
   );
 }
 
-/** A bare chevron, for Pomelo's quieter carousels. */
 export function ChevronButton({
   direction,
   ...rest
@@ -473,7 +464,7 @@ export function ColourOption({
       data-selected={selected || undefined}
       onClick={onSelect}
     >
-      {/* The fabric colour is product data, not a brand token. */}
+      {/* swatch is product data, not a token */}
       <span style={{ background: swatch }} />
     </button>
   );

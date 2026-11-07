@@ -66,7 +66,7 @@ function Workbench({ brand }: { brand: string }) {
   const [preview, setPreview] = useState<Screen | null>(null);
   const [catalogue, setCatalogue] = useState<Catalogue | undefined>(undefined);
 
-  // Layouts name products by id, so the preview needs the published catalogue to show them.
+  // the preview needs the catalogue to resolve product ids
   useEffect(() => {
     let cancelled = false;
     fetch(`/artifacts/${brand}/latest/catalogue.json`)

@@ -27,7 +27,6 @@ export type Screen = {
   schemaVersion: number;
   screen: string;
   fit?: "scroll" | "viewport";
-  /** A space token for the gap between sections, e.g. space.stack.gap-loose. */
   gap?: string;
   sections: Section[];
 };

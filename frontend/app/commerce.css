@@ -1,10 +1,3 @@
-/*
- * Commerce composites and sections. Values are tokens: semantic where a role
- * exists, and the brand's own type and space primitives (--p-*) where Figma binds
- * a component straight to the scale. Each brand's scale differs, so the same rule
- * sets 40px headlines on Clementine and 104px on Pomelo.
- */
-
 .strata-icon { display: block; flex: none; }
 .strata-visually-hidden {
   position: absolute; width: 1px; height: 1px; overflow: hidden;
@@ -12,7 +5,7 @@
 }
 a.strata-button { text-decoration: none; box-sizing: border-box; }
 
-/* ── Shared type roles ─────────────────────────────────────────── */
+/* shared type roles */
 
 .strata-product-name {
   margin: 0;
@@ -70,7 +63,7 @@ a.strata-button { text-decoration: none; box-sizing: border-box; }
   color: var(--colour-text-count);
 }
 
-/* ── Atoms ─────────────────────────────────────────────────────── */
+/* atoms */
 
 .strata-nav-link {
   font-family: var(--font-body-family);
@@ -225,7 +218,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
   color: var(--colour-text-muted);
 }
 
-/* ── Header ────────────────────────────────────────────────────── */
+/* header */
 
 .strata-site-header { display: flex; align-items: center; gap: var(--p-space-6); }
 .strata-site-header[data-variant="minimal"] { gap: var(--p-space-10); }
@@ -237,7 +230,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 .strata-site-header[data-variant="minimal"] .strata-site-logo img { height: auto; width: 150px; }
 .strata-site-nav { display: flex; align-items: center; gap: var(--p-space-6); }
 
-/* ── Section header ────────────────────────────────────────────── */
+/* section header */
 
 .strata-section-header { display: flex; align-items: center; gap: var(--p-space-4); min-height: var(--size-control); }
 .strata-section-title-group { display: flex; align-items: baseline; gap: var(--p-space-3); flex: 1; min-width: 0; }
@@ -262,7 +255,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 }
 .strata-section-link:hover { text-decoration: underline; }
 
-/* ── Clementine: promo, cards, aisles ──────────────────────────── */
+/* clementine: promo, cards, aisles */
 
 .strata-promo-hero { display: flex; align-items: center; gap: 60px; }
 .strata-promo-hero-image { width: 559px; max-width: 45%; height: auto; }
@@ -345,7 +338,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 .strata-category-name { font-family: var(--font-body-family); font-size: var(--p-font-size-sm); font-weight: var(--font-label-strong-weight); line-height: var(--p-font-leading-md); color: var(--colour-text-primary); }
 .strata-category-count { font-family: var(--font-body-family); font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); color: var(--colour-text-secondary); }
 
-/* ── Clementine: listing ───────────────────────────────────────── */
+/* clementine: listing */
 
 .strata-product-listing { display: flex; flex-direction: column; gap: var(--p-space-6); padding-block: var(--p-space-2); }
 .strata-listing-header { display: flex; flex-direction: column; gap: var(--space-stack-gap); }
@@ -375,7 +368,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 .strata-filter-chip[data-selected] { background: var(--colour-text-primary); color: var(--colour-text-inverse); font-weight: var(--font-label-strong-weight); }
 .strata-listing-empty { margin: 0; font-family: var(--font-body-family); color: var(--colour-text-muted); }
 
-/* ── Breadcrumb, accordion, stepper, notes ─────────────────────── */
+/* breadcrumb, accordion, stepper, notes */
 
 .strata-breadcrumb ol { display: flex; flex-wrap: wrap; gap: var(--p-space-2); margin: 0; padding: 0; list-style: none; }
 .strata-breadcrumb li {
@@ -462,7 +455,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 }
 .strata-note .strata-icon { color: var(--colour-text-primary); }
 
-/* ── Clementine: product page ──────────────────────────────────── */
+/* clementine: product page */
 
 .strata-product-overview { display: flex; align-items: flex-start; gap: var(--p-space-10); }
 .strata-product-media {
@@ -503,13 +496,8 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 .strata-product-buy { display: flex; align-items: center; gap: var(--p-space-3); }
 .strata-product-buy .strata-button { flex: 1; }
 
-/* ── Pomelo: home ──────────────────────────────────────────────── */
+/* pomelo: home */
 
-/*
- * The piece and the lockup share one grid cell: the image, at full size, sets the
- * hero's height so the whole chair shows before anything after it; the wordmark
- * overlaps its top right.
- */
 .strata-wordmark-hero {
   display: grid;
   margin-top: var(--p-space-12);
@@ -528,7 +516,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 .strata-wordmark { display: block; width: 100%; height: auto; }
 .strata-wordmark-hero-actions { display: flex; gap: var(--space-control-gap); }
 
-/* ProductFigures is no longer on a screen but stays in the contract. */
+/* product figures, unused but still in the contract */
 .strata-product-figures { display: flex; }
 .strata-product-figure { flex: 1 1 0; min-width: 0; margin: 0; display: flex; flex-direction: column; align-items: center; gap: var(--p-space-10); padding: var(--p-space-5); }
 .strata-product-figure + .strata-product-figure { border-left: var(--border-divider) solid var(--colour-border-default); }
@@ -536,7 +524,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 .strata-product-figure figcaption { align-self: stretch; display: flex; flex-direction: column; gap: var(--p-space-2); }
 .strata-product-figures[data-align="end"] { margin-top: auto; }
 
-/* ── Pomelo: listing and rail ──────────────────────────────────── */
+/* pomelo: listing and rail */
 
 .strata-catalogue { display: flex; flex-direction: column; gap: var(--space-stack-gap-loose); }
 .strata-catalogue-header { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--p-space-6); }
@@ -581,7 +569,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 .strata-rail-track::-webkit-scrollbar { display: none; }
 .strata-rail-track .strata-catalogue-card { flex: 0 0 25%; scroll-snap-align: start; border-right: var(--border-divider) solid var(--colour-border-subtle); }
 
-/* ── Pomelo: product page ──────────────────────────────────────── */
+/* pomelo: product page */
 
 .strata-product-showcase { display: grid; grid-template-columns: 286px 640px 1fr; align-items: stretch; }
 .strata-showcase-options { display: flex; flex-direction: column; justify-content: center; gap: var(--p-space-4); padding-right: var(--p-space-6); }
@@ -635,7 +623,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 .strata-showcase-buy { display: flex; align-items: center; gap: var(--p-space-2); }
 .strata-showcase-buy .strata-button { flex: 1; }
 
-/* ── Basket ────────────────────────────────────────────────────── */
+/* basket */
 
 .strata-page-title { display: flex; flex-direction: column; gap: var(--p-space-6); }
 
@@ -714,7 +702,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 .strata-basket-empty { display: flex; flex-direction: column; align-items: flex-start; gap: var(--p-space-4); padding-block: var(--p-space-10); }
 .strata-basket-empty p { margin: 0; font-family: var(--font-body-family); font-size: var(--p-font-size-lg); line-height: var(--p-font-leading-lg); color: var(--colour-text-primary); }
 
-/* Pomelo's detailed basket */
+/* detailed basket */
 .strata-basket[data-layout="detailed"] { display: flex; flex-direction: column; }
 .strata-cart-table { width: 100%; border-collapse: collapse; font-family: var(--font-body-family); }
 .strata-cart-table th {
@@ -769,7 +757,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 .strata-promo { display: flex; gap: var(--p-space-4); }
 .strata-promo .strata-input { width: 220px; min-height: var(--size-control); background: var(--colour-secondary-bg); border-color: var(--colour-border-default); box-sizing: border-box; }
 
-/* ── Pomelo: footer ────────────────────────────────────────────── */
+/* pomelo: footer */
 
 .strata-site-footer {
   display: flex;
@@ -808,7 +796,7 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 }
 .strata-footer-mark small { font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); color: var(--colour-footer-mark); }
 
-/* ── Screen fitting ────────────────────────────────────────────── */
+/* screen fitting */
 
 .strata-screen[data-fit="viewport"] {
   height: 100dvh;

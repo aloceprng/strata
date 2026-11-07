@@ -1,9 +1,3 @@
-"""A brand's sample catalogue: the products its screens show and its basket sells.
-
-The catalogue is published with tokens and layouts, so a product page, a card and a
-basket line all read one record. Layouts refer to products by id, and publish
-refuses an id the catalogue does not hold.
-"""
 from __future__ import annotations
 
 import json
@@ -155,7 +149,7 @@ class _Checker:
             self.list(where, value, rule)
         elif kind == "offer":
             self.offer(where, value)
-        else:  # pragma: no cover - a schema typo, not user input
+        else:  # pragma: no cover
             raise AssertionError(f"unknown rule type {kind}")
 
     def number(self, where: str, value: Any, rule: dict, *, integer: bool) -> None:

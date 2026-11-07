@@ -31,7 +31,6 @@ export type Reference = {
   fits: string[];
   sections: Record<string, { tokens?: string[]; props: Record<string, PropRule> }>;
   tokenOptions: Record<string, string[]>;
-  /** Product ids in the published catalogue. */
   products?: string[];
 };
 

@@ -8,7 +8,7 @@ import { StoreProvider } from "../store/StoreProvider";
 
 const ARTIFACT_STORE = process.env.NEXT_PUBLIC_ARTIFACT_STORE ?? "http://127.0.0.1:8000";
 
-/** Server-side fetch of a published artifact. The browser's /artifacts rewrite does not apply here. */
+// the /artifacts rewrite only covers browser requests
 async function loadArtifact<T>(brand: string, path: string): Promise<T | null> {
   const response = await fetch(`${ARTIFACT_STORE}/artifacts/${encodeURIComponent(brand)}/latest/${path}`, {
     cache: "no-store",
@@ -18,10 +18,6 @@ async function loadArtifact<T>(brand: string, path: string): Promise<T | null> {
   return response.json();
 }
 
-/**
- * One published screen of one brand. The product screen is a template: `product` names the
- * catalogue entry it shows, and an id the catalogue lacks is a 404.
- */
 export async function BrandScreen({ brand, screen, product }: { brand: string; screen: string; product?: string }) {
   const [layout, catalogue] = await Promise.all([
     loadArtifact<Screen>(brand, `screens/${screen}.json`),
