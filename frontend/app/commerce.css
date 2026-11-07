@@ -1,0 +1,821 @@
+/*
+ * Commerce composites and sections. Values are tokens: semantic where a role
+ * exists, and the brand's own type and space primitives (--p-*) where Figma binds
+ * a component straight to the scale. Each brand's scale differs, so the same rule
+ * sets 40px headlines on Clementine and 104px on Pomelo.
+ */
+
+.strata-icon { display: block; flex: none; }
+.strata-visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+a.strata-button { text-decoration: none; box-sizing: border-box; }
+
+/* ── Shared type roles ─────────────────────────────────────────── */
+
+.strata-product-name {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  font-weight: var(--font-name-weight);
+  line-height: var(--p-font-leading-md);
+  color: var(--colour-text-primary);
+}
+.strata-product-name a,
+.strata-cart-name { color: inherit; text-decoration: none; }
+.strata-product-name a:hover,
+.strata-cart-name:hover { text-decoration: underline; }
+
+.strata-display-title {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--p-space-4);
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: var(--font-heading-size);
+  font-weight: var(--font-heading-weight);
+  line-height: var(--p-font-leading-2xl);
+  letter-spacing: var(--font-heading-tracking);
+  color: var(--colour-text-primary);
+}
+.strata-display-count {
+  margin-top: var(--p-space-3);
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-md);
+  font-weight: var(--font-label-strong-weight);
+  line-height: 1.35;
+  letter-spacing: 0;
+  color: var(--colour-text-count);
+}
+
+.strata-inline-title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--p-space-3);
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: var(--p-font-size-2xl);
+  font-weight: var(--font-heading-weight);
+  line-height: var(--p-font-leading-2xl);
+  letter-spacing: var(--p-font-tracking-tight);
+  color: var(--colour-text-primary);
+}
+.strata-inline-count {
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  font-weight: var(--font-label-weight);
+  line-height: var(--p-font-leading-md);
+  letter-spacing: 0;
+  color: var(--colour-text-count);
+}
+
+/* ── Atoms ─────────────────────────────────────────────────────── */
+
+.strata-nav-link {
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  font-weight: var(--font-label-weight);
+  line-height: var(--p-font-leading-md);
+  color: var(--colour-text-nav);
+  text-decoration: none;
+  white-space: nowrap;
+}
+a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
+.strata-nav-link[data-active] { color: var(--colour-text-primary); font-weight: var(--font-label-strong-weight); }
+.strata-nav-link:focus-visible { outline: 2px solid var(--colour-focus-ring); outline-offset: 4px; border-radius: 2px; }
+
+.strata-offer-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--p-space-1) var(--p-space-3);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-xs);
+  font-weight: var(--p-font-weight-semibold);
+  line-height: var(--p-font-leading-xs);
+  white-space: nowrap;
+}
+.strata-offer-tag[data-tone="deal"]    { background: var(--colour-tag-deal-bg); color: var(--colour-tag-deal-fg); }
+.strata-offer-tag[data-tone="info"]    { background: var(--colour-tag-info-bg); color: var(--colour-tag-info-fg); }
+.strata-offer-tag[data-tone="alert"]   { background: var(--colour-status-danger); color: var(--colour-text-inverse); }
+.strata-offer-tag[data-tone="inverse"] { background: var(--colour-text-primary); color: var(--colour-text-inverse); }
+
+.strata-save-button,
+.strata-add-button,
+.strata-chevron-button,
+.strata-cart-remove {
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.strata-save-button {
+  width: var(--p-space-8);
+  height: var(--p-space-8);
+  border-radius: var(--radius-pill);
+  background: var(--colour-surface-raised);
+  color: var(--colour-text-secondary);
+}
+.strata-save-button[data-saved] { color: var(--colour-action-bg); }
+.strata-add-button {
+  width: var(--p-space-10);
+  height: var(--p-space-10);
+  border-radius: var(--radius-card);
+  background: var(--colour-action-bg);
+  color: var(--colour-action-fg);
+}
+.strata-add-button:hover { background: var(--colour-action-bg-hover); }
+.strata-chevron-button { color: var(--colour-text-primary); }
+.strata-save-button:focus-visible,
+.strata-add-button:focus-visible,
+.strata-chevron-button:focus-visible,
+.strata-cart-remove:focus-visible,
+.strata-basket-button:focus-visible,
+.strata-filter-chip:focus-visible,
+.strata-toolbar-button:focus-visible,
+.strata-text-tab:focus-visible,
+.strata-colour-option:focus-visible,
+.strata-accordion-head:focus-visible,
+.strata-stepper button:focus-visible { outline: 2px solid var(--colour-focus-ring); outline-offset: 2px; }
+
+.strata-search-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-control-gap);
+  width: 440px;
+  height: var(--size-control);
+  padding: 0 var(--space-control-padding-x);
+  border-radius: var(--radius-control);
+  background: var(--colour-surface-sunken);
+  color: var(--colour-text-muted);
+  box-sizing: border-box;
+}
+.strata-search-field:focus-within { outline: 2px solid var(--colour-focus-ring); outline-offset: -2px; }
+.strata-search-field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  line-height: var(--p-font-leading-md);
+  color: var(--colour-text-primary);
+}
+.strata-search-field input::placeholder { color: var(--colour-text-muted); }
+
+.strata-avatar {
+  display: inline-grid;
+  place-items: center;
+  width: var(--size-control);
+  height: var(--size-control);
+  border-radius: var(--radius-card);
+  background: var(--colour-text-primary);
+  color: var(--colour-text-inverse);
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  font-weight: var(--font-label-strong-weight);
+}
+
+.strata-basket-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-control-gap);
+  height: var(--size-control);
+  padding: var(--p-space-1) var(--p-space-1) var(--p-space-1) var(--p-space-4);
+  border-radius: var(--radius-card);
+  background: var(--colour-action-bg);
+  color: var(--colour-action-fg);
+  font-family: var(--font-body-family);
+  text-decoration: none;
+  box-sizing: border-box;
+}
+.strata-basket-button:hover { background: var(--colour-action-bg-hover); }
+.strata-basket-total { font-size: var(--p-font-size-sm); font-weight: var(--font-label-strong-weight); line-height: var(--p-font-leading-md); }
+.strata-basket-count {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  width: 36px;
+  border-radius: var(--radius-card);
+  background: var(--colour-surface-raised);
+  color: var(--colour-text-accent);
+  font-size: var(--p-font-size-xs);
+  font-weight: var(--p-font-weight-semibold);
+}
+
+.strata-price { display: inline-flex; align-items: baseline; gap: var(--p-space-2); }
+.strata-price-amount {
+  font-family: var(--font-body-family);
+  font-size: var(--font-price-size);
+  font-weight: var(--font-price-weight);
+  line-height: var(--font-price-leading);
+  letter-spacing: var(--font-price-tracking);
+  color: var(--colour-text-price);
+  white-space: nowrap;
+}
+.strata-price-unit {
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-xs);
+  line-height: var(--p-font-leading-xs);
+  color: var(--colour-text-muted);
+}
+
+/* ── Header ────────────────────────────────────────────────────── */
+
+.strata-site-header { display: flex; align-items: center; gap: var(--p-space-6); }
+.strata-site-header[data-variant="minimal"] { gap: var(--p-space-10); }
+.strata-site-header[data-logo="center"] { display: grid; grid-template-columns: 1fr auto 1fr; }
+.strata-site-header[data-logo="center"] [data-utilities] { justify-self: end; }
+.strata-site-header-spacer { flex: 1; }
+.strata-site-logo { display: block; flex: none; }
+.strata-site-logo img { display: block; height: 56px; width: auto; }
+.strata-site-header[data-variant="minimal"] .strata-site-logo img { height: auto; width: 150px; }
+.strata-site-nav { display: flex; align-items: center; gap: var(--p-space-6); }
+
+/* ── Section header ────────────────────────────────────────────── */
+
+.strata-section-header { display: flex; align-items: center; gap: var(--p-space-4); min-height: var(--size-control); }
+.strata-section-title-group { display: flex; align-items: baseline; gap: var(--p-space-3); flex: 1; min-width: 0; }
+.strata-section-title {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: var(--p-font-size-lg);
+  font-weight: var(--font-heading-weight);
+  line-height: var(--p-font-leading-lg);
+  letter-spacing: var(--p-font-tracking-tight);
+  color: var(--colour-text-primary);
+}
+.strata-section-subtitle { font-family: var(--font-body-family); font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); color: var(--colour-text-muted); }
+.strata-section-actions { display: flex; align-items: center; gap: var(--p-space-4); }
+.strata-section-link {
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  font-weight: var(--font-label-strong-weight);
+  line-height: var(--p-font-leading-md);
+  color: var(--colour-text-accent);
+  text-decoration: none;
+}
+.strata-section-link:hover { text-decoration: underline; }
+
+/* ── Clementine: promo, cards, aisles ──────────────────────────── */
+
+.strata-promo-hero { display: flex; align-items: center; gap: 60px; }
+.strata-promo-hero-image { width: 559px; max-width: 45%; height: auto; }
+.strata-promo-hero-copy { display: flex; flex-direction: column; align-items: flex-start; gap: var(--p-space-4); max-width: 440px; }
+.strata-promo-hero-headline { display: flex; flex-direction: column; align-items: flex-start; }
+.strata-promo-hero .strata-heading {
+  white-space: pre-line;
+  font-size: var(--p-font-size-2xl);
+  line-height: var(--p-font-leading-2xl);
+  letter-spacing: var(--p-font-tracking-tight);
+}
+.strata-eyebrow {
+  padding-block: var(--p-space-1);
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-xs);
+  font-weight: var(--p-font-weight-semibold);
+  line-height: var(--p-font-leading-xs);
+  color: var(--colour-action-bg);
+}
+.strata-promo-hero-action { border-radius: var(--radius-card); }
+
+.strata-product-row,
+.strata-category-carousel { display: flex; flex-direction: column; gap: var(--p-space-6); }
+.strata-product-grid { display: grid; gap: var(--p-space-6); }
+
+.strata-product-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-card-gap);
+  min-width: 0;
+  padding: var(--space-card-padding);
+  border: 1px solid var(--colour-border-default);
+  border-radius: var(--radius-card);
+  background: var(--colour-surface-raised);
+  box-shadow: var(--elevation-card);
+}
+.strata-product-card-image { position: relative; display: grid; place-items: center; padding: var(--p-space-4) var(--p-space-10); }
+.strata-product-card-image a { display: block; width: 100%; }
+.strata-product-card-image img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; }
+.strata-product-grid[data-size="large"] .strata-product-card-image { padding-block: var(--p-space-8); }
+.strata-product-card-image .strata-save-button { position: absolute; top: 0; right: 0; }
+.strata-product-card-info { display: flex; flex-direction: column; gap: var(--p-space-4); }
+.strata-product-card-tag { display: flex; align-items: center; height: var(--p-space-6); }
+.strata-product-card .strata-product-name {
+  height: calc(var(--p-font-leading-md) * 2);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.strata-product-card-price { display: flex; align-items: center; justify-content: space-between; gap: var(--p-space-2); }
+
+.strata-carousel-track {
+  display: flex;
+  gap: var(--p-space-6);
+  margin-right: calc(-1 * var(--space-page-padding-x));
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.strata-carousel-track::-webkit-scrollbar { display: none; }
+.strata-category-tile {
+  flex: 0 0 220px;
+  height: 160px;
+  padding: var(--p-space-3);
+  box-sizing: border-box;
+  border-radius: var(--p-radius-md);
+  background: center / cover no-repeat;
+  scroll-snap-align: start;
+  text-decoration: none;
+}
+.strata-category-tile:focus-visible { outline: 2px solid var(--colour-focus-ring); outline-offset: 2px; }
+.strata-category-label {
+  display: inline-flex;
+  flex-direction: column;
+  padding: var(--p-space-2) var(--p-space-3);
+  border-radius: var(--radius-card);
+  background: var(--colour-surface-page);
+}
+.strata-category-name { font-family: var(--font-body-family); font-size: var(--p-font-size-sm); font-weight: var(--font-label-strong-weight); line-height: var(--p-font-leading-md); color: var(--colour-text-primary); }
+.strata-category-count { font-family: var(--font-body-family); font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); color: var(--colour-text-secondary); }
+
+/* ── Clementine: listing ───────────────────────────────────────── */
+
+.strata-product-listing { display: flex; flex-direction: column; gap: var(--p-space-6); padding-block: var(--p-space-2); }
+.strata-listing-header { display: flex; flex-direction: column; gap: var(--space-stack-gap); }
+.strata-listing-top { display: flex; align-items: center; }
+.strata-listing-top .strata-section-header { flex: 1; }
+.strata-listing-toolbar,
+.strata-filter-chips { display: flex; gap: var(--space-control-gap); }
+.strata-filter-chip,
+.strata-toolbar-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-control-gap);
+  height: var(--size-control);
+  padding: 0 var(--space-control-padding-x);
+  border: 0;
+  border-radius: var(--radius-control);
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  font-weight: var(--font-label-weight);
+  line-height: var(--p-font-leading-md);
+  cursor: pointer;
+}
+.strata-toolbar-button { background: none; color: var(--colour-text-secondary); }
+.strata-toolbar-button:hover { background: var(--colour-secondary-bg); }
+.strata-filter-chip { background: var(--colour-secondary-bg); color: var(--colour-secondary-fg); }
+.strata-filter-chip:hover { background: var(--colour-secondary-bg-hover); }
+.strata-filter-chip[data-selected] { background: var(--colour-text-primary); color: var(--colour-text-inverse); font-weight: var(--font-label-strong-weight); }
+.strata-listing-empty { margin: 0; font-family: var(--font-body-family); color: var(--colour-text-muted); }
+
+/* ── Breadcrumb, accordion, stepper, notes ─────────────────────── */
+
+.strata-breadcrumb ol { display: flex; flex-wrap: wrap; gap: var(--p-space-2); margin: 0; padding: 0; list-style: none; }
+.strata-breadcrumb li {
+  display: flex;
+  gap: var(--p-space-2);
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  font-weight: var(--font-label-weight);
+  line-height: var(--p-font-leading-md);
+  color: var(--colour-text-muted);
+}
+.strata-breadcrumb li + li::before { content: "/"; }
+.strata-breadcrumb a { color: inherit; text-decoration: none; }
+.strata-breadcrumb a[href]:hover { color: var(--colour-text-primary); }
+.strata-breadcrumb [aria-current] { color: var(--colour-text-primary); }
+
+.strata-accordion { display: flex; flex-direction: column; }
+.strata-accordion-row { display: flex; flex-direction: column; gap: var(--p-space-2); padding-block: var(--p-space-4); border-bottom: var(--border-divider) solid var(--colour-border-subtle); }
+.strata-accordion-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  font-weight: var(--font-label-strong-weight);
+  line-height: var(--p-font-leading-md);
+  color: var(--colour-text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+.strata-accordion-body { margin: 0; font-family: var(--font-body-family); font-size: var(--p-font-size-sm); line-height: var(--p-font-leading-md); color: var(--colour-text-secondary); }
+
+.strata-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--p-space-2);
+  height: var(--size-control);
+  padding: var(--p-space-1);
+  border-radius: var(--radius-control);
+  background: var(--colour-secondary-bg);
+  box-sizing: border-box;
+}
+.strata-stepper[data-surface="plain"] { background: none; }
+.strata-stepper button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--colour-surface-raised);
+  color: var(--colour-text-primary);
+  cursor: pointer;
+}
+.strata-stepper button:disabled { color: var(--colour-text-muted); cursor: not-allowed; }
+.strata-stepper output {
+  width: var(--p-space-8);
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  font-weight: var(--font-label-strong-weight);
+  line-height: var(--p-font-leading-md);
+  text-align: center;
+  color: var(--colour-text-primary);
+}
+
+.strata-note {
+  display: flex;
+  align-items: center;
+  gap: var(--p-space-3);
+  margin: 0;
+  padding: var(--p-space-4);
+  border-radius: var(--radius-card);
+  background: var(--colour-surface-sunken);
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  font-weight: var(--font-label-weight);
+  line-height: var(--p-font-leading-md);
+  color: var(--colour-text-secondary);
+}
+.strata-note .strata-icon { color: var(--colour-text-primary); }
+
+/* ── Clementine: product page ──────────────────────────────────── */
+
+.strata-product-overview { display: flex; align-items: flex-start; gap: var(--p-space-10); }
+.strata-product-media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 640px;
+  height: 560px;
+  max-width: 50%;
+  border-radius: var(--radius-card);
+  background: var(--colour-surface-raised);
+  overflow: hidden;
+}
+.strata-product-media img { width: 360px; height: 360px; object-fit: contain; }
+.strata-product-media-tag { position: absolute; top: var(--p-space-6); left: var(--p-space-6); }
+.strata-product-info { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: var(--p-space-6); }
+.strata-product-badges { display: flex; gap: var(--p-space-2); }
+.strata-product-title { display: flex; flex-direction: column; gap: var(--p-space-2); }
+.strata-product-title h1 {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: var(--p-font-size-2xl);
+  font-weight: var(--font-heading-weight);
+  line-height: var(--p-font-leading-2xl);
+  letter-spacing: var(--p-font-tracking-tight);
+  color: var(--colour-text-primary);
+}
+.strata-product-title p { margin: 0; font-family: var(--font-body-family); font-size: var(--p-font-size-sm); line-height: var(--p-font-leading-md); color: var(--colour-text-muted); }
+.strata-price-lockup { display: flex; align-items: baseline; gap: var(--p-space-3); margin: 0; }
+.strata-price-lockup-amount {
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-lg);
+  font-weight: var(--p-font-weight-bold);
+  line-height: var(--p-font-leading-lg);
+  letter-spacing: var(--p-font-tracking-tight);
+  color: var(--colour-text-price);
+}
+.strata-product-buy { display: flex; align-items: center; gap: var(--p-space-3); }
+.strata-product-buy .strata-button { flex: 1; }
+
+/* ── Pomelo: home ──────────────────────────────────────────────── */
+
+/*
+ * The piece and the lockup share one grid cell: the image, at full size, sets the
+ * hero's height so the whole chair shows before anything after it; the wordmark
+ * overlaps its top right.
+ */
+.strata-wordmark-hero {
+  display: grid;
+  margin-top: var(--p-space-12);
+}
+.strata-wordmark-hero > * { grid-area: 1 / 1; }
+.strata-wordmark-hero-image {
+  align-self: start;
+  width: min(962px, 67vw);
+  height: auto;
+  aspect-ratio: 1;
+  margin-left: calc(31px - var(--space-page-padding-x));
+  object-fit: contain;
+}
+.strata-wordmark-hero + .strata-site-footer { margin-top: calc(var(--space-page-padding-y) - var(--space-section-gap)); }
+.strata-wordmark-hero-lockup { position: relative; display: flex; flex-direction: column; align-items: flex-end; align-self: start; justify-self: end; width: min(1010px, 72%); }
+.strata-wordmark { display: block; width: 100%; height: auto; }
+.strata-wordmark-hero-actions { display: flex; gap: var(--space-control-gap); }
+
+/* ProductFigures is no longer on a screen but stays in the contract. */
+.strata-product-figures { display: flex; }
+.strata-product-figure { flex: 1 1 0; min-width: 0; margin: 0; display: flex; flex-direction: column; align-items: center; gap: var(--p-space-10); padding: var(--p-space-5); }
+.strata-product-figure + .strata-product-figure { border-left: var(--border-divider) solid var(--colour-border-default); }
+.strata-product-figure img { width: 160px; height: 160px; object-fit: contain; }
+.strata-product-figure figcaption { align-self: stretch; display: flex; flex-direction: column; gap: var(--p-space-2); }
+.strata-product-figures[data-align="end"] { margin-top: auto; }
+
+/* ── Pomelo: listing and rail ──────────────────────────────────── */
+
+.strata-catalogue { display: flex; flex-direction: column; gap: var(--space-stack-gap-loose); }
+.strata-catalogue-header { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--p-space-6); }
+.strata-catalogue-tools { display: flex; align-items: center; gap: var(--p-space-6); padding-bottom: var(--p-space-2); }
+.strata-text-tab {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  font-weight: var(--font-label-weight);
+  line-height: 1.35;
+  color: var(--colour-text-muted);
+  cursor: pointer;
+}
+.strata-text-tab:hover { color: var(--colour-text-primary); }
+.strata-text-tab[aria-pressed="true"] { color: var(--colour-text-primary); font-weight: var(--font-label-strong-weight); text-decoration: underline; text-underline-offset: 3px; }
+.strata-text-tab[data-strong] { color: var(--colour-text-primary); }
+.strata-catalogue-divider { width: 1px; height: var(--p-space-4); background: var(--colour-border-default); }
+
+.strata-catalogue-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.strata-catalogue-grid > :not(:nth-child(4n + 1)) { border-left: var(--border-divider) solid var(--colour-border-subtle); }
+.strata-catalogue-grid > :nth-child(n + 5) { border-top: var(--border-divider) solid var(--colour-border-subtle); }
+
+.strata-catalogue-card { display: flex; flex-direction: column; height: 340px; padding: var(--p-space-4); box-sizing: border-box; min-width: 0; }
+.strata-catalogue-card-media { display: grid; flex: 1; min-height: 0; place-items: center; }
+.strata-catalogue-card-media img { width: 224px; height: 224px; max-width: 100%; object-fit: contain; }
+.strata-catalogue-card-info { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--p-space-3); }
+.strata-catalogue-card-text { display: flex; flex-direction: column; gap: var(--p-space-1); min-width: 0; }
+.strata-catalogue-card-material { font-family: var(--font-body-family); font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); color: var(--colour-text-secondary); }
+
+.strata-catalogue-rail { display: flex; flex-direction: column; gap: var(--p-space-4); }
+.strata-rail-heading { display: flex; align-items: center; justify-content: space-between; }
+.strata-rail-arrows { display: flex; gap: var(--p-space-2); }
+.strata-rail-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-block: var(--border-divider) solid var(--colour-border-subtle);
+}
+.strata-rail-track::-webkit-scrollbar { display: none; }
+.strata-rail-track .strata-catalogue-card { flex: 0 0 25%; scroll-snap-align: start; border-right: var(--border-divider) solid var(--colour-border-subtle); }
+
+/* ── Pomelo: product page ──────────────────────────────────────── */
+
+.strata-product-showcase { display: grid; grid-template-columns: 286px 640px 1fr; align-items: stretch; }
+.strata-showcase-options { display: flex; flex-direction: column; justify-content: center; gap: var(--p-space-4); padding-right: var(--p-space-6); }
+.strata-showcase-label,
+.strata-spec-heading,
+.strata-extras legend,
+.strata-cart-option span:first-child {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-xs);
+  font-weight: var(--font-label-strong-weight);
+  line-height: var(--p-font-leading-xs);
+  color: var(--colour-text-primary);
+}
+.strata-showcase-caption { margin: 0; font-family: var(--font-body-family); font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); color: var(--colour-text-secondary); }
+.strata-colour-options { display: grid; grid-template-columns: repeat(3, 56px); gap: var(--p-space-2); }
+.strata-colour-option { display: flex; width: 56px; height: 56px; padding: 0; border: 0; border-radius: var(--radius-control); background: none; cursor: pointer; box-sizing: border-box; }
+.strata-colour-option span { flex: 1; border: var(--border-divider) solid var(--colour-border-strong); border-radius: var(--radius-control); }
+.strata-colour-option[data-selected] { border: var(--border-divider) solid var(--colour-border-strong); }
+.strata-colour-option[data-selected] span { border: var(--p-space-1) solid var(--colour-secondary-bg); }
+
+.strata-showcase-gallery { display: flex; flex-direction: column; border-inline: var(--border-divider) solid var(--colour-border-subtle); }
+.strata-showcase-view { position: relative; height: 560px; overflow: hidden; background: var(--colour-surface-sunken); }
+.strata-showcase-view + .strata-showcase-view { border-top: var(--border-divider) solid var(--colour-border-subtle); }
+.strata-showcase-view img { position: absolute; object-fit: contain; }
+.strata-showcase-view[data-view="front"] img { inset: 0; width: 416px; height: 416px; margin: auto; }
+.strata-showcase-view[data-view="detail"] img { left: -230px; top: -151px; width: 832px; height: 832px; }
+
+.strata-showcase-details { display: flex; flex-direction: column; gap: var(--p-space-6); min-width: 0; padding: var(--p-space-8) 0 var(--p-space-8) var(--p-space-8); }
+.strata-showcase-title { display: flex; flex-direction: column; gap: var(--p-space-3); }
+.strata-showcase-title .strata-display-title { display: block; letter-spacing: var(--p-font-tracking-tight); }
+.strata-showcase-price { display: flex; align-items: baseline; gap: var(--p-space-3); margin: 0; font-family: var(--font-body-family); font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); color: var(--colour-text-secondary); }
+.strata-showcase-description { margin: 0; font-family: var(--font-body-family); font-size: var(--p-font-size-sm); line-height: var(--p-font-leading-md); color: var(--colour-text-secondary); }
+
+.strata-spec-table { display: flex; flex-direction: column; margin: 0; }
+.strata-spec-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--p-space-4);
+  padding-block: var(--p-space-1);
+  border-bottom: var(--border-divider) solid var(--colour-border-subtle);
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-xs);
+  line-height: var(--p-font-leading-xs);
+}
+.strata-spec-row dt { color: var(--colour-text-secondary); }
+.strata-spec-row dd { margin: 0; color: var(--colour-text-primary); text-align: right; }
+
+.strata-showcase-actions { display: flex; flex-direction: column; gap: var(--p-space-2); }
+.strata-showcase-buy { display: flex; align-items: center; gap: var(--p-space-2); }
+.strata-showcase-buy .strata-button { flex: 1; }
+
+/* ── Basket ────────────────────────────────────────────────────── */
+
+.strata-page-title { display: flex; flex-direction: column; gap: var(--p-space-6); }
+
+.strata-basket[data-layout="compact"] { display: flex; align-items: flex-start; gap: var(--p-space-10); }
+.strata-cart-lines { flex: 1; min-width: 0; margin: 0; padding: 0; list-style: none; border-top: var(--border-divider) solid var(--colour-border-subtle); }
+.strata-cart-line[data-layout="compact"] {
+  display: flex;
+  align-items: center;
+  gap: var(--p-space-4);
+  padding-block: var(--p-space-4);
+  border-bottom: var(--border-divider) solid var(--colour-border-subtle);
+}
+.strata-cart-thumb { display: grid; flex: none; place-items: center; background: var(--colour-surface-sunken); border-radius: var(--radius-card); }
+.strata-cart-line[data-layout="compact"] .strata-cart-thumb { width: 80px; height: 80px; }
+.strata-cart-line[data-layout="compact"] .strata-cart-thumb img { width: 64px; height: 64px; object-fit: contain; }
+.strata-cart-info { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: var(--p-space-1); }
+.strata-cart-name-row { display: flex; align-items: center; gap: var(--p-space-2); }
+.strata-cart-name { font-family: var(--font-body-family); font-size: var(--p-font-size-sm); font-weight: var(--font-name-weight); line-height: var(--p-font-leading-md); color: var(--colour-text-primary); }
+.strata-cart-detail { font-family: var(--font-body-family); font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); color: var(--colour-text-muted); }
+.strata-cart-line[data-layout="compact"] .strata-cart-price {
+  width: 80px;
+  font-family: var(--font-body-family);
+  font-size: var(--font-price-size);
+  font-weight: var(--font-price-weight);
+  line-height: var(--font-price-leading);
+  letter-spacing: var(--font-price-tracking);
+  color: var(--colour-text-price);
+  text-align: right;
+}
+.strata-cart-remove { width: 36px; height: 36px; border-radius: var(--radius-control); color: var(--colour-text-primary); }
+.strata-cart-remove:hover { background: var(--colour-secondary-bg); }
+
+.strata-order-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--p-space-6);
+  flex: 0 0 480px;
+  padding: var(--p-space-6);
+  border: var(--border-divider) solid var(--colour-border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--colour-surface-raised);
+  box-sizing: border-box;
+}
+.strata-order-summary h2 {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: var(--font-price-size);
+  font-weight: var(--font-price-weight);
+  line-height: var(--font-price-leading);
+  letter-spacing: var(--font-price-tracking);
+  color: var(--colour-text-primary);
+}
+.strata-summary-rows { display: flex; flex-direction: column; gap: var(--p-space-3); margin: 0; }
+.strata-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-sm);
+  line-height: var(--p-font-leading-md);
+}
+.strata-summary-row dt { color: var(--colour-text-secondary); }
+.strata-summary-row dd { margin: 0; font-weight: var(--font-label-strong-weight); color: var(--colour-text-primary); }
+.strata-summary-row[data-kind="saving"] dd { color: var(--colour-text-accent); }
+.strata-summary-row[data-kind="total"] dt { font-weight: var(--font-label-strong-weight); color: var(--colour-text-primary); }
+.strata-summary-row[data-kind="total"] dd {
+  font-size: var(--p-font-size-lg);
+  font-weight: var(--p-font-weight-bold);
+  line-height: var(--p-font-leading-lg);
+  letter-spacing: var(--p-font-tracking-tight);
+}
+.strata-checkout { display: flex; flex-direction: column; gap: var(--p-space-2); }
+.strata-checkout .strata-button { width: 100%; }
+.strata-checkout-note { margin: 0; font-family: var(--font-body-family); font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); color: var(--colour-text-muted); text-align: center; }
+
+.strata-basket-empty { display: flex; flex-direction: column; align-items: flex-start; gap: var(--p-space-4); padding-block: var(--p-space-10); }
+.strata-basket-empty p { margin: 0; font-family: var(--font-body-family); font-size: var(--p-font-size-lg); line-height: var(--p-font-leading-lg); color: var(--colour-text-primary); }
+
+/* Pomelo's detailed basket */
+.strata-basket[data-layout="detailed"] { display: flex; flex-direction: column; }
+.strata-cart-table { width: 100%; border-collapse: collapse; font-family: var(--font-body-family); }
+.strata-cart-table th {
+  padding: 0 0 var(--p-space-4);
+  border-bottom: var(--border-divider) solid var(--colour-border-subtle);
+  font-size: var(--p-font-size-xs);
+  font-weight: var(--font-label-weight);
+  line-height: var(--p-font-leading-xs);
+  color: var(--colour-text-secondary);
+  text-align: left;
+}
+.strata-cart-table th:nth-child(2) { width: 360px; }
+.strata-cart-table th:nth-child(3) { width: 188px; text-align: right; }
+.strata-cart-table td { padding-block: var(--p-space-4); border-bottom: var(--border-divider) solid var(--colour-border-subtle); vertical-align: top; }
+.strata-cart-table td:first-child,
+.strata-cart-table td:last-child { height: 160px; }
+.strata-cart-product { display: flex; gap: var(--p-space-6); height: 100%; }
+.strata-cart-line[data-layout="detailed"] .strata-cart-thumb { width: 160px; height: 160px; }
+.strata-cart-line[data-layout="detailed"] .strata-cart-thumb img { width: 136px; height: 136px; object-fit: contain; }
+.strata-cart-line[data-layout="detailed"] .strata-cart-info { justify-content: space-between; }
+.strata-cart-line[data-layout="detailed"] .strata-cart-name { font-weight: var(--font-body-weight); }
+.strata-cart-option { display: flex; flex-direction: column; gap: var(--p-space-1); }
+.strata-cart-option span { font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); color: var(--colour-text-secondary); }
+.strata-cart-price-cell { display: flex; height: 100%; flex-direction: column; align-items: flex-end; justify-content: space-between; }
+.strata-cart-line[data-layout="detailed"] .strata-cart-price { font-size: var(--p-font-size-sm); line-height: var(--p-font-leading-md); color: var(--colour-text-primary); }
+.strata-cart-remove-text {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-body-family);
+  font-size: var(--p-font-size-xs);
+  line-height: var(--p-font-leading-xs);
+  color: var(--colour-text-secondary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.strata-basket-lower { display: flex; justify-content: flex-end; padding-top: var(--p-space-8); }
+.strata-order-summary[data-layout="detailed"] { flex: 0 1 548px; gap: var(--p-space-8); padding: 0; border: 0; background: none; }
+.strata-order-summary[data-layout="detailed"] .strata-summary-row dd { font-weight: var(--font-body-weight); }
+.strata-extras { display: flex; flex-direction: column; gap: var(--p-space-4); margin: 0; padding: 0; border: 0; }
+.strata-extras legend { margin-bottom: var(--p-space-4); }
+.strata-extra { display: flex; align-items: center; gap: var(--p-space-3); }
+.strata-extra-price { font-family: var(--font-body-family); font-size: var(--p-font-size-sm); line-height: var(--p-font-leading-md); color: var(--colour-text-primary); }
+.strata-checkbox { display: flex; flex: 1; align-items: center; gap: var(--p-space-3); cursor: pointer; }
+.strata-checkbox input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.strata-checkbox-box { display: grid; flex: none; place-items: center; width: 18px; height: 18px; border: var(--border-divider) solid var(--colour-text-primary); color: var(--colour-text-primary); box-sizing: border-box; }
+.strata-checkbox input:focus-visible + .strata-checkbox-box { outline: 2px solid var(--colour-focus-ring); outline-offset: 2px; }
+.strata-extra-label { font-family: var(--font-body-family); font-size: var(--p-font-size-sm); line-height: var(--p-font-leading-md); color: var(--colour-text-primary); }
+.strata-extra-note { margin-left: var(--p-space-2); font-family: var(--font-body-family); font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); color: var(--colour-text-secondary); }
+
+.strata-promo { display: flex; gap: var(--p-space-4); }
+.strata-promo .strata-input { width: 220px; min-height: var(--size-control); background: var(--colour-secondary-bg); border-color: var(--colour-border-default); box-sizing: border-box; }
+
+/* ── Pomelo: footer ────────────────────────────────────────────── */
+
+.strata-site-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--p-space-12);
+  margin: 0 calc(-1 * var(--space-page-padding-x)) calc(-1 * var(--space-page-padding-y));
+  padding: var(--p-space-12) var(--space-page-padding-x) var(--p-space-8);
+  background: var(--colour-footer-bg);
+  color: var(--colour-footer-fg);
+  font-family: var(--font-body-family);
+}
+.strata-footer-top { display: flex; justify-content: space-between; gap: var(--p-space-12); }
+.strata-site-footer h2 {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: var(--p-font-size-lg);
+  font-weight: var(--font-heading-weight);
+  line-height: var(--p-font-leading-lg);
+  letter-spacing: var(--p-font-tracking-tight);
+}
+.strata-footer-newsletter { display: flex; flex-direction: column; gap: var(--p-space-4); }
+.strata-footer-newsletter p { width: 300px; margin: 0; font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); }
+.strata-footer-newsletter form { display: flex; gap: var(--p-space-3); }
+.strata-footer-newsletter .strata-input { width: 220px; min-height: var(--size-control); background: var(--colour-secondary-bg-hover); border-color: var(--colour-border-default); box-sizing: border-box; }
+.strata-footer-columns { display: flex; gap: var(--p-space-12); }
+.strata-footer-column { display: flex; flex-direction: column; gap: var(--p-space-2); }
+.strata-footer-column ul { display: flex; flex-direction: column; gap: var(--p-space-1); margin: 0; padding: 0; list-style: none; font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); }
+.strata-footer-mark { display: flex; flex-direction: column; align-items: flex-end; gap: var(--p-space-2); width: min(772px, 100%); }
+.strata-footer-wordmark {
+  display: block;
+  width: 100%;
+  aspect-ratio: 678 / 133;
+  background: var(--colour-footer-mark);
+  mask: no-repeat center / contain;
+  -webkit-mask: no-repeat center / contain;
+}
+.strata-footer-mark small { font-size: var(--p-font-size-xs); line-height: var(--p-font-leading-xs); color: var(--colour-footer-mark); }
+
+/* ── Screen fitting ────────────────────────────────────────────── */
+
+.strata-screen[data-fit="viewport"] {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  padding-block: min(var(--space-page-padding-y), 6dvh);
+  gap: min(var(--space-section-gap), 6dvh);
+}
+.strata-screen[data-fit="viewport"] .strata-product-figure { gap: min(40px, 4dvh); padding-block: min(20px, 2dvh); }
+.strata-screen[data-fit="viewport"] .strata-product-figure img { width: min(160px, 18dvh); height: min(160px, 18dvh); }

@@ -16,11 +16,66 @@ export type Version = {
   note: string;
 };
 
+export type PropRule = {
+  type: "string" | "enum" | "boolean" | "number" | "asset" | "token" | "list" | "products" | "link";
+  required?: boolean;
+  values?: string[];
+  min?: number;
+  max?: number;
+  group?: string;
+  items?: Record<string, PropRule>;
+};
+
+export type Reference = {
+  schemaVersion: number;
+  fits: string[];
+  sections: Record<string, { tokens?: string[]; props: Record<string, PropRule> }>;
+  tokenOptions: Record<string, string[]>;
+  /** Product ids in the published catalogue. */
+  products?: string[];
+};
+
 export type Pipeline = {
   brand: string;
   versions: Version[];
   layouts: Layouts;
+  reference: Reference;
 };
+
+const SAMPLE_ASSET = "/products/brand/name.png";
+
+/** A placeholder value that passes the rule, so a pasted snippet validates. */
+export function sampleValue(rule: PropRule, tokens: Record<string, string[]> = {}): unknown {
+  switch (rule.type) {
+    case "enum":
+      return rule.values?.[0];
+    case "boolean":
+      return true;
+    case "number":
+      return rule.min ?? 0;
+    case "asset":
+      return SAMPLE_ASSET;
+    case "token":
+      return tokens[rule.group ?? ""]?.[0] ?? `${rule.group}.name`;
+    case "products":
+      return [];
+    case "link":
+      return "home";
+    case "list":
+      return Array.from({ length: Math.max(rule.min ?? 1, 1) }, () => sampleProps(rule.items ?? {}, tokens));
+    default:
+      return "Text";
+  }
+}
+
+/** Only the required props, filled with placeholders. */
+export function sampleProps(props: Record<string, PropRule>, tokens: Record<string, string[]> = {}) {
+  return Object.fromEntries(
+    Object.entries(props)
+      .filter(([, rule]) => rule.required)
+      .map(([name, rule]) => [name, sampleValue(rule, tokens)]),
+  );
+}
 
 export type Check = {
   verdict: "ready" | "needs-approval" | "refused";

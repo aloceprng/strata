@@ -60,8 +60,30 @@ class TestPipeline:
     def test_a_brand_with_nothing_published_has_no_layouts(self, client, brand):
         assert client.get("/api/brands/pomelo/pipeline").json()["layouts"] == {}
 
+    def test_sends_the_section_contract_as_a_reference(self, client, published):
+        ref = client.get("/api/brands/pomelo/pipeline").json()["reference"]
+        assert ref["schemaVersion"] == 1
+        assert ref["fits"] == ["scroll", "viewport"]
+        source = ref["sections"]["ProductRow"]["props"]["source"]
+        assert source["values"] == ["list", "related"]
+        assert ref["products"] == []
+
+    def test_token_props_list_the_brands_tokens_in_that_group(self, client, published):
+        ref = client.get("/api/brands/pomelo/pipeline").json()["reference"]
+        assert ref["tokenOptions"] == {"space.stack": ["space.stack.gap"]}
+
+    def test_with_nothing_published_token_options_are_empty(self, client, brand):
+        ref = client.get("/api/brands/pomelo/pipeline").json()["reference"]
+        assert ref["tokenOptions"] == {"space.stack": []}
+
     def test_an_unknown_brand_is_404(self, client, db):
         assert client.get("/api/brands/nope/pipeline").status_code == 404
+
+
+def test_token_paths_skip_dtcg_metadata():
+    from tokens.views import token_paths
+    tree = {"$description": "x", "space": {"$type": "dimension", "gap": {"$value": "8px"}}}
+    assert token_paths(tree) == ["space.gap"]
 
 
 class TestCheck:

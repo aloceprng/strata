@@ -93,12 +93,13 @@
       "8": {"$value": "32px"},
       "10": {"$value": "40px"},
       "12": {"$value": "48px"},
-      "14": {"$value": "56px"}
+      "14": {"$value": "56px"},
+      "24": {"$value": "96px"}
     },
     "radius": {
       "$type": "dimension",
       "none": {"$value": "0px"},
-      "sm": {"$value": "14px"},
+      "sm": {"$value": "12px"},
       "md": {"$value": "20px"},
       "lg": {"$value": "28px"},
       "full": {"$value": "9999px"}
@@ -116,11 +117,10 @@
       "size": {
         "$type": "dimension",
         "xs": {"$value": "12px"},
-        "sm": {"$value": "13px"},
-        "base": {"$value": "14px"},
-        "md": {"$value": "17px"},
-        "lg": {"$value": "20px"},
-        "xl": {"$value": "24px"},
+        "sm": {"$value": "16px"},
+        "md": {"$value": "20px"},
+        "lg": {"$value": "24px"},
+        "xl": {"$value": "32px"},
         "2xl": {"$value": "40px"}
       },
       "weight": {
@@ -142,7 +142,16 @@
         "display": {"$value": "-0.025em"},
         "heading": {"$value": "-0.025em"},
         "body": {"$value": "0em"},
-        "wide": {"$value": "0em"}
+        "wide": {"$value": "0em"},
+        "tight": {"$value": "-0.3px"}
+      },
+      "leading": {
+        "$type": "dimension",
+        "$description": "Line heights in px, for components that set an exact line box (Figma binds line height in px).",
+        "xs": {"$value": "16px"},
+        "md": {"$value": "24px"},
+        "lg": {"$value": "32px"},
+        "2xl": {"$value": "44px"}
       }
     },
     "duration": {
@@ -155,7 +164,7 @@
     "colour": {
       "$type": "color",
       "surface": {
-        "page": {"$value": "{primitive.colour.neutral.100}"},
+        "page": {"$value": "{primitive.colour.neutral.0}"},
         "raised": {"$value": "{primitive.colour.neutral.0}"},
         "sunken": {"$value": "{primitive.colour.neutral.100}"}
       },
@@ -164,7 +173,10 @@
         "secondary": {"$value": "{primitive.colour.neutral.700}"},
         "muted": {"$value": "{primitive.colour.neutral.600}"},
         "inverse": {"$value": "{primitive.colour.neutral.0}"},
-        "accent": {"$value": "{primitive.colour.brand-1.700}"}
+        "accent": {"$value": "{primitive.colour.brand-1.700}"},
+        "nav": {"$value": "{primitive.colour.neutral.600}"},
+        "price": {"$value": "{semantic.colour.text.primary}"},
+        "count": {"$value": "{semantic.colour.text.muted}", "$description": "Item counts beside page titles"}
       },
       "action": {
         "bg": {"$value": "{primitive.colour.brand-1.600}"},
@@ -173,8 +185,8 @@
         "border": {"$value": "{primitive.colour.brand-1.600}"}
       },
       "secondary": {
-        "bg": {"$value": "{primitive.colour.neutral.0}"},
-        "bg-hover": {"$value": "{primitive.colour.neutral.100}"},
+        "bg": {"$value": "{primitive.colour.neutral.100}"},
+        "bg-hover": {"$value": "{primitive.colour.neutral.200}"},
         "fg": {"$value": "{primitive.colour.neutral.900}"},
         "border": {"$value": "{primitive.colour.neutral.200}"}
       },
@@ -189,6 +201,12 @@
       "status": {
         "danger": {"$value": "{primitive.colour.red.600}"},
         "warning": {"$value": "{primitive.colour.amber.700}"}
+      },
+      "tag": {
+        "deal-bg": {"$value": "{primitive.colour.brand-2.400}"},
+        "deal-fg": {"$value": "{primitive.colour.neutral.900}"},
+        "info-bg": {"$value": "{primitive.colour.brand-3.100}"},
+        "info-fg": {"$value": "{primitive.colour.brand-3.800}"}
       }
     },
     "space": {
@@ -202,16 +220,23 @@
         "gap-loose": {"$type": "dimension", "$value": "{primitive.space.8}"}
       },
       "card": {
-        "padding": {"$type": "dimension", "$value": "{primitive.space.4}"},
+        "padding": {"$type": "dimension", "$value": "{primitive.space.5}"},
         "gap": {"$type": "dimension", "$value": "{primitive.space.3}"}
       },
       "field": {
         "gap": {"$type": "dimension", "$value": "{primitive.space.2}"}
+      },
+      "page": {
+        "padding-x": {"$type": "dimension", "$value": "{primitive.space.14}"},
+        "padding-y": {"$type": "dimension", "$value": "{primitive.space.6}"}
+      },
+      "section": {
+        "gap": {"$type": "dimension", "$value": "{primitive.space.8}"}
       }
     },
     "radius": {
       "control": {"$type": "dimension", "$value": "{primitive.radius.full}"},
-      "card": {"$type": "dimension", "$value": "{primitive.radius.md}"},
+      "card": {"$type": "dimension", "$value": "{primitive.radius.sm}"},
       "pill": {"$type": "dimension", "$value": "{primitive.radius.full}"}
     },
     "border": {
@@ -225,7 +250,7 @@
     "font": {
       "body": {
         "family": {"$type": "fontFamily", "$value": "{primitive.font.family.sans}"},
-        "size": {"$type": "dimension", "$value": "{primitive.font.size.base}"},
+        "size": {"$type": "dimension", "$value": "{primitive.font.size.sm}"},
         "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.regular}"},
         "lineheight": {"$type": "number", "$value": "{primitive.font.lineheight.normal}"},
         "tracking": {"$type": "dimension", "$value": "{primitive.font.tracking.body}"}
@@ -238,12 +263,27 @@
         "tracking": {"$type": "dimension", "$value": "{primitive.font.tracking.heading}"}
       },
       "control": {
-        "size": {"$type": "dimension", "$value": "{primitive.font.size.base}"},
+        "size": {"$type": "dimension", "$value": "{primitive.font.size.sm}"},
         "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.semibold}"}
       },
       "caption": {
         "size": {"$type": "dimension", "$value": "{primitive.font.size.xs}"},
         "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.regular}"}
+      },
+      "label": {
+        "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.medium}"}
+      },
+      "label-strong": {
+        "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.semibold}"}
+      },
+      "name": {
+        "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.semibold}"}
+      },
+      "price": {
+        "size": {"$type": "dimension", "$value": "{primitive.font.size.md}"},
+        "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.bold}"},
+        "leading": {"$type": "dimension", "$value": "{primitive.font.leading.md}"},
+        "tracking": {"$type": "dimension", "$value": "{primitive.font.tracking.tight}"}
       }
     },
     "motion": {
@@ -252,7 +292,7 @@
     },
     "elevation": {
       "control": {"$type": "string", "$value": "none"},
-      "card": {"$type": "string", "$value": "0 4px 16px rgba(0,0,0,0.05)"}
+      "card": {"$type": "string", "$value": "none"}
     }
   },
   "component": {
@@ -262,7 +302,7 @@
       "size": {"$value": "md"}
     },
     "card": {
-      "elevation": {"$value": "raised"}
+      "elevation": {"$value": "flat"}
     }
   }
 }

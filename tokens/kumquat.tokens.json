@@ -93,13 +93,14 @@
       "8": {"$value": "32px"},
       "10": {"$value": "40px"},
       "12": {"$value": "48px"},
-      "14": {"$value": "56px"}
+      "14": {"$value": "56px"},
+      "24": {"$value": "96px"}
     },
     "radius": {
       "$type": "dimension",
       "none": {"$value": "0px"},
-      "sm": {"$value": "6px"},
-      "md": {"$value": "10px"},
+      "sm": {"$value": "4px"},
+      "md": {"$value": "8px"},
       "lg": {"$value": "12px"},
       "full": {"$value": "9999px"}
     },
@@ -115,10 +116,9 @@
       },
       "size": {
         "$type": "dimension",
-        "xs": {"$value": "11px"},
-        "sm": {"$value": "13px"},
-        "base": {"$value": "15px"},
-        "md": {"$value": "22px"},
+        "xs": {"$value": "12px"},
+        "sm": {"$value": "16px"},
+        "md": {"$value": "24px"},
         "lg": {"$value": "40px"},
         "xl": {"$value": "64px"},
         "2xl": {"$value": "128px"}
@@ -142,7 +142,16 @@
         "display": {"$value": "-0.05em"},
         "heading": {"$value": "-0.035em"},
         "body": {"$value": "-0.01em"},
-        "wide": {"$value": "0.08em"}
+        "wide": {"$value": "0.08em"},
+        "tight": {"$value": "-0.3px"}
+      },
+      "leading": {
+        "$type": "dimension",
+        "$description": "Line heights in px, for components that set an exact line box (Figma binds line height in px).",
+        "xs": {"$value": "16px"},
+        "md": {"$value": "24px"},
+        "lg": {"$value": "32px"},
+        "2xl": {"$value": "44px"}
       }
     },
     "duration": {
@@ -164,7 +173,9 @@
         "secondary": {"$value": "{primitive.colour.brand-1.800}"},
         "muted": {"$value": "{primitive.colour.brand-1.700}"},
         "inverse": {"$value": "{primitive.colour.brand-3.300}"},
-        "accent": {"$value": "{primitive.colour.brand-1.800}"}
+        "accent": {"$value": "{primitive.colour.brand-1.800}"},
+        "nav": {"$value": "{primitive.colour.neutral.600}"},
+        "price": {"$value": "{semantic.colour.text.primary}"}
       },
       "action": {
         "bg": {"$value": "{primitive.colour.brand-1.800}"},
@@ -189,6 +200,12 @@
       "status": {
         "danger": {"$value": "{primitive.colour.red.700}"},
         "warning": {"$value": "{primitive.colour.amber.800}"}
+      },
+      "tag": {
+        "deal-bg": {"$value": "{primitive.colour.brand-2.400}"},
+        "deal-fg": {"$value": "{primitive.colour.neutral.900}"},
+        "info-bg": {"$value": "{primitive.colour.brand-3.100}"},
+        "info-fg": {"$value": "{primitive.colour.brand-3.800}"}
       }
     },
     "space": {
@@ -207,6 +224,13 @@
       },
       "field": {
         "gap": {"$type": "dimension", "$value": "{primitive.space.2}"}
+      },
+      "page": {
+        "padding-x": {"$type": "dimension", "$value": "{primitive.space.14}"},
+        "padding-y": {"$type": "dimension", "$value": "{primitive.space.6}"}
+      },
+      "section": {
+        "gap": {"$type": "dimension", "$value": "{primitive.space.8}"}
       }
     },
     "radius": {
@@ -225,7 +249,7 @@
     "font": {
       "body": {
         "family": {"$type": "fontFamily", "$value": "{primitive.font.family.sans}"},
-        "size": {"$type": "dimension", "$value": "{primitive.font.size.base}"},
+        "size": {"$type": "dimension", "$value": "{primitive.font.size.sm}"},
         "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.regular}"},
         "lineheight": {"$type": "number", "$value": "{primitive.font.lineheight.normal}"},
         "tracking": {"$type": "dimension", "$value": "{primitive.font.tracking.body}"}
@@ -244,6 +268,21 @@
       "caption": {
         "size": {"$type": "dimension", "$value": "{primitive.font.size.xs}"},
         "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.regular}"}
+      },
+      "label": {
+        "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.medium}"}
+      },
+      "label-strong": {
+        "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.semibold}"}
+      },
+      "name": {
+        "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.semibold}"}
+      },
+      "price": {
+        "size": {"$type": "dimension", "$value": "{primitive.font.size.md}"},
+        "weight": {"$type": "fontWeight", "$value": "{primitive.font.weight.bold}"},
+        "leading": {"$type": "dimension", "$value": "{primitive.font.leading.md}"},
+        "tracking": {"$type": "dimension", "$value": "{primitive.font.tracking.tight}"}
       }
     },
     "motion": {

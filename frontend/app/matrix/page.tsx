@@ -15,7 +15,7 @@ import {
 } from "./tokens";
 import styles from "./system.module.css";
 
-const BRANDS = ["clementine", "kumquat", "pomelo"];
+const BRANDS = ["clementine", "pomelo"];
 
 const COMPONENT_COUNT = 11;
 

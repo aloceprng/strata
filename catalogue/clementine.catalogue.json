@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "currency": {"code": "USD", "decimals": 2},
+  "delivery": {"fee": 3.99},
+  "categories": {
+    "fruit-veg": {"name": "Fruit & veg"}
+  },
+  "products": {
+    "vine-tomatoes": {
+      "name": "Vine tomatoes",
+      "price": 1.85,
+      "unit": "/400g",
+      "per": "per 400 g",
+      "unitPrice": "$4.63/kg",
+      "image": "/products/clementine/vine-tomato.png",
+      "category": "fruit-veg",
+      "tag": {"label": "20% off", "tone": "deal"},
+      "filters": ["On offer"],
+      "summary": "Sold in 400 g bunches, still on the vine.",
+      "details": [
+        {"title": "Description", "body": "Sweet, deep red tomatoes ripened on the vine, so they keep their flavour."}
+      ],
+      "related": ["baby-spinach", "spring-mix", "hass-avocado", "broccoli", "lemons"]
+    },
+    "baby-spinach": {
+      "name": "Baby spinach",
+      "price": 3.99,
+      "unit": "/142g",
+      "per": "per 142 g",
+      "image": "/products/clementine/baby-spinach.png",
+      "category": "fruit-veg",
+      "tag": {"label": "Organic", "tone": "info"},
+      "filters": ["Organic"],
+      "summary": "Washed and ready to eat, in a 142 g bag.",
+      "details": [
+        {"title": "Description", "body": "Tender young leaves, washed three times. Good raw, or wilted in a minute."}
+      ],
+      "related": ["spring-mix", "vine-tomatoes", "hass-avocado", "lemons", "broccoli"]
+    },
+    "hass-avocado": {
+      "name": "Hass avocado, ripe & ready to eat",
+      "price": 1.49,
+      "unit": "each",
+      "per": "each",
+      "image": "/products/clementine/hass-avocado.png",
+      "category": "fruit-veg",
+      "tag": {"label": "Buy 2 get 1", "tone": "deal"},
+      "offer": {"type": "free", "buy": 2, "free": 1},
+      "filters": ["On offer"],
+      "summary": "Sold each. Ripe today, so eat within two days.",
+      "details": [
+        {"title": "Description", "body": "Creamy Hass avocados, picked and ripened so they are ready the day they arrive."}
+      ],
+      "related": ["lemons", "vine-tomatoes", "spring-mix", "baby-spinach", "mango"]
+    },
+    "blueberries": {
+      "name": "Blueberries",
+      "price": 4.99,
+      "unit": "/pint",
+      "per": "per pint",
+      "image": "/products/clementine/blueberries-punnet.png",
+      "category": "fruit-veg",
+      "tag": {"label": "Last few", "tone": "alert"},
+      "summary": "A pint punnet, about 280 g.",
+      "details": [
+        {"title": "Description", "body": "Plump, sweet blueberries. Rinse just before eating."}
+      ],
+      "related": ["bananas", "mango", "honeycrisp-apples", "navel-oranges", "lemons"]
+    },
+    "bananas": {
+      "name": "Bananas",
+      "price": 0.79,
+      "unit": "/lb",
+      "per": "per lb",
+      "image": "/products/clementine/banana-bunch.png",
+      "category": "fruit-veg",
+      "tag": {"label": "Fair trade", "tone": "info"},
+      "filters": ["Under $1"],
+      "summary": "Sold by the pound, about five to a bunch.",
+      "details": [
+        {"title": "Description", "body": "Fair trade bananas, picked green and ripened on the way."}
+      ],
+      "related": ["blueberries", "mango", "honeycrisp-apples", "navel-oranges", "lemons"]
+    },
+    "carrots": {
+      "name": "Carrots, loose",
+      "price": 1.98,
+      "unit": "/kg",
+      "per": "per kg",
+      "image": "/products/clementine/carrot.png",
+      "category": "fruit-veg",
+      "tag": {"label": "Local", "tone": "info"},
+      "filters": ["British"],
+      "summary": "Loose carrots, sold by the kilo.",
+      "details": [
+        {"title": "Description", "body": "Crunchy carrots from farms within a day's drive."}
+      ],
+      "related": ["yukon-potatoes", "broccoli", "baby-spinach", "vine-tomatoes", "lemons"]
+    },
+    "yukon-potatoes": {
+      "name": "Yukon Gold potatoes",
+      "price": 0.99,
+      "unit": "/lb",
+      "per": "per lb",
+      "image": "/products/clementine/new-potato.png",
+      "category": "fruit-veg",
+      "tag": {"label": "Local", "tone": "info"},
+      "filters": ["British", "Under $1"],
+      "summary": "Sold by the pound. Waxy, buttery and good for everything.",
+      "details": [
+        {"title": "Description", "body": "Golden, thin-skinned potatoes that roast, mash and boil equally well."}
+      ],
+      "related": ["carrots", "broccoli", "vine-tomatoes", "baby-spinach", "lemons"]
+    },
+    "spring-mix": {
+      "name": "Spring mix salad",
+      "price": 4.49,
+      "unit": "/312g",
+      "per": "per 312 g",
+      "image": "/products/clementine/mixed-salad.png",
+      "category": "fruit-veg",
+      "tag": {"label": "Organic", "tone": "info"},
+      "filters": ["Organic"],
+      "summary": "A 312 g tub of mixed young leaves.",
+      "details": [
+        {"title": "Description", "body": "Red and green lettuces, chard and rocket, washed and ready."}
+      ],
+      "related": ["baby-spinach", "vine-tomatoes", "hass-avocado", "lemons", "carrots"]
+    },
+    "broccoli": {
+      "name": "Broccoli crown",
+      "price": 2.29,
+      "unit": "each",
+      "per": "each",
+      "image": "/products/clementine/broccoli.png",
+      "category": "fruit-veg",
+      "tag": {"label": "15% off", "tone": "deal"},
+      "filters": ["On offer"],
+      "summary": "Sold each, about 350 g.",
+      "details": [
+        {"title": "Description", "body": "Tight green florets with a short stalk. Steam for four minutes."}
+      ],
+      "related": ["carrots", "yukon-potatoes", "baby-spinach", "lemons", "vine-tomatoes"]
+    },
+    "navel-oranges": {
+      "name": "Navel oranges",
+      "price": 0.89,
+      "unit": "each",
+      "per": "each",
+      "unitPrice": "$4.45/kg",
+      "image": "/products/clementine/navel-orange.png",
+      "category": "fruit-veg",
+      "tag": {"label": "3 for $2", "tone": "deal"},
+      "offer": {"type": "multibuy", "quantity": 3, "price": 2.00},
+      "badges": [
+        {"label": "Grown in California", "tone": "info"},
+        {"label": "Seedless", "tone": "info"}
+      ],
+      "filters": ["On offer", "Under $1"],
+      "summary": "Sold each, about 200 g. Seedless and easy to peel.",
+      "delivery": "Arrives tomorrow, 7–9am · Best within 10 days of delivery",
+      "details": [
+        {"title": "Description", "body": "Sweet, juicy and easy to peel, with no seeds. A navel orange is named for the small second fruit at its base."},
+        {"title": "Nutrition", "body": "Per orange (about 200 g): 94 kcal, 24 g carbohydrate, 4.8 g fibre, 106 mg vitamin C."},
+        {"title": "Storage & use", "body": "Keeps a week at room temperature, two in the fridge. Zest before you peel."},
+        {"title": "Origin & sourcing", "body": "Grown in California's Central Valley and shipped by sea in season."}
+      ],
+      "related": ["lemons", "mango", "honeycrisp-apples", "bananas", "blueberries"]
+    },
+    "honeycrisp-apples": {
+      "name": "Honeycrisp apples",
+      "price": 1.29,
+      "unit": "each",
+      "per": "each",
+      "image": "/products/clementine/apple.png",
+      "category": "fruit-veg",
+      "tag": {"label": "Local", "tone": "info"},
+      "filters": ["British"],
+      "summary": "Sold each. Crisp, sweet and very juicy.",
+      "details": [
+        {"title": "Description", "body": "A crisp, sweet-sharp apple that keeps well in the fridge."}
+      ],
+      "related": ["navel-oranges", "bananas", "mango", "blueberries", "lemons"]
+    },
+    "mango": {
+      "name": "Mango, ready to eat",
+      "price": 1.99,
+      "unit": "each",
+      "per": "each",
+      "image": "/products/clementine/mango.png",
+      "category": "fruit-veg",
+      "tag": {"label": "This week only", "tone": "inverse"},
+      "summary": "Sold each. Ripe now; it should give a little when pressed.",
+      "details": [
+        {"title": "Description", "body": "Fragrant, sweet mangoes, ripened before they reach you."}
+      ],
+      "related": ["navel-oranges", "blueberries", "bananas", "honeycrisp-apples", "lemons"]
+    },
+    "lemons": {
+      "name": "Lemons",
+      "price": 0.69,
+      "unit": "each",
+      "per": "each",
+      "image": "/products/clementine/lemon.png",
+      "category": "fruit-veg",
+      "tag": {"label": "2 for $1", "tone": "deal"},
+      "offer": {"type": "multibuy", "quantity": 2, "price": 1.00},
+      "filters": ["On offer", "Under $1"],
+      "summary": "Sold each. Unwaxed, so the zest is safe to use.",
+      "details": [
+        {"title": "Description", "body": "Bright, juicy unwaxed lemons."}
+      ],
+      "related": ["navel-oranges", "hass-avocado", "mango", "honeycrisp-apples", "bananas"]
+    }
+  },
+  "basket": [
+    {"product": "navel-oranges", "quantity": 3},
+    {"product": "hass-avocado", "quantity": 3},
+    {"product": "blueberries", "quantity": 2},
+    {"product": "baby-spinach", "quantity": 2},
+    {"product": "spring-mix", "quantity": 1},
+    {"product": "broccoli", "quantity": 1},
+    {"product": "mango", "quantity": 2}
+  ],
+  "saved": ["baby-spinach", "yukon-potatoes", "mango"]
+}

@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "currency": {"code": "USD", "decimals": 0},
+  "delivery": {"fee": 0},
+  "categories": {
+    "chairs": {"name": "Chairs"}
+  },
+  "products": {
+    "dylan-swivel-chair": {
+      "name": "Dylan swivel chair",
+      "price": 690,
+      "material": "Green corduroy, steel",
+      "image": "/products/pomelo/dylan-swivel-chair.png",
+      "category": "chairs",
+      "delivery": "Free delivery · 2–3 weeks",
+      "description": "Green corduroy on a chrome star base. Turns a full circle, reclines a little.",
+      "specs": [
+        {"label": "Width", "value": "78 cm"},
+        {"label": "Depth", "value": "82 cm"},
+        {"label": "Height", "value": "86 cm"},
+        {"label": "Seat height", "value": "42 cm"},
+        {"label": "Base", "value": "Chromed steel, 360° swivel"},
+        {"label": "Cover", "value": "Removable, dry-clean only"}
+      ],
+      "options": {
+        "label": "Colour",
+        "choices": [
+          {"name": "Corduroy — Moss", "swatch": "#14602a"},
+          {"name": "Corduroy — Chartreuse", "swatch": "#a9ac3c"},
+          {"name": "Corduroy — Tomato", "swatch": "#9a3430"},
+          {"name": "Corduroy — Walnut", "swatch": "#5e4b3e"},
+          {"name": "Corduroy — Oat", "swatch": "#bdb6aa"},
+          {"name": "Corduroy — Navy", "swatch": "#2d3b5f"}
+        ]
+      },
+      "details": [
+        {"title": "Warranty", "body": "Ten years on the frame and swivel, two on the cover."},
+        {"title": "Colours in stock", "body": "Moss, Oat and Navy ship in 2–3 weeks. Other colours are made to order in 6–8 weeks."},
+        {"title": "Care", "body": "Vacuum weekly on a low setting. The cover comes off for dry cleaning."},
+        {"title": "Lead time", "body": "Made in our Porto workshop and delivered by a two-person team."}
+      ],
+      "related": ["alder-armchair", "marlow-lounge-chair", "holm-dining-chair", "tove-swivel-chair", "pier-bar-stool"]
+    },
+    "alder-armchair": {
+      "name": "Alder armchair",
+      "price": 740,
+      "material": "Ash, wool",
+      "image": "/products/pomelo/alder-armchair.png",
+      "category": "chairs",
+      "delivery": "Free delivery · 3–4 weeks",
+      "description": "A rounded wool shell on four splayed ash legs. Small enough for a reading corner.",
+      "specs": [
+        {"label": "Width", "value": "72 cm"},
+        {"label": "Depth", "value": "70 cm"},
+        {"label": "Height", "value": "78 cm"},
+        {"label": "Seat height", "value": "44 cm"}
+      ],
+      "details": [
+        {"title": "Warranty", "body": "Ten years on the frame, two on the upholstery."},
+        {"title": "Care", "body": "Brush the wool with a soft brush. Blot spills, never rub."}
+      ],
+      "related": ["dylan-swivel-chair", "marlow-lounge-chair", "oda-side-chair", "tove-swivel-chair", "holm-dining-chair"]
+    },
+    "holm-dining-chair": {
+      "name": "Holm dining chair",
+      "price": 210,
+      "material": "Solid oak",
+      "image": "/products/pomelo/holm-dining-chair.png",
+      "category": "chairs",
+      "delivery": "Free delivery · 2–3 weeks",
+      "description": "A carver chair in solid oak, with arms low enough to tuck under the table.",
+      "specs": [
+        {"label": "Width", "value": "56 cm"},
+        {"label": "Depth", "value": "52 cm"},
+        {"label": "Height", "value": "80 cm"},
+        {"label": "Seat height", "value": "46 cm"}
+      ],
+      "options": {
+        "label": "Finish",
+        "choices": [
+          {"name": "Solid oak", "swatch": "#a0623a"},
+          {"name": "Smoked oak", "swatch": "#5b3a26"},
+          {"name": "Black-stained oak", "swatch": "#2b2420"}
+        ]
+      },
+      "details": [
+        {"title": "Warranty", "body": "Ten years on the frame."},
+        {"title": "Care", "body": "Wipe with a damp cloth. Re-oil once a year."}
+      ],
+      "related": ["oda-side-chair", "kestrel-stool", "pier-bar-stool", "alder-armchair", "dylan-swivel-chair"]
+    },
+    "kestrel-stool": {
+      "name": "Kestrel stool",
+      "price": 140,
+      "material": "Ash, lacquer",
+      "image": "/products/pomelo/stool.png",
+      "category": "chairs",
+      "delivery": "Free delivery · 1–2 weeks",
+      "description": "A counter stool in turned ash with a gloss lacquered seat.",
+      "specs": [
+        {"label": "Diameter", "value": "36 cm"},
+        {"label": "Seat height", "value": "65 cm"}
+      ],
+      "related": ["pier-bar-stool", "holm-dining-chair", "oda-side-chair", "alder-armchair", "tove-swivel-chair"]
+    },
+    "marlow-lounge-chair": {
+      "name": "Marlow lounge chair",
+      "price": 980,
+      "material": "Walnut, linen",
+      "image": "/products/pomelo/marlow-lounge-chair.png",
+      "category": "chairs",
+      "delivery": "Free delivery · 4–6 weeks",
+      "description": "A low walnut frame with deep linen cushions and a slight recline.",
+      "specs": [
+        {"label": "Width", "value": "74 cm"},
+        {"label": "Depth", "value": "84 cm"},
+        {"label": "Height", "value": "76 cm"},
+        {"label": "Seat height", "value": "38 cm"}
+      ],
+      "related": ["dylan-swivel-chair", "alder-armchair", "tove-swivel-chair", "oda-side-chair", "holm-dining-chair"]
+    },
+    "oda-side-chair": {
+      "name": "Oda side chair",
+      "price": 180,
+      "material": "Beech, cane",
+      "image": "/products/pomelo/dining-chair.png",
+      "category": "chairs",
+      "delivery": "Free delivery · 2–3 weeks",
+      "description": "A light beech chair with an upholstered seat and a curved back.",
+      "specs": [
+        {"label": "Width", "value": "46 cm"},
+        {"label": "Depth", "value": "50 cm"},
+        {"label": "Height", "value": "82 cm"},
+        {"label": "Seat height", "value": "46 cm"}
+      ],
+      "related": ["holm-dining-chair", "kestrel-stool", "alder-armchair", "pier-bar-stool", "marlow-lounge-chair"]
+    },
+    "pier-bar-stool": {
+      "name": "Pier bar stool",
+      "price": 165,
+      "material": "Powder-coat steel",
+      "image": "/products/pomelo/pier-bar-stool.png",
+      "category": "chairs",
+      "delivery": "Free delivery · 1–2 weeks",
+      "description": "A bar-height stool in dark wood with a padded green seat and a steel footrest.",
+      "specs": [
+        {"label": "Diameter", "value": "38 cm"},
+        {"label": "Seat height", "value": "75 cm"}
+      ],
+      "related": ["kestrel-stool", "holm-dining-chair", "oda-side-chair", "dylan-swivel-chair", "tove-swivel-chair"]
+    },
+    "tove-swivel-chair": {
+      "name": "Tove swivel chair",
+      "price": 860,
+      "material": "Red leather, steel",
+      "image": "/products/pomelo/tove-swivel-chair.png",
+      "category": "chairs",
+      "delivery": "Free delivery · 3–4 weeks",
+      "description": "A buttoned red leather egg on a five-star steel base.",
+      "specs": [
+        {"label": "Width", "value": "80 cm"},
+        {"label": "Depth", "value": "78 cm"},
+        {"label": "Height", "value": "96 cm"},
+        {"label": "Seat height", "value": "44 cm"}
+      ],
+      "related": ["dylan-swivel-chair", "marlow-lounge-chair", "alder-armchair", "kestrel-stool", "pier-bar-stool"]
+    }
+  },
+  "extras": [
+    {"id": "assembly", "label": "Assembly", "note": "by our two-person team", "price": 60, "selected": true},
+    {"id": "fabric-protection", "label": "Fabric protection", "note": "5-year stain cover", "price": 45},
+    {"id": "take-away", "label": "Take away old furniture", "note": "up to two pieces", "price": 40}
+  ],
+  "basket": [
+    {"product": "dylan-swivel-chair", "quantity": 1, "option": "Corduroy — Moss"},
+    {"product": "holm-dining-chair", "quantity": 2, "option": "Solid oak"}
+  ]
+}

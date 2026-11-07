@@ -4,13 +4,200 @@
     "screen": "home",
     "sections": [
       {
-        "id": "autumn-harvest",
-        "type": "Intro",
+        "id": "header",
+        "type": "SiteHeader",
         "props": {
-          "title": "Autumn harvest.",
-          "body": "20% off seasonal veg.",
-          "tone": "secondary",
-          "gap": "space.stack.gap"
+          "variant": "full",
+          "logo": "/brand/clementine/logo.svg",
+          "logoAlt": "Clementine",
+          "links": [
+            {"label": "Home", "link": "home", "active": true},
+            {"label": "Shop", "link": "shop"},
+            {"label": "Offers"},
+            {"label": "Recipes"}
+          ],
+          "searchPlaceholder": "Search groceries",
+          "initials": "SC",
+          "basket": true
+        }
+      },
+      {
+        "id": "autumn-harvest",
+        "type": "PromoHero",
+        "props": {
+          "eyebrow": "This week only",
+          "headline": "Autumn harvest.\n20% off seasonal veg.",
+          "body": "Squash, kale, beetroot and 60 more, picked this week.",
+          "action": "Shop the offer",
+          "link": "shop",
+          "image": "/brand/clementine/hero-basket.png",
+          "imageAlt": "A blue shopping basket overflowing with fruit and vegetables"
+        }
+      },
+      {
+        "id": "deals",
+        "type": "ProductRow",
+        "props": {
+          "title": "Deals this week",
+          "subtitle": "Ends Sunday",
+          "linkLabel": "See all 86 →",
+          "link": "shop",
+          "columns": 5,
+          "products": ["vine-tomatoes", "hass-avocado", "navel-oranges", "broccoli", "lemons"]
+        }
+      },
+      {
+        "id": "aisles",
+        "type": "CategoryCarousel",
+        "props": {
+          "title": "Shop by aisle",
+          "linkLabel": "All aisles →",
+          "link": "shop",
+          "categories": [
+            {"name": "Fruit & veg", "count": "342 items", "image": "/categories/clementine/fruit-veg.png", "link": "shop"},
+            {"name": "Bakery", "count": "128 items", "image": "/categories/clementine/bakery.png"},
+            {"name": "Snacks", "count": "214 items", "image": "/categories/clementine/snacks.png"},
+            {"name": "Meat & fish", "count": "176 items", "image": "/categories/clementine/meat-fish.png"},
+            {"name": "Frozen", "count": "96 items", "image": "/categories/clementine/frozen.png"},
+            {"name": "Pantry", "count": "530 items", "image": "/categories/clementine/pantry.png"},
+            {"name": "Drinks", "count": "164 items", "image": "/categories/clementine/drinks.png"},
+            {"name": "Dairy & eggs", "count": "214 items", "image": "/categories/clementine/dairy-eggs.png"}
+          ]
+        }
+      }
+    ]
+  },
+  "shop": {
+    "schemaVersion": 1,
+    "screen": "shop",
+    "sections": [
+      {
+        "id": "header",
+        "type": "SiteHeader",
+        "props": {
+          "variant": "full",
+          "logo": "/brand/clementine/logo.svg",
+          "logoAlt": "Clementine",
+          "links": [
+            {"label": "Home", "link": "home"},
+            {"label": "Shop", "link": "shop", "active": true},
+            {"label": "Offers"},
+            {"label": "Recipes"}
+          ],
+          "searchPlaceholder": "Search groceries",
+          "initials": "SC",
+          "basket": true
+        }
+      },
+      {
+        "id": "fruit-veg",
+        "type": "ProductGrid",
+        "props": {
+          "title": "Fruits & Vegetables",
+          "subtitle": "{products} products",
+          "filters": [
+            {"label": "All"},
+            {"label": "Organic"},
+            {"label": "British"},
+            {"label": "On offer"},
+            {"label": "Under $1"}
+          ],
+          "sortLabel": "Sort: Best match",
+          "columns": 4,
+          "products": [
+            "vine-tomatoes", "baby-spinach", "hass-avocado", "blueberries",
+            "bananas", "carrots", "yukon-potatoes", "spring-mix",
+            "broccoli", "navel-oranges", "honeycrisp-apples", "mango"
+          ]
+        }
+      }
+    ]
+  },
+  "product": {
+    "schemaVersion": 1,
+    "screen": "product",
+    "sections": [
+      {
+        "id": "header",
+        "type": "SiteHeader",
+        "props": {
+          "variant": "full",
+          "logo": "/brand/clementine/logo.svg",
+          "logoAlt": "Clementine",
+          "links": [
+            {"label": "Home", "link": "home"},
+            {"label": "Shop", "link": "shop", "active": true},
+            {"label": "Offers"},
+            {"label": "Recipes"}
+          ],
+          "searchPlaceholder": "Search groceries",
+          "initials": "SC",
+          "basket": true
+        }
+      },
+      {
+        "id": "trail",
+        "type": "Breadcrumb",
+        "props": {
+          "items": [{"label": "Shop", "link": "shop"}],
+          "withProduct": true
+        }
+      },
+      {
+        "id": "overview",
+        "type": "ProductOverview",
+        "props": {"addLabel": "Add to basket", "addedLabel": "Added to basket"}
+      },
+      {
+        "id": "goes-well-with",
+        "type": "ProductRow",
+        "props": {
+          "title": "Goes well with",
+          "linkLabel": "See all →",
+          "link": "shop",
+          "columns": 5,
+          "source": "related"
+        }
+      }
+    ]
+  },
+  "basket": {
+    "schemaVersion": 1,
+    "screen": "basket",
+    "sections": [
+      {
+        "id": "header",
+        "type": "SiteHeader",
+        "props": {
+          "variant": "full",
+          "logo": "/brand/clementine/logo.svg",
+          "logoAlt": "Clementine",
+          "links": [
+            {"label": "Home", "link": "home"},
+            {"label": "Shop", "link": "shop", "active": true},
+            {"label": "Offers"},
+            {"label": "Recipes"}
+          ],
+          "searchPlaceholder": "Search groceries",
+          "initials": "SC",
+          "basket": true
+        }
+      },
+      {
+        "id": "title",
+        "type": "PageTitle",
+        "props": {"title": "Your basket", "count": "{units} items", "style": "inline"}
+      },
+      {
+        "id": "basket",
+        "type": "Basket",
+        "props": {
+          "layout": "compact",
+          "summaryTitle": "Order summary",
+          "checkoutLabel": "Continue to delivery",
+          "emptyTitle": "Your basket is empty.",
+          "emptyLinkLabel": "Start shopping",
+          "emptyLink": "shop"
         }
       }
     ]

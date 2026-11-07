@@ -4,13 +4,523 @@
     "screen": "home",
     "sections": [
       {
-        "id": "the-orchard",
-        "type": "Intro",
+        "id": "header",
+        "type": "SiteHeader",
         "props": {
-          "title": "The Orchard",
-          "body": "Collection 04, autumn 2026.",
-          "tone": "secondary",
-          "gap": "space.stack.gap"
+          "variant": "minimal",
+          "links": [
+            {
+              "label": "Sofas"
+            },
+            {
+              "label": "Storage"
+            },
+            {
+              "label": "Lighting"
+            },
+            {
+              "label": "Outdoor"
+            },
+            {
+              "label": "Journal"
+            }
+          ],
+          "utilities": [
+            {
+              "label": "Search"
+            },
+            {
+              "label": "Account"
+            },
+            {
+              "label": "Basket ({lines})",
+              "link": "basket",
+              "active": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "the-collection",
+        "type": "WordmarkHero",
+        "props": {
+          "wordmark": "/brand/pomelo/wordmark.svg",
+          "wordmarkAlt": "Pomelo",
+          "image": "/products/pomelo/dylan-swivel-chair.png",
+          "imageAlt": "The Dylan swivel chair in green corduroy",
+          "actions": [
+            {
+              "label": "Shop the collection",
+              "variant": "primary",
+              "link": "shop"
+            },
+            {
+              "label": "Book a showroom visit",
+              "variant": "secondary"
+            }
+          ]
+        }
+      },
+      {
+        "id": "footer",
+        "type": "SiteFooter",
+        "props": {
+          "newsletterTitle": "Newsletter",
+          "newsletterBody": "Get 10% off your first order, plus new collections and showroom events.",
+          "columns": [
+            {
+              "title": "Customer service",
+              "links": [
+                {
+                  "label": "Delivery"
+                },
+                {
+                  "label": "Returns"
+                },
+                {
+                  "label": "Track your order"
+                },
+                {
+                  "label": "FAQ"
+                }
+              ]
+            },
+            {
+              "title": "Information",
+              "links": [
+                {
+                  "label": "Privacy policy"
+                },
+                {
+                  "label": "Terms of sale"
+                },
+                {
+                  "label": "Care guides"
+                }
+              ]
+            },
+            {
+              "title": "Follow us",
+              "links": [
+                {
+                  "label": "Instagram"
+                },
+                {
+                  "label": "Pinterest"
+                },
+                {
+                  "label": "TikTok"
+                }
+              ]
+            }
+          ],
+          "wordmark": "/brand/pomelo/wordmark.svg",
+          "wordmarkAlt": "Pomelo",
+          "copyright": "© 2026 Pomelo"
+        }
+      }
+    ]
+  },
+  "shop": {
+    "schemaVersion": 1,
+    "screen": "shop",
+    "gap": "space.stack.gap-loose",
+    "sections": [
+      {
+        "id": "header",
+        "type": "SiteHeader",
+        "props": {
+          "variant": "minimal",
+          "logo": "/brand/pomelo/wordmark.svg",
+          "logoAlt": "Pomelo",
+          "logoPosition": "center",
+          "links": [
+            {
+              "label": "Sofas"
+            },
+            {
+              "label": "Storage"
+            },
+            {
+              "label": "Lighting"
+            },
+            {
+              "label": "Outdoor"
+            },
+            {
+              "label": "Journal"
+            }
+          ],
+          "utilities": [
+            {
+              "label": "Search"
+            },
+            {
+              "label": "Account"
+            },
+            {
+              "label": "Basket ({lines})",
+              "link": "basket",
+              "active": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "chairs",
+        "type": "CatalogueGrid",
+        "props": {
+          "title": "Chairs",
+          "count": "{products}",
+          "filters": [
+            {
+              "label": "All"
+            },
+            {
+              "label": "Lounge"
+            },
+            {
+              "label": "Dining"
+            },
+            {
+              "label": "Stools"
+            },
+            {
+              "label": "Outdoor"
+            }
+          ],
+          "sortLabel": "Sort: Newest ↓",
+          "products": [
+            "dylan-swivel-chair",
+            "alder-armchair",
+            "holm-dining-chair",
+            "kestrel-stool",
+            "marlow-lounge-chair",
+            "oda-side-chair",
+            "pier-bar-stool",
+            "tove-swivel-chair"
+          ]
+        }
+      },
+      {
+        "id": "footer",
+        "type": "SiteFooter",
+        "props": {
+          "newsletterTitle": "Newsletter",
+          "newsletterBody": "Get 10% off your first order, plus new collections and showroom events.",
+          "columns": [
+            {
+              "title": "Customer service",
+              "links": [
+                {
+                  "label": "Delivery"
+                },
+                {
+                  "label": "Returns"
+                },
+                {
+                  "label": "Track your order"
+                },
+                {
+                  "label": "FAQ"
+                }
+              ]
+            },
+            {
+              "title": "Information",
+              "links": [
+                {
+                  "label": "Privacy policy"
+                },
+                {
+                  "label": "Terms of sale"
+                },
+                {
+                  "label": "Care guides"
+                }
+              ]
+            },
+            {
+              "title": "Follow us",
+              "links": [
+                {
+                  "label": "Instagram"
+                },
+                {
+                  "label": "Pinterest"
+                },
+                {
+                  "label": "TikTok"
+                }
+              ]
+            }
+          ],
+          "wordmark": "/brand/pomelo/wordmark.svg",
+          "wordmarkAlt": "Pomelo",
+          "copyright": "© 2026 Pomelo"
+        }
+      }
+    ]
+  },
+  "product": {
+    "schemaVersion": 1,
+    "screen": "product",
+    "gap": "space.stack.gap-loose",
+    "sections": [
+      {
+        "id": "header",
+        "type": "SiteHeader",
+        "props": {
+          "variant": "minimal",
+          "logo": "/brand/pomelo/wordmark.svg",
+          "logoAlt": "Pomelo",
+          "logoPosition": "center",
+          "links": [
+            {
+              "label": "Sofas"
+            },
+            {
+              "label": "Storage"
+            },
+            {
+              "label": "Lighting"
+            },
+            {
+              "label": "Outdoor"
+            },
+            {
+              "label": "Journal"
+            }
+          ],
+          "utilities": [
+            {
+              "label": "Search"
+            },
+            {
+              "label": "Account"
+            },
+            {
+              "label": "Basket ({lines})",
+              "link": "basket",
+              "active": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "showcase",
+        "type": "ProductShowcase",
+        "props": {
+          "optionsLabel": "Other colours",
+          "specsLabel": "Parameters",
+          "addLabel": "Add to basket",
+          "addedLabel": "Added to basket"
+        }
+      },
+      {
+        "id": "related",
+        "type": "CatalogueRail",
+        "props": {
+          "title": "Related products",
+          "source": "related"
+        }
+      },
+      {
+        "id": "footer",
+        "type": "SiteFooter",
+        "props": {
+          "newsletterTitle": "Newsletter",
+          "newsletterBody": "Get 10% off your first order, plus new collections and showroom events.",
+          "columns": [
+            {
+              "title": "Customer service",
+              "links": [
+                {
+                  "label": "Delivery"
+                },
+                {
+                  "label": "Returns"
+                },
+                {
+                  "label": "Track your order"
+                },
+                {
+                  "label": "FAQ"
+                }
+              ]
+            },
+            {
+              "title": "Information",
+              "links": [
+                {
+                  "label": "Privacy policy"
+                },
+                {
+                  "label": "Terms of sale"
+                },
+                {
+                  "label": "Care guides"
+                }
+              ]
+            },
+            {
+              "title": "Follow us",
+              "links": [
+                {
+                  "label": "Instagram"
+                },
+                {
+                  "label": "Pinterest"
+                },
+                {
+                  "label": "TikTok"
+                }
+              ]
+            }
+          ],
+          "wordmark": "/brand/pomelo/wordmark.svg",
+          "wordmarkAlt": "Pomelo",
+          "copyright": "© 2026 Pomelo"
+        }
+      }
+    ]
+  },
+  "basket": {
+    "schemaVersion": 1,
+    "screen": "basket",
+    "gap": "space.stack.gap-loose",
+    "sections": [
+      {
+        "id": "header",
+        "type": "SiteHeader",
+        "props": {
+          "variant": "minimal",
+          "logo": "/brand/pomelo/wordmark.svg",
+          "logoAlt": "Pomelo",
+          "logoPosition": "center",
+          "links": [
+            {
+              "label": "Sofas"
+            },
+            {
+              "label": "Storage"
+            },
+            {
+              "label": "Lighting"
+            },
+            {
+              "label": "Outdoor"
+            },
+            {
+              "label": "Journal"
+            }
+          ],
+          "utilities": [
+            {
+              "label": "Search"
+            },
+            {
+              "label": "Account"
+            },
+            {
+              "label": "Basket ({lines})",
+              "link": "basket",
+              "active": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "title",
+        "type": "PageTitle",
+        "props": {
+          "title": "Basket",
+          "count": "({lines})",
+          "style": "display",
+          "breadcrumb": [
+            {
+              "label": "Home",
+              "link": "home"
+            },
+            {
+              "label": "Shop",
+              "link": "shop"
+            },
+            {
+              "label": "Basket"
+            }
+          ]
+        }
+      },
+      {
+        "id": "basket",
+        "type": "Basket",
+        "props": {
+          "layout": "detailed",
+          "extrasTitle": "Add to your order",
+          "promo": true,
+          "checkoutLabel": "Checkout",
+          "emptyTitle": "Nothing in your basket yet.",
+          "emptyLinkLabel": "Shop the collection",
+          "emptyLink": "shop"
+        }
+      },
+      {
+        "id": "footer",
+        "type": "SiteFooter",
+        "props": {
+          "newsletterTitle": "Newsletter",
+          "newsletterBody": "Get 10% off your first order, plus new collections and showroom events.",
+          "columns": [
+            {
+              "title": "Customer service",
+              "links": [
+                {
+                  "label": "Delivery"
+                },
+                {
+                  "label": "Returns"
+                },
+                {
+                  "label": "Track your order"
+                },
+                {
+                  "label": "FAQ"
+                }
+              ]
+            },
+            {
+              "title": "Information",
+              "links": [
+                {
+                  "label": "Privacy policy"
+                },
+                {
+                  "label": "Terms of sale"
+                },
+                {
+                  "label": "Care guides"
+                }
+              ]
+            },
+            {
+              "title": "Follow us",
+              "links": [
+                {
+                  "label": "Instagram"
+                },
+                {
+                  "label": "Pinterest"
+                },
+                {
+                  "label": "TikTok"
+                }
+              ]
+            }
+          ],
+          "wordmark": "/brand/pomelo/wordmark.svg",
+          "wordmarkAlt": "Pomelo",
+          "copyright": "© 2026 Pomelo"
         }
       }
     ]

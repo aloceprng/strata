@@ -10,6 +10,7 @@ from strata_core import (
     diff_layouts,
     load_contract,
     resolve_document,
+    validate_catalogue,
     validate_layouts,
     worst_severity,
 )
@@ -28,6 +29,14 @@ CONTRACT = {
             },
         },
         "Note": {"props": {"text": {"type": "string"}}},
+        "Shelf": {"props": {
+            "items": {"type": "list", "min": 1, "max": 2, "required": True, "items": {
+                "name": {"type": "string", "required": True},
+                "image": {"type": "asset"},
+                "saved": {"type": "boolean"},
+                "count": {"type": "number", "min": 0, "max": 99},
+            }},
+        }},
     },
 }
 TOKENS = {"semantic": {
@@ -38,6 +47,10 @@ TOKENS = {"semantic": {
 
 def section(section_id="intro", kind="Intro", **props):
     return {"id": section_id, "type": kind, "props": {"title": "Hi", **props}}
+
+
+def shelf(items):
+    return {"id": "shelf", "type": "Shelf", "props": {"items": items}}
 
 
 def screen(*sections, name="home"):
@@ -58,6 +71,9 @@ class TestValidation:
     def test_a_brand_may_have_no_screens(self):
         check({})
 
+    def test_a_screen_may_fit_the_viewport(self):
+        check({"home": {**screen(section()), "fit": "viewport"}})
+
     def test_props_are_optional_unless_required(self):
         check({"home": screen({"id": "n", "type": "Note"})})
 
@@ -70,6 +86,7 @@ class TestValidation:
         ({"home": {"schemaVersion": 2, "screen": "home", "sections": []}}, "schema version 2"),
         ({"home": {"screen": "home", "sections": []}}, "schema version None"),
         ({"home": screen(name="other")}, "labelled 'other'"),
+        ({"home": {**screen(), "fit": "page"}}, "fit must be one of scroll, viewport"),
         ({"home": {"schemaVersion": 1, "screen": "home"}}, "list of sections"),
         ({"home": screen("nope")}, r"sections\[0\] must be an object"),
         ({"home": screen({"type": "Intro"})}, "needs an id"),
@@ -92,6 +109,32 @@ class TestValidation:
     def test_invalid_layouts_are_refused(self, layouts, message):
         with pytest.raises(LayoutError, match=message):
             check(layouts)
+
+    def test_a_list_of_typed_items_passes(self):
+        item = {"name": "Kale", "image": "/products/clementine/kale.png", "saved": True, "count": 3}
+        check({"home": screen(shelf([item, {"name": "Leek", "count": 2.5}]))})
+
+    @pytest.mark.parametrize("items, message", [
+        ("Kale", "items must be a list"),
+        ([], "between 1 and 2 items"),
+        ([{"name": "a"}] * 3, "between 1 and 2 items"),
+        (["Kale"], r"items\[0\] must be an object"),
+        ([{}], r"items\[0\] is missing the required prop 'name'"),
+        ([{"name": "a", "colour": "red"}], r"items\[0\] has the unknown prop 'colour'"),
+        ([{"name": "a", "saved": "yes"}], "saved must be true or false"),
+        ([{"name": "a", "count": "3"}], "count must be a number"),
+        ([{"name": "a", "count": True}], "count must be a number"),
+        ([{"name": "a", "count": 100}], "between 0 and 99"),
+        ([{"name": "a", "count": -1}], "between 0 and 99"),
+        ([{"name": "a", "image": 7}], "must be an image path"),
+        ([{"name": "a", "image": "kale.png"}], "must be an image path"),
+        ([{"name": "a", "image": "/products/../secrets.png"}], "must be an image path"),
+        ([{"name": "a", "image": "https://evil.example/x.png"}], "must be an image path"),
+        ([{"name": "a", "image": "/products/kale.gif"}], "must be an image path"),
+    ])
+    def test_invalid_list_items_are_refused(self, items, message):
+        with pytest.raises(LayoutError, match=message):
+            check({"home": screen(shelf(items))})
 
     def test_a_section_needs_its_tokens_on_this_brand(self):
         tokens = {"semantic": {"other": {"$value": "1"}}}
@@ -144,6 +187,11 @@ class TestDiff:
         assert records[0]["severity"] == "patch"
         assert records[0]["after"]["props"]["title"] == "Bye"
 
+    def test_changing_a_screens_fit_is_minor(self):
+        records = diff_layouts({"home": screen(section("a"))},
+                               {"home": {**screen(section("a")), "fit": "viewport"}})
+        assert [(r["path"], r["severity"], r["after"]) for r in records] == [("layout.home.fit", "minor", "viewport")]
+
     def test_changing_a_sections_type_is_major(self):
         assert self.severity(screen(section("a")), screen(section("a", kind="Note"))) == "major"
 
@@ -157,8 +205,11 @@ class TestRealFiles:
     def test_every_seed_layout_is_valid(self, brand):
         tokens = json.loads((REPO / "tokens" / f"{brand}.tokens.json").read_text(encoding="utf-8"))
         layouts = json.loads((REPO / "layouts" / f"{brand}.layouts.json").read_text(encoding="utf-8"))
+        source = REPO / "catalogue" / f"{brand}.catalogue.json"
+        catalogue = json.loads(source.read_text(encoding="utf-8")) if source.exists() else None
+        validate_catalogue(catalogue)
         validate_layouts(layouts, load_contract(REPO / "contracts" / "components.json"),
-                         resolve_document(tokens))
+                         resolve_document(tokens), catalogue)
 
 
 @pytest.fixture

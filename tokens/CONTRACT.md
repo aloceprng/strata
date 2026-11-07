@@ -1,7 +1,7 @@
 # The token contract
 
 **Semantic tokens are a contract.** A brand needs every token read by the
-components it renders. Shared components read the 55 core keys below, so every
+components it renders. Shared components read the 67 core keys below, so every
 brand defines those — different values, identical names. A component asks for
 `--colour-action-bg`; a brand that omits it renders that component wrong on that
 brand alone. `test_every_brand_defines_the_core_semantic_tokens` asserts this
@@ -14,7 +14,7 @@ together.
 them. A section used by one brand needs its tokens on that brand alone, and any
 brand may define extra tokens of its own. See [DESIGN.md](../DESIGN.md).
 
-**Primitives are free.** Clementine, Pomelo and Kumquat share `colour.brand-1.*` 
+**Primitives are free.** Clementine and Pomelo share `colour.brand-1.*` 
 and `colour.red.*`. The only rule the resolver enforces is direction: a primitive 
 may never reference a semantic token, or the two tiers stop being tiers.
 
@@ -57,10 +57,13 @@ devtools instead of invisible.
 | `colour.status.danger` | COLOR | Errors, destructive actions |
 | `colour.status.warning` | COLOR | Warnings |
 
-### Space — 8
+### Space — 11
 
 | Token | Figma type | Purpose |
 | --- | --- | --- |
+| `space.page.padding-x` | FLOAT | Screen side margin (Clementine 56, Pomelo 48) |
+| `space.page.padding-y` | FLOAT | Screen top and bottom margin (Clementine 24, Pomelo 56) |
+| `space.section.gap` | FLOAT | Gap between a screen's sections (Clementine 32, Pomelo 96) |
 | `space.control.padding-x` | FLOAT | Button and input horizontal padding |
 | `space.control.padding-y` | FLOAT | Button and input vertical padding |
 | `space.control.gap` | FLOAT | Gap between icon and label |
@@ -110,6 +113,34 @@ devtools instead of invisible.
 | `elevation.control` | STRING | Button shadow, or `none` |
 | `elevation.card` | STRING | Card shadow, or `none` |
 
+### Role — 9
+
+Added 2026-11-04 for the Clementine and Pomelo home screens. Each exists because
+the brands give the same *role* a different weight, size or colour, and a shared
+component cannot branch on brand. A component reads the role, never the brand.
+
+| Token | Figma type | Purpose | Clementine / Pomelo |
+| --- | --- | --- | --- |
+| `colour.text.nav` | COLOR | Resting nav and utility links | `neutral.600` / `neutral.800` |
+| `colour.text.price` | COLOR | Selling price | `text.primary` / `text.accent` |
+| `font.label.weight` | FLOAT | UI labels: nav links, inline actions | 500 / 400 |
+| `font.label-strong.weight` | FLOAT | Active link, totals, initials | 600 / 500 |
+| `font.name.weight` | FLOAT | Product names | 600 / 500 |
+| `font.price.size` | FLOAT | Selling price | `size.md` (20) / `size.xs` (12) |
+| `font.price.weight` | FLOAT | Selling price | 700 / 400 |
+| `font.price.leading` | FLOAT | Price line box, px | `leading.md` (24) / `leading.xs` (16) |
+| `font.price.tracking` | FLOAT | Price letter spacing, **px** | `tracking.tight` (−0.3px) / `0px` |
+
+### Section tokens
+
+Added 2026-11-06 for the shop, product and basket screens. Required only by the
+sections that list them in `contracts/components.json`.
+
+| Token | Read by | Clementine / Pomelo |
+| --- | --- | --- |
+| `colour.text.count` | `PageTitle`, `CatalogueGrid` | `text.muted` / `brand-2.500` |
+| `colour.footer.bg` / `fg` / `mark` | `SiteFooter` | — / `brand-2.500`, `neutral.0`, `brand-2.600` |
+
 ## Component defaults — 3
 
 Not values but *defaults*. A brand that can change a default rather than only a
@@ -126,36 +157,47 @@ they are read from `tokens.json`, not from `theme.css`.
 
 ## Primitives — shape required
 
-104 per brand today. Sharing names lets one Figma collection hold all three as
+109 per brand today. Sharing names lets one Figma collection hold every brand as
 modes. A variable exists in every mode of its collection, so a single-brand
 token still appears on the others with an unused value.
+
+**Every size is a multiple of 4** (decided 2026-11-04): space, radius, font sizes
+and px line heights. `radius.full` (9999) is the one exception, because it means
+"fully round" rather than a step.
 
 | Group | Count | Notes |
 | --- | --- | --- |
 | Neutral ramp | 10 | `0` (pure white), then `100`–`900` |
 | Brand ramps | 27 | `brand-1`, `brand-2`, `brand-3`, each `100`–`900` |
 | Status ramps | 27 | `red`, `green`, `amber`, each `100`–`900` |
-| Space scale | 11 | 4px base: `0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 14` |
+| Space scale | 12 | 4px base: `0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 14, 24` |
 | Radius scale | 5 | `none, sm, md, lg, full` |
 | Sizes | 2 | `control`, `border` |
 | Font family | 1 | `sans`, with a `sans-serif` fallback |
-| Font sizes | 7 | `xs` → `2xl` |
+| Font sizes | 6 | `xs, sm, md, lg, xl, 2xl`. `base` was retired 2026-11-04; use `sm` |
 | Font weights | 5 | light, regular, medium, semibold, bold |
-| Line heights | 3 | display, tight, normal |
-| Letter spacing | 4 | display, heading, body, wide |
+| Line heights | 3 | display, tight, normal — unitless |
+| Leading | 4 | `xs 16, md 24, lg 32, 2xl 44` — px line boxes |
+| Letter spacing | 5 | display, heading, body, wide (em) and `tight` (px) |
 | Durations | 2 | fast, base |
 
-### Clementine, Pomelo, Kumquat
+Clementine's sizes are 12 / 16 / 20 / 24 / 32 / 40; Pomelo's 12 / 16 / 20 / 24 /
+56 / 104.
 
-| Group | Clementine | Pomelo | Kumquat |
-| --- | --- | --- | --- |
-| `neutral` | white → black | white → brown | cream → black |
-| `brand-1` | orange | yellow | navy |
-| `brand-2` | yellow | red | light blue |
-| `brand-3` | blue | green | sand yellow |
-| `red` | status red | status red | brick red |
-| `green` | status green | status green | forest green |
-| `amber` | amber | amber | burnt amber |
+### Clementine and Pomelo
+
+`kumquat.tokens.json` is still in the repo and seeded, but Kumquat was cut from
+the demo and no screen shows it.
+
+| Group | Clementine | Pomelo |
+| --- | --- | --- |
+| `neutral` | white → black | white → brown |
+| `brand-1` | orange | yellow |
+| `brand-2` | yellow | red |
+| `brand-3` | blue | green |
+| `red` | status red | status red |
+| `green` | status green | status green |
+| `amber` | amber | amber |
 
 The step holding the original Figma colour carries a `$description` naming it.
 That step is the only one that follows the Figma primitive live (see
@@ -168,16 +210,18 @@ because pure-hue dark yellows go olive.
 Semantic values were taken from the final screens on the Figma "example screens"
 page. Where the brands differ most:
 
-| | Clementine | Pomelo | Kumquat |
-| --- | --- | --- | --- |
-| Font | Inter | DM Sans | Inter |
-| Heading | 40px, 700, −2.5% | 104px, 700, −5% | 128px, 300, −3.5% |
-| `colour.action.bg` / `fg` | `brand-1.600` / `neutral.0` | `brand-1.500` / `neutral.900` | `brand-1.800` / `brand-3.300` |
-| `colour.text.accent` | `brand-1.700` | `brand-2.600` | `brand-1.800` |
-| `radius.control` / `radius.card` | 9999px / 20px | 4px / 0px | 12px / 10px |
-| `size.control` | 44px | 52px | 56px |
-| `elevation.card` | soft shadow | none | none |
-| `component.card.elevation` | raised | flat | flat |
+| | Clementine | Pomelo |
+| --- | --- | --- |
+| Font | Inter | DM Sans |
+| Heading | 40px, 700, −2.5% | 104px, 700, −5% |
+| `colour.action.bg` / `fg` | `brand-1.600` / `neutral.0` | `brand-1.500` / `neutral.900` |
+| `colour.text.accent` | `brand-1.700` | `brand-2.600` |
+| `radius.control` / `radius.card` | 9999px / 12px | 4px / 0px |
+| `space.card.padding` | 20px | 24px |
+| `size.control` | 44px | 52px |
+| `elevation.card` | none | none |
+| `component.card.elevation` | flat | flat |
+| `colour.surface.page` | `neutral.0` (pure white) | `neutral.100` |
 
 Still open:
 
@@ -187,15 +231,10 @@ Still open:
 - **`green` has no semantic key.** `red` and `amber` map to `status.danger`
   and `status.warning`; there is no `status.success` to receive `green`. It
   stays a primitive until one is added to every brand.
-- **Kumquat uses four surface and ink pairings.** The semantic tokens hold the
-  yellow plan pairing. Results (light blue), ticket (cream) and on board (navy)
-  need either a mode per pairing or a page-level override of
-  `colour.surface.page`, `colour.text.primary`, `colour.action.bg` and
-  `colour.action.fg`.
 
 In Figma the tokens live in three collections, each with a mode per brand:
 `scales` (colour primitives), `type & space` (every other primitive) and
-`semantic` (the 55 keys plus the three component defaults). A frame that uses
+`semantic` (the 67 keys plus the three component defaults). A frame that uses
 semantic colours needs its `scales` mode set as well as its `semantic` mode,
 because an alias resolves in the referenced collection's own mode.
 
@@ -254,7 +293,14 @@ appends `px`. Line heights and font weights are the exception — genuinely
 unitless, so they pass through unchanged. Letter spacing is stored as a
 percent of the font size and exported as `em`: `-3.5` becomes `-0.035em`.
 
-**Six of the 55 have no consumer yet** — `border.divider`,
+**Two kinds of line height and letter spacing.** `font.lineheight.*` are unitless
+ratios and `font.tracking.*` (except `tight`) are percent in Figma and `em` in the
+files, as above. `font.leading.*` and `font.tracking.tight` are **px**, because
+Figma binds a text style's line height and letter spacing in pixels. Components
+that need an exact line box (prices, labels) read the px tokens; running text
+reads the ratios.
+
+**Six of the 67 have no consumer yet** — `border.divider`,
 `colour.border.strong`, the two `colour.status.*`, `colour.text.inverse` and
 `radius.pill`. They are reserved for components not yet written: Select needs a
 divider, Field needs a danger state, a badge needs the pill. Define them now

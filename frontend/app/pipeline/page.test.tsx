@@ -13,6 +13,25 @@ const PIPELINE: Pipeline = {
   brand: "clementine",
   versions: [{ version: 2, status: "published", severity: "minor", note: "Layouts" }],
   layouts: { home: HOME },
+  reference: {
+    schemaVersion: 1,
+    fits: ["scroll", "viewport"],
+    sections: {
+      Intro: {
+        props: {
+          title: { type: "string", required: true },
+          tone: { type: "enum", values: ["secondary", "accent"] },
+          gap: { type: "token", group: "space.stack" },
+        },
+      },
+      Shelf: {
+        props: {
+          items: { type: "list", min: 1, max: 4, required: true, items: { image: { type: "asset", required: true } } },
+        },
+      },
+    },
+    tokenOptions: { "space.stack": ["space.stack.gap"] },
+  },
 };
 
 function respond(check: Check) {
@@ -35,6 +54,18 @@ afterEach(() => {
 });
 
 describe("the pipeline page", () => {
+  it("lists every key a layout can use, starting with a type in the draft", async () => {
+    render(<PipelinePage />);
+    await screen.findByText("Published title");
+    expect(screen.getByRole("tab", { name: /Intro/ }).getAttribute("aria-selected")).toBe("true");
+    expect(screen.getByText('"accent"')).toBeTruthy();
+    expect(screen.getByText('"space.stack.gap"')).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("tab", { name: "Shelf" }));
+    expect(screen.getByText(/a list, 1–4 items/)).toBeTruthy();
+    expect(screen.getByText(/"image": "\/products\/brand\/name.png"/)).toBeTruthy();
+  });
+
   it("previews the published screen and lists its versions", async () => {
     render(<PipelinePage />);
     expect(await screen.findByText("Published title")).toBeTruthy();

@@ -7,6 +7,9 @@ class TokenFileError(StrataError):
 class LayoutError(StrataError):
     pass
 
+class CatalogueError(StrataError):
+    pass
+
 class UnknownReferenceError(StrataError):
 
     def __init__(self, source: str, target: str):

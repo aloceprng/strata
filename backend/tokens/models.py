@@ -52,6 +52,10 @@ class TokenSet(models.Model):
 
     tokens = models.JSONField(default=dict)
     layouts = models.JSONField(default=dict, blank=True)
+    catalogue = models.JSONField(
+        default=dict, blank=True,
+        help_text="Sample products, delivery and the starting basket. Layouts refer to products by id.",
+    )
 
     note = models.CharField(max_length=200, blank=True)
 
@@ -91,6 +95,8 @@ class TokenSet(models.Model):
             self.version = self.next_version(self.brand)
         if self.layouts is None:
             self.layouts = {}
+        if self.catalogue is None:
+            self.catalogue = {}
         self.check_immutable()
         super().save(*args, **kwargs)
 
@@ -104,7 +110,7 @@ class TokenSet(models.Model):
         if previous and previous.status == self.Status.PUBLISHED:
             changed = [
                 field
-                for field in ("tokens", "layouts", "version", "brand_id")
+                for field in ("tokens", "layouts", "catalogue", "version", "brand_id")
                 if getattr(previous, field) != getattr(self, field)
             ]
             if changed:
@@ -163,6 +169,7 @@ class TokenSet(models.Model):
             version=self.next_version(self.brand),
             tokens=self.tokens,
             layouts=self.layouts,
+            catalogue=self.catalogue,
             note=note,
             status=self.Status.DRAFT,
         )

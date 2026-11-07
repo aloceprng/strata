@@ -18,9 +18,11 @@ sys.path.insert(0, str(ROOT / "backend"))
 
 from strata_core import (  # noqa: E402
     StrataError,
+    emit_catalogue,
     emit_layout,
     load_contract,
     resolve_document,
+    validate_catalogue,
     validate_layouts,
 )
 from strata_core.emitters import emit_css, emit_json  # noqa: E402
@@ -28,11 +30,15 @@ from strata_core.storage import LocalArtifactStore, versioned_path  # noqa: E402
 
 TOKENS_DIR = ROOT / "tokens"
 LAYOUTS_DIR = ROOT / "layouts"
+CATALOGUE_DIR = ROOT / "catalogue"
 CONTRACT = ROOT / "contracts" / "components.json"
 DIST_DIR = ROOT / "dist"
 
 def brands() -> list[str]:
     return sorted(p.name.removesuffix(".tokens.json") for p in TOKENS_DIR.glob("*.tokens.json"))
+
+def read_optional(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
 
 def build_brand(brand: str, store: LocalArtifactStore, version: str | None) -> bool:
     source = TOKENS_DIR / f"{brand}.tokens.json"
@@ -41,15 +47,14 @@ def build_brand(brand: str, store: LocalArtifactStore, version: str | None) -> b
         return False
 
     document = json.loads(source.read_text(encoding="utf-8"))
-    layout_source = LAYOUTS_DIR / f"{brand}.layouts.json"
-    layouts = (
-        json.loads(layout_source.read_text(encoding="utf-8")) if layout_source.exists() else {}
-    )
+    layouts = read_optional(LAYOUTS_DIR / f"{brand}.layouts.json")
+    catalogue = read_optional(CATALOGUE_DIR / f"{brand}.catalogue.json")
 
     started = time.perf_counter()
     try:
         resolved = resolve_document(document)
-        validate_layouts(layouts, load_contract(CONTRACT), resolved)
+        validate_catalogue(catalogue)
+        validate_layouts(layouts, load_contract(CONTRACT), resolved, catalogue)
     except StrataError as exc:
         print(f"  {brand}: FAILED — {exc}")
         return False
@@ -59,6 +64,8 @@ def build_brand(brand: str, store: LocalArtifactStore, version: str | None) -> b
         "theme.css": emit_css(resolved, brand),
         "tokens.json": emit_json(resolved, brand),
     }
+    if catalogue:
+        outputs["catalogue.json"] = emit_catalogue(catalogue)
     for screen, layout in layouts.items():
         outputs[f"screens/{screen}.json"] = emit_layout(layout)
 

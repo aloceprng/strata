@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import { BrandProvider, BrandStylesheet } from "../components/BrandProvider";
 import { ScreenRenderer, type Screen } from "../sections/ScreenRenderer";
+import type { Catalogue } from "../store/catalogue";
+import { StoreProvider } from "../store/StoreProvider";
 import {
   EXAMPLES,
   outcomeOf,
@@ -13,8 +15,9 @@ import {
   type Pipeline,
 } from "./model";
 import styles from "./pipeline.module.css";
+import { Reference } from "./Reference";
 
-const BRANDS = ["clementine", "kumquat", "pomelo"];
+const BRANDS = ["clementine", "pomelo"];
 const CHECK_DELAY_MS = 250;
 
 export default function PipelinePage() {
@@ -61,6 +64,21 @@ function Workbench({ brand }: { brand: string }) {
   const [text, setText] = useState("");
   const [check, setCheck] = useState<Check | null>(null);
   const [preview, setPreview] = useState<Screen | null>(null);
+  const [catalogue, setCatalogue] = useState<Catalogue | undefined>(undefined);
+
+  // Layouts name products by id, so the preview needs the published catalogue to show them.
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`/artifacts/${brand}/latest/catalogue.json`)
+      .then((response) => (response.ok ? response.json() : undefined))
+      .catch(() => undefined)
+      .then((loaded: Catalogue | undefined) => {
+        if (!cancelled) setCatalogue(loaded);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [brand]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -164,13 +182,15 @@ function Workbench({ brand }: { brand: string }) {
             Preview{refused ? " · last valid draft" : ""}
           </h2>
           <BrandProvider brand={brand}>
-            <div className={styles.preview}>
-              {preview ? (
-                <ScreenRenderer screen={preview} />
-              ) : (
-                <p className={styles.empty}>No home screen in this draft.</p>
-              )}
-            </div>
+            <StoreProvider brand={brand} catalogue={catalogue}>
+              <div className={styles.preview}>
+                {preview ? (
+                  <ScreenRenderer screen={preview} />
+                ) : (
+                  <p className={styles.empty}>No home screen in this draft.</p>
+                )}
+              </div>
+            </StoreProvider>
           </BrandProvider>
         </section>
 
@@ -212,6 +232,13 @@ function Workbench({ brand }: { brand: string }) {
           </ol>
         </section>
       </main>
+
+      {pipeline.reference ? (
+        <Reference
+          reference={pipeline.reference}
+          inUse={(preview ?? pipeline.layouts.home)?.sections.map((s) => s.type) ?? []}
+        />
+      ) : null}
     </>
   );
 }

@@ -270,8 +270,9 @@
 .strata-screen {
   display: flex;
   flex-direction: column;
-  gap: var(--space-card-padding);
+  gap: var(--space-section-gap);
   min-height: 100vh;
-  padding: var(--space-card-padding);
+  padding: var(--space-page-padding-y) var(--space-page-padding-x);
+  box-sizing: border-box;
   background: var(--colour-surface-page);
 }

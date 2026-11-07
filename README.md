@@ -25,8 +25,8 @@ npm run dev                           # then open:
 <http://127.0.0.1:3000/matrix>
 
 Switch brands in the header. Nothing re-renders — the markup and class names
-are identical on all three. Drag the `--radius-control` slider and every
-component responds at once, which is the thing three hand-written stylesheets
+are identical on both. Drag the `--radius-control` slider and every
+component responds at once, which is the thing two hand-written stylesheets
 could not do.
 
 The app never imports a theme from `src/`. It loads
@@ -147,12 +147,12 @@ set is a fiction.
 | --- | --- |
 | Tokens, resolver, cycle detection | done |
 | CSS + JSON emit, versioned artifact paths | done |
-| Three brands, proof page, live slider | done |
+| Two brands, proof page, live slider | done |
 | `Brand` / `TokenSet` models, admin, seed | done — needs Postgres running |
 | Publish from admin rewrites `theme.css` / `tokens.json` | done — synchronous |
 | Headless React components, the matrix page | done |
 | Semantic diffing, severity classification | done — every publish is diffed against the previous version; major changes need explicit approval |
-| Spacing, radius, type, default button, semantic values | assigned for all three brands — first-pass values, final designs pending |
+| Spacing, radius, type, default button, semantic values | assigned for both brands — first-pass values, final designs pending |
 | Brand sector and principle | placeholders in `seed.py` |
 | CI: tests, 85% coverage gate, coverage report | done — `.github/workflows/ci.yml` |
 | Server-published screens | pipeline done, one section type — see [DESIGN.md](DESIGN.md) |
@@ -163,7 +163,7 @@ set is a fiction.
 | Figma variable sync | deferred — verify Variables API plan access first |
 | Drag editor | deferred |
 
-## The three brands
+## The two brands
 
 Invented, and meant to differ as *systems* rather than as palettes.
 
@@ -171,7 +171,6 @@ Invented, and meant to differ as *systems* rather than as palettes.
 | --- | --- | --- | --- |
 | Clementine | orange | yellow | blue |
 | Pomelo | yellow | red | green |
-| Kumquat | navy | light blue | sand yellow |
 
 Colour primitives are exported from Figma. Spacing, radius, type scale,
 default button and semantic tokens have first-pass values, to be replaced once

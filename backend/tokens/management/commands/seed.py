@@ -2,6 +2,7 @@
 import json
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
@@ -12,19 +13,28 @@ from ...models import Brand, TokenSet
 PLACEHOLDER = "Placeholder: write this brand's principle before designing its values."
 
 BRANDS = {
-    "clementine": {"name": "Clementine", "sector": "TBD", "principle": PLACEHOLDER},
-    "pomelo": {"name": "Pomelo", "sector": "TBD", "principle": PLACEHOLDER},
+    "clementine": {"name": "Clementine", "sector": "Grocery", "principle": PLACEHOLDER},
+    "pomelo": {"name": "Pomelo", "sector": "Furniture", "principle": PLACEHOLDER},
     "kumquat": {"name": "Kumquat", "sector": "TBD", "principle": PLACEHOLDER},
 }
 
 class Command(BaseCommand):
-    help = "Load the hand-authored token files as published v1 token sets."
+    help = (
+        "Load the hand-authored token, layout and catalogue files as published v1 token sets. "
+        "With --update, publish a new version for any brand whose files have changed."
+    )
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--reset",
             action="store_true",
             help="Delete existing brands first. Destroys every version.",
+        )
+        parser.add_argument(
+            "--update",
+            action="store_true",
+            help="Publish the files as a new version when they differ from the latest one, "
+                 "accepting major changes. Earlier versions are kept.",
         )
 
     @transaction.atomic
@@ -44,11 +54,8 @@ class Command(BaseCommand):
                 continue
 
             document = json.loads(source.read_text(encoding="utf-8"))
-            layout_source = settings.LAYOUT_SOURCE_DIR / f"{slug}.layouts.json"
-            layouts = (
-                json.loads(layout_source.read_text(encoding="utf-8"))
-                if layout_source.exists() else {}
-            )
+            layouts = read_optional(settings.LAYOUT_SOURCE_DIR / f"{slug}.layouts.json")
+            catalogue = read_optional(settings.CATALOGUE_SOURCE_DIR / f"{slug}.catalogue.json")
 
             try:
                 resolved = resolve_document(document)
@@ -57,6 +64,9 @@ class Command(BaseCommand):
 
             brand, created = Brand.objects.update_or_create(slug=slug, defaults=details)
 
+            if brand.token_sets.exists() and options["update"]:
+                self.update(brand, document, layouts, catalogue)
+                continue
             if brand.token_sets.exists():
                 self.stdout.write(
                     f"  {slug}: already has "
@@ -69,6 +79,7 @@ class Command(BaseCommand):
                 version=1,
                 tokens=document,
                 layouts=layouts,
+                catalogue=catalogue,
                 note="seeded from the hand-authored file",
             )
             token_set.publish()
@@ -82,3 +93,28 @@ class Command(BaseCommand):
             )
 
         self.stdout.write(self.style.SUCCESS(f"{Brand.objects.count()} brand(s) in the database."))
+
+    def update(self, brand, document, layouts, catalogue):
+        latest = brand.latest_published()
+        if latest and (latest.tokens, latest.layouts, latest.catalogue) == (document, layouts, catalogue):
+            self.stdout.write(f"  {brand.slug}: files match {latest.label}, nothing to publish")
+            return
+        draft = TokenSet.objects.create(
+            brand=brand,
+            tokens=document,
+            layouts=layouts,
+            catalogue=catalogue,
+            note="updated from the hand-authored files",
+        )
+        try:
+            draft.publish(allow_major=True)
+        except ValidationError as exc:
+            draft.delete()
+            raise CommandError(f"{brand.slug}: {exc.messages[0]}") from exc
+        self.stdout.write(self.style.SUCCESS(
+            f"  {brand.slug}: published {draft.label} ({draft.severity or 'no changes'})"
+        ))
+
+
+def read_optional(path):
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}

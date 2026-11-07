@@ -33,7 +33,7 @@ class TokenSetAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         fields = list(super().get_readonly_fields(request, obj))
         if obj and obj.status == TokenSet.Status.PUBLISHED:
-            fields += ["tokens", "layouts", "brand"]
+            fields += ["tokens", "layouts", "catalogue", "brand"]
         return fields
 
     def save_model(self, request, obj, form, change):

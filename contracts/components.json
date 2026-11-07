@@ -14,6 +14,320 @@
         "tone": {"type": "enum", "values": ["secondary", "accent"]},
         "gap": {"type": "token", "group": "space.stack"}
       }
+    },
+    "SiteHeader": {
+      "tokens": [
+        "colour.text.nav",
+        "colour.text.primary",
+        "font.label.weight",
+        "font.label-strong.weight",
+        "size.control"
+      ],
+      "props": {
+        "variant": {"type": "enum", "values": ["full", "minimal"], "required": true},
+        "logo": {"type": "asset"},
+        "logoAlt": {"type": "string"},
+        "logoPosition": {"type": "enum", "values": ["start", "center"]},
+        "links": {"type": "list", "min": 1, "max": 8, "required": true, "items": {
+          "label": {"type": "string", "required": true},
+          "link": {"type": "link"},
+          "active": {"type": "boolean"}
+        }},
+        "utilities": {"type": "list", "max": 4, "items": {
+          "label": {"type": "string", "required": true},
+          "link": {"type": "link"},
+          "active": {"type": "boolean"}
+        }},
+        "searchPlaceholder": {"type": "string"},
+        "initials": {"type": "string"},
+        "basket": {"type": "boolean"}
+      }
+    },
+    "PromoHero": {
+      "tokens": [
+        "colour.text.primary",
+        "colour.text.secondary",
+        "font.heading.size",
+        "colour.action.bg"
+      ],
+      "props": {
+        "eyebrow": {"type": "string"},
+        "headline": {"type": "string", "required": true},
+        "body": {"type": "string"},
+        "action": {"type": "string"},
+        "link": {"type": "link"},
+        "image": {"type": "asset", "required": true},
+        "imageAlt": {"type": "string"}
+      }
+    },
+    "ProductRow": {
+      "tokens": [
+        "colour.surface.raised",
+        "colour.border.default",
+        "colour.text.price",
+        "colour.tag.deal-bg",
+        "colour.tag.deal-fg",
+        "colour.tag.info-bg",
+        "colour.tag.info-fg",
+        "font.name.weight",
+        "font.price.size",
+        "font.price.weight",
+        "font.price.leading",
+        "font.price.tracking",
+        "radius.card",
+        "space.card.padding",
+        "space.card.gap"
+      ],
+      "props": {
+        "title": {"type": "string", "required": true},
+        "subtitle": {"type": "string"},
+        "linkLabel": {"type": "string"},
+        "link": {"type": "link"},
+        "columns": {"type": "number", "min": 2, "max": 6},
+        "source": {"type": "enum", "values": ["list", "related"]},
+        "products": {"type": "products", "max": 12}
+      }
+    },
+    "CategoryCarousel": {
+      "tokens": [
+        "colour.surface.page",
+        "colour.text.primary",
+        "colour.text.secondary",
+        "font.label-strong.weight"
+      ],
+      "props": {
+        "title": {"type": "string", "required": true},
+        "linkLabel": {"type": "string"},
+        "link": {"type": "link"},
+        "categories": {"type": "list", "min": 1, "max": 16, "required": true, "items": {
+          "name": {"type": "string", "required": true},
+          "count": {"type": "string"},
+          "image": {"type": "asset", "required": true},
+          "link": {"type": "link"}
+        }}
+      }
+    },
+    "ProductGrid": {
+      "tokens": [
+        "colour.surface.raised",
+        "colour.border.default",
+        "colour.secondary.bg",
+        "colour.secondary.fg",
+        "colour.text.primary",
+        "colour.text.inverse",
+        "colour.text.secondary",
+        "font.name.weight",
+        "font.price.size",
+        "font.price.weight",
+        "radius.card",
+        "radius.control",
+        "space.card.padding",
+        "space.card.gap"
+      ],
+      "props": {
+        "title": {"type": "string", "required": true},
+        "subtitle": {"type": "string"},
+        "filters": {"type": "list", "max": 8, "items": {
+          "label": {"type": "string", "required": true}
+        }},
+        "sortLabel": {"type": "string"},
+        "columns": {"type": "number", "min": 2, "max": 6},
+        "products": {"type": "products", "min": 1, "max": 24, "required": true}
+      }
+    },
+    "CatalogueGrid": {
+      "tokens": [
+        "colour.border.subtle",
+        "colour.border.default",
+        "colour.text.primary",
+        "colour.text.secondary",
+        "colour.text.muted",
+        "colour.text.count",
+        "colour.text.price",
+        "font.heading.size",
+        "font.name.weight",
+        "font.price.size"
+      ],
+      "props": {
+        "title": {"type": "string", "required": true},
+        "count": {"type": "string"},
+        "filters": {"type": "list", "max": 8, "items": {
+          "label": {"type": "string", "required": true}
+        }},
+        "sortLabel": {"type": "string"},
+        "products": {"type": "products", "min": 1, "max": 24, "required": true}
+      }
+    },
+    "Breadcrumb": {
+      "tokens": [
+        "colour.text.muted",
+        "colour.text.primary",
+        "font.label.weight"
+      ],
+      "props": {
+        "items": {"type": "list", "max": 4, "items": {
+          "label": {"type": "string", "required": true},
+          "link": {"type": "link"}
+        }},
+        "withProduct": {"type": "boolean"}
+      }
+    },
+    "ProductOverview": {
+      "context": "product",
+      "tokens": [
+        "colour.surface.raised",
+        "colour.surface.sunken",
+        "colour.secondary.bg",
+        "colour.border.subtle",
+        "colour.text.primary",
+        "colour.text.secondary",
+        "colour.text.muted",
+        "colour.text.price",
+        "colour.action.bg",
+        "colour.tag.deal-bg",
+        "colour.tag.info-bg",
+        "radius.card",
+        "radius.control"
+      ],
+      "props": {
+        "addLabel": {"type": "string"},
+        "addedLabel": {"type": "string"}
+      }
+    },
+    "ProductShowcase": {
+      "context": "product",
+      "tokens": [
+        "colour.surface.raised",
+        "colour.surface.sunken",
+        "colour.border.subtle",
+        "colour.border.strong",
+        "colour.secondary.bg",
+        "colour.text.primary",
+        "colour.text.secondary",
+        "colour.text.price",
+        "colour.action.bg",
+        "font.heading.size",
+        "font.price.size",
+        "radius.control"
+      ],
+      "props": {
+        "optionsLabel": {"type": "string"},
+        "specsLabel": {"type": "string"},
+        "addLabel": {"type": "string"},
+        "addedLabel": {"type": "string"}
+      }
+    },
+    "CatalogueRail": {
+      "tokens": [
+        "colour.border.subtle",
+        "colour.text.primary",
+        "colour.text.secondary",
+        "colour.text.price",
+        "font.name.weight",
+        "font.price.size"
+      ],
+      "props": {
+        "title": {"type": "string", "required": true},
+        "source": {"type": "enum", "values": ["list", "related"]},
+        "products": {"type": "products", "max": 12}
+      }
+    },
+    "PageTitle": {
+      "tokens": [
+        "colour.text.primary",
+        "colour.text.muted",
+        "colour.text.count",
+        "font.heading.size"
+      ],
+      "props": {
+        "title": {"type": "string", "required": true},
+        "count": {"type": "string"},
+        "style": {"type": "enum", "values": ["inline", "display"]},
+        "breadcrumb": {"type": "list", "max": 4, "items": {
+          "label": {"type": "string", "required": true},
+          "link": {"type": "link"}
+        }}
+      }
+    },
+    "Basket": {
+      "tokens": [
+        "colour.surface.raised",
+        "colour.surface.sunken",
+        "colour.secondary.bg",
+        "colour.border.subtle",
+        "colour.border.default",
+        "colour.text.primary",
+        "colour.text.secondary",
+        "colour.text.muted",
+        "colour.text.accent",
+        "colour.text.price",
+        "colour.action.bg",
+        "radius.card",
+        "radius.control"
+      ],
+      "props": {
+        "layout": {"type": "enum", "values": ["compact", "detailed"], "required": true},
+        "summaryTitle": {"type": "string"},
+        "checkoutLabel": {"type": "string", "required": true},
+        "extrasTitle": {"type": "string"},
+        "promo": {"type": "boolean"},
+        "emptyTitle": {"type": "string", "required": true},
+        "emptyLinkLabel": {"type": "string"},
+        "emptyLink": {"type": "link"}
+      }
+    },
+    "SiteFooter": {
+      "tokens": [
+        "colour.footer.bg",
+        "colour.footer.fg",
+        "colour.footer.mark",
+        "colour.action.bg"
+      ],
+      "props": {
+        "newsletterTitle": {"type": "string"},
+        "newsletterBody": {"type": "string"},
+        "columns": {"type": "list", "max": 4, "items": {
+          "title": {"type": "string", "required": true},
+          "links": {"type": "list", "min": 1, "max": 6, "required": true, "items": {
+            "label": {"type": "string", "required": true}
+          }}
+        }},
+        "wordmark": {"type": "asset"},
+        "wordmarkAlt": {"type": "string"},
+        "copyright": {"type": "string"}
+      }
+    },
+    "ProductFigures": {
+      "tokens": [
+        "colour.text.primary",
+        "colour.text.price",
+        "colour.border.default",
+        "font.name.weight",
+        "font.price.size",
+        "font.price.weight",
+        "font.price.leading"
+      ],
+      "props": {
+        "align": {"type": "enum", "values": ["start", "end"]},
+        "products": {"type": "products", "min": 1, "max": 6, "required": true}
+      }
+    },
+    "WordmarkHero": {
+      "tokens": [
+        "colour.action.bg",
+        "colour.secondary.border"
+      ],
+      "props": {
+        "wordmark": {"type": "asset", "required": true},
+        "wordmarkAlt": {"type": "string"},
+        "image": {"type": "asset"},
+        "imageAlt": {"type": "string"},
+        "actions": {"type": "list", "max": 2, "items": {
+          "label": {"type": "string", "required": true},
+          "variant": {"type": "enum", "values": ["primary", "secondary"]},
+          "link": {"type": "link"}
+        }}
+      }
     }
   }
 }

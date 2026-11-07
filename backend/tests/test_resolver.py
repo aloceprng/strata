@@ -193,10 +193,14 @@ REQUIRED_SEMANTIC = {"semantic." + key for key in """
     font.heading.family font.heading.size font.heading.weight font.heading.lineheight font.heading.tracking
     font.control.size font.control.weight font.caption.size font.caption.weight
     motion.control motion.theme elevation.control elevation.card
+    colour.text.nav colour.text.price
+    font.label.weight font.label-strong.weight font.name.weight
+    font.price.size font.price.weight font.price.leading font.price.tracking
+    space.page.padding-x space.page.padding-y space.section.gap
 """.split()}
 
-def test_the_contract_list_has_55_keys():
-    assert len(REQUIRED_SEMANTIC) == 55
+def test_the_contract_list_has_67_keys():
+    assert len(REQUIRED_SEMANTIC) == 67
 
 class TestRealBrandFiles:
     @pytest.mark.parametrize("source", BRAND_FILES, ids=lambda p: p.name)

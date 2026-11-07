@@ -128,4 +128,5 @@ ARTIFACT_URL = '/artifacts/'
 
 TOKEN_SOURCE_DIR = REPO_ROOT / 'tokens'
 LAYOUT_SOURCE_DIR = REPO_ROOT / 'layouts'
+CATALOGUE_SOURCE_DIR = REPO_ROOT / 'catalogue'
 COMPONENT_CONTRACT = REPO_ROOT / 'contracts' / 'components.json'

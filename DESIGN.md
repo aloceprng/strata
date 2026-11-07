@@ -6,7 +6,8 @@ left to build.
 
 **Goal:** Clementine and Pomelo each have a home, product details and cart
 screen, rendered from published layouts. Publishing a new layout changes a
-page's structure with no frontend deploy. Only the home route exists today.
+page's structure with no frontend deploy. Both brands now have home, shop,
+product and basket screens.
 
 ## Component layers
 
@@ -79,21 +80,31 @@ invalid prop, an unknown or missing token, or a duplicate section `id`.
 | Screen or section added, or sections reordered | Minor |
 | Prop or content changed | Patch |
 
-## Planned: product and cart screens
+## Screens, catalogue and cart
 
-Not built yet. The storage model already holds several screens per brand.
+Each brand publishes four screens: `home`, `shop`, `product` and `basket`.
 
-- **Routes:** `/brands/<brand>/<screen>` replaces the fixed `home` fetch.
-- **Sample data:** six to eight fake products per brand. There is no catalogue
-  or real product data.
-- **Contract:** props gain number, list and action types.
-- **Actions:** a layout can give a control an action from a fixed list:
-  `addToCart`, `removeFromCart` and links between screens. Publish refuses any
-  other action.
-- **Cart:** add, change quantity, remove and updated totals, kept in the
-  browser. The checkout button is shown disabled.
+- **Routes:** `/brands/<brand>` is home, `/brands/<brand>/<screen>` any other
+  screen, and `/brands/<brand>/products/<id>` the product screen. `product` is a
+  template rendered once per catalogue product; an unknown id is a 404.
+- **Catalogue:** `catalogue/<brand>.catalogue.json` holds the sample products,
+  currency, delivery fee, Pomelo's extras and the starting basket. It is
+  versioned with tokens and layouts and published as `catalogue.json`, so a card,
+  a product page and a basket line read one record. Removing a product is major,
+  adding one minor, any other change a patch.
+- **Contract types:** `products` (a list of catalogue ids) and `link` (a screen
+  name or `product/<id>`). Publish refuses an id the catalogue lacks and a link to
+  a screen the version lacks. A section marked `"context": "product"` may only sit
+  on the product screen. A screen may set `gap` to a `space.*` token.
+- **Copy templates:** layout text may use `{units}`, `{lines}` and `{products}`,
+  e.g. `"Basket ({lines})"`, filled from the live basket or the listing.
+- **Cart:** add, change quantity, remove, extras and saved items, kept per brand
+  in `localStorage` and seeded from the catalogue. Totals apply the catalogue's
+  multibuy and buy-X-get-Y offers, and reproduce the Figma totals exactly.
+  Checkout, promo codes and the newsletter render but do nothing.
 
-Both brands must sell things, so Pomelo's brief needs to make it a shop.
+`python manage.py seed --update` publishes the source files as a new version
+when they differ from the latest one.
 
 ## Rendering
 
@@ -107,13 +118,11 @@ logged, so an older frontend survives newer data.
 | Phase | Work | Finished when |
 | --- | --- | --- |
 | 1. Pipeline (done) | Validation, diff, publish, renderer, one simple section, `/pipeline` dry-run page | A published change appears without a deploy |
-| 2. Clementine | Screen routes, sample data, actions, cart state, remaining atoms, composites and sections | Home, product and cart match Figma on desktop, and the cart works |
-| 3. Pomelo | `ProductFigures`, `SpecNotes`, title rail, illustrations, its product and cart sections | Home, product and cart match Figma on desktop, and the cart works |
-| 4. Kumquat | Sections for whatever the brand becomes | Three different pages from one renderer |
-| 5. Demo | Authenticated publish from `/pipeline`, hosted site, README walkthrough | The idea lands in thirty seconds |
+| 2. Clementine (done) | Screen routes, sample data, actions, cart state, remaining atoms, composites and sections | Home, product and cart match Figma on desktop, and the cart works |
+| 3. Pomelo (done) | Wordmark hero, catalogue grid and rail, showcase, detailed basket, footer | Home, product and cart match Figma on desktop, and the cart works |
+| 4. Demo | Authenticated publish from `/pipeline`, hosted site, README walkthrough | The idea lands in thirty seconds |
 
-Kumquat's sector is decided just before phase 4. Token names do not depend on
-it.
+Clementine is a grocery shop and Pomelo a furniture shop. See [DESIGN_BRIEF.md](DESIGN_BRIEF.md) for the design work.
 
 ## Out of scope for now
 

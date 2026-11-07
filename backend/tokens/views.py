@@ -6,7 +6,10 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 
-from strata_core import worst_severity
+from django.conf import settings
+
+from strata_core import load_contract, worst_severity
+from strata_core.layout import SCREEN_FITS
 
 from .build import changes, render
 from .models import Brand, TokenSet
@@ -24,6 +27,36 @@ def describe(token_set: TokenSet) -> dict:
         "changes": token_set.changes,
     }
 
+def token_paths(tree: dict, prefix: str = "") -> list[str]:
+    """Every token path in a DTCG tree, e.g. space.stack.gap."""
+    paths = []
+    for key, node in tree.items():
+        if key.startswith("$") or not isinstance(node, dict):
+            continue
+        path = f"{prefix}{key}"
+        paths.extend([path] if "$value" in node else token_paths(node, f"{path}."))
+    return paths
+
+def reference(latest: TokenSet | None) -> dict:
+    """What a layout may contain: the section contract plus this brand's token choices."""
+    contract = load_contract(settings.COMPONENT_CONTRACT)
+    available = token_paths(latest.tokens.get("semantic", {})) if latest else []
+    groups = {
+        rule["group"]
+        for section in contract["sections"].values()
+        for rule in section["props"].values()
+        if rule["type"] == "token"
+    }
+    return {
+        "schemaVersion": contract["schemaVersion"],
+        "fits": list(SCREEN_FITS),
+        "products": sorted((latest.catalogue or {}).get("products", {})) if latest else [],
+        "sections": contract["sections"],
+        "tokenOptions": {
+            group: [p for p in available if p.startswith(f"{group}.")] for group in sorted(groups)
+        },
+    }
+
 @require_GET
 def pipeline(request, slug):
     brand = get_object_or_404(Brand, slug=slug)
@@ -32,6 +65,7 @@ def pipeline(request, slug):
         "brand": brand.slug,
         "versions": [describe(s) for s in brand.token_sets.order_by("-version")],
         "layouts": latest.layouts if latest else {},
+        "reference": reference(latest),
     })
 
 @csrf_exempt
@@ -52,6 +86,7 @@ def check(request, slug):
         version=TokenSet.next_version(brand),
         tokens=baseline.tokens,
         layouts=layouts,
+        catalogue=baseline.catalogue,
     )
     try:
         render(draft)
