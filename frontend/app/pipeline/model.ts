@@ -117,6 +117,11 @@ export function parseDraft(
   }
 }
 
+// the first section that takes a title; SiteHeader, usually first, does not
+function titledIndex(screen: Screen) {
+  return screen.sections.findIndex((section) => typeof section.props?.title === "string");
+}
+
 function editHome(layouts: Layouts, edit: (screen: Screen) => Screen): Layouts {
   return layouts.home ? { ...layouts, home: edit(layouts.home) } : layouts;
 }
@@ -129,7 +134,7 @@ export const EXAMPLES: { label: string; change: (layouts: Layouts) => Layouts }[
       editHome(layouts, (home) => ({
         ...home,
         sections: home.sections.map((section, index) =>
-          index === 0
+          index === titledIndex(home)
             ? { ...section, props: { ...section.props, title: "New headline" } }
             : section,
         ),

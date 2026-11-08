@@ -133,4 +133,12 @@ describe("the example edits", () => {
     EXAMPLES.forEach((example) => example.change(PIPELINE.layouts));
     expect(JSON.stringify(PIPELINE.layouts)).toBe(before);
   });
+
+  it("edit copy changes a section that has a title, not the header", () => {
+    const edit = EXAMPLES.find((example) => example.label === "Edit copy")!;
+    const home = { ...HOME, sections: [{ id: "header", type: "SiteHeader" }, ...HOME.sections] };
+    const edited = edit.change({ home }).home;
+    expect(edited.sections[0].props).toBeUndefined();
+    expect(edited.sections[1].props?.title).toBe("New headline");
+  });
 });
