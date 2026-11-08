@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { BrandProvider, BrandStylesheet } from "../components/BrandProvider";
+import { tokenVariable } from "../sections/Intro";
 import { ScreenRenderer, type Screen } from "../sections/ScreenRenderer";
 import type { Catalogue } from "../store/catalogue";
 import { StoreProvider } from "../store/StoreProvider";
 import {
   EXAMPLES,
   outcomeOf,
-  parseDraft,
+  parseDrafts,
+  screenOfChange,
   type Check,
   type Layouts,
   type Pipeline,
@@ -19,6 +21,13 @@ import { Reference } from "./Reference";
 
 const BRANDS = ["clementine", "pomelo"];
 const CHECK_DELAY_MS = 250;
+const FRAME_WIDTH = 1280;
+
+// the order a shopper meets the screens; unknown screens go last
+const SCREEN_ORDER = ["home", "shop", "product", "basket"];
+const rank = (screen: string) => (SCREEN_ORDER.includes(screen) ? SCREEN_ORDER.indexOf(screen) : SCREEN_ORDER.length);
+
+const pretty = (screen: Screen) => JSON.stringify(screen, null, 2);
 
 export default function PipelinePage() {
   const [brand, setBrand] = useState(BRANDS[0]);
@@ -34,8 +43,8 @@ export default function PipelinePage() {
             <p className={styles.eyebrow}>strata</p>
             <h1 className={styles.title}>Publish pipeline</h1>
             <p className={styles.lead}>
-              Edit a screen and see what publishing it would do. These are the real publish
-              checks, run as a dry run: nothing here is saved.
+              Edit any screen and see what publishing it would do. These are the real publish
+              checks, run as a dry run against every screen: nothing here is saved.
             </p>
           </div>
           <nav className={styles.tabs} aria-label="Brand">
@@ -61,10 +70,13 @@ export default function PipelinePage() {
 function Workbench({ brand }: { brand: string }) {
   const [pipeline, setPipeline] = useState<Pipeline | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [text, setText] = useState("");
+  const [texts, setTexts] = useState<Record<string, string>>({});
+  const [selected, setSelected] = useState("home");
   const [check, setCheck] = useState<Check | null>(null);
-  const [preview, setPreview] = useState<Screen | null>(null);
+  const [brokenScreen, setBrokenScreen] = useState<string | null>(null);
+  const [previews, setPreviews] = useState<Layouts | null>(null);
   const [catalogue, setCatalogue] = useState<Catalogue | undefined>(undefined);
+  const [product, setProduct] = useState<string | null>(null);
 
   // the preview needs the catalogue to resolve product ids
   useEffect(() => {
@@ -73,7 +85,9 @@ function Workbench({ brand }: { brand: string }) {
       .then((response) => (response.ok ? response.json() : undefined))
       .catch(() => undefined)
       .then((loaded: Catalogue | undefined) => {
-        if (!cancelled) setCatalogue(loaded);
+        if (cancelled) return;
+        setCatalogue(loaded);
+        setProduct(Object.keys(loaded?.products ?? {})[0] ?? null);
       });
     return () => {
       cancelled = true;
@@ -89,7 +103,11 @@ function Workbench({ brand }: { brand: string }) {
       })
       .then((loaded: Pipeline) => {
         setPipeline(loaded);
-        setText(JSON.stringify(loaded.layouts, null, 2));
+        setTexts(
+          Object.fromEntries(Object.entries(loaded.layouts).map(([name, screen]) => [name, pretty(screen)])),
+        );
+        const names = Object.keys(loaded.layouts);
+        setSelected((current) => (names.includes(current) ? current : names[0]));
       })
       .catch((error: Error) => {
         if (error.name !== "AbortError") setLoadError(error.message);
@@ -97,15 +115,18 @@ function Workbench({ brand }: { brand: string }) {
     return () => controller.abort();
   }, [brand]);
 
+  // one publish covers every screen, so every edit checks the whole bundle
   useEffect(() => {
-    if (!text) return;
+    if (!Object.keys(texts).length) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
-      const draft = parseDraft(text);
+      const draft = parseDrafts(texts);
       if (!draft.ok) {
+        setBrokenScreen(draft.screen);
         setCheck({ verdict: "refused", error: draft.error, changes: [] });
         return;
       }
+      setBrokenScreen(null);
       fetch(`/api/brands/${brand}/check`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -118,7 +139,7 @@ function Workbench({ brand }: { brand: string }) {
         })
         .then((result: Check) => {
           setCheck(result);
-          if (result.verdict !== "refused") setPreview(draft.layouts.home ?? null);
+          if (result.verdict !== "refused") setPreviews(draft.layouts);
         })
         .catch((error: Error) => {
           if (error.name === "AbortError") return;
@@ -129,22 +150,35 @@ function Workbench({ brand }: { brand: string }) {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [brand, text]);
+  }, [brand, texts]);
 
   if (loadError) {
     return (
       <p className={styles.notice} role="alert">
-        Could not load {brand}: {loadError}. Is Django running on port 8000?
+        Could not load {brand}: {loadError}. Is Django running?
       </p>
     );
   }
   if (!pipeline) return <p className={styles.notice}>Loading {brand}…</p>;
 
-  const apply = (change: (layouts: Layouts) => Layouts) => {
-    setText(JSON.stringify(change(pipeline.layouts), null, 2));
-  };
+  const screens = Object.keys(pipeline.layouts).sort((a, b) => rank(a) - rank(b));
+  const published = pipeline.layouts[selected];
+  const changes = check?.changes ?? [];
+  const changesOn = (name: string) => changes.filter((change) => screenOfChange(change) === name);
+  const edited = (name: string) => texts[name] !== pretty(pipeline.layouts[name]);
+  const groups = [
+    ...screens.map((name) => ({ name, list: changesOn(name), screen: true })),
+    { name: "other", list: changes.filter((change) => !screens.includes(screenOfChange(change))), screen: false },
+  ].filter((group) => group.list.length);
+  const preview = previews?.[selected] ?? null;
   const outcome = check ? outcomeOf(check) : null;
   const refused = check?.verdict === "refused";
+  const products = Object.entries(catalogue?.products ?? {});
+  const current = selected === "product" ? product : null;
+
+  const apply = (change: (screen: Screen) => Screen) => {
+    setTexts((draft) => ({ ...draft, [selected]: pretty(change(published)) }));
+  };
 
   return (
     <>
@@ -153,15 +187,41 @@ function Workbench({ brand }: { brand: string }) {
         <span>{outcome?.detail}</span>
       </section>
 
+      <nav className={styles.screens} aria-label="Screen">
+        {screens.map((name) => {
+          const count = changesOn(name).length;
+          return (
+            <button
+              key={name}
+              type="button"
+              className={styles.screenTab}
+              aria-pressed={name === selected}
+              data-broken={name === brokenScreen || undefined}
+              onClick={() => setSelected(name)}
+            >
+              {name}
+              {count ? (
+                <span className={styles.count} aria-label={`, ${count} changes`}>
+                  {count}
+                </span>
+              ) : edited(name) ? (
+                <span className={styles.dot} aria-label=", edited" />
+              ) : null}
+            </button>
+          );
+        })}
+      </nav>
+
       <main className={styles.grid}>
         <section className={styles.panel}>
-          <h2 className={styles.panelTitle}>Draft layout</h2>
+          <h2 className={styles.panelTitle}>Draft · {selected}</h2>
           <div className={styles.examples}>
             {EXAMPLES.map((example) => (
               <button
                 key={example.label}
                 type="button"
                 className={styles.example}
+                disabled={example.appliesTo ? !example.appliesTo(published) : false}
                 onClick={() => apply(example.change)}
               >
                 {example.label}
@@ -170,46 +230,82 @@ function Workbench({ brand }: { brand: string }) {
           </div>
           <textarea
             className={styles.editor}
-            aria-label={`${brand} draft layout JSON`}
+            aria-label={`${brand} ${selected} draft layout JSON`}
             spellCheck={false}
-            value={text}
-            onChange={(event) => setText(event.target.value)}
+            value={texts[selected] ?? ""}
+            onChange={(event) => {
+              const value = event.target.value;
+              setTexts((draft) => ({ ...draft, [selected]: value }));
+            }}
           />
         </section>
 
         <section className={styles.panel}>
-          <h2 className={styles.panelTitle}>
-            Preview{refused ? " · last valid draft" : ""}
-          </h2>
+          <div className={styles.panelHead}>
+            <h2 className={styles.panelTitle}>Preview{refused ? " · last valid draft" : ""}</h2>
+            {selected === "product" && products.length ? (
+              <label className={styles.picker}>
+                Product
+                <select value={product ?? ""} onChange={(event) => setProduct(event.target.value)}>
+                  {products.map(([id, item]) => (
+                    <option key={id} value={id}>
+                      {item.name ?? id}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : null}
+          </div>
           <BrandProvider brand={brand}>
-            <StoreProvider brand={brand} catalogue={catalogue}>
-              <div className={styles.preview}>
-                {preview ? (
-                  <ScreenRenderer screen={preview} />
-                ) : (
-                  <p className={styles.empty}>No home screen in this draft.</p>
-                )}
-              </div>
+            <StoreProvider key={current ?? "screen"} brand={brand} catalogue={catalogue} current={current}>
+              {preview ? (
+                <ScaledFrame>
+                  <div
+                    className="strata-screen"
+                    data-fit={preview.fit ?? "scroll"}
+                    data-screen={selected}
+                    style={preview.gap ? { gap: tokenVariable(preview.gap) } : undefined}
+                  >
+                    <ScreenRenderer screen={preview} />
+                  </div>
+                </ScaledFrame>
+              ) : (
+                <p className={styles.empty}>No valid draft of {selected} yet.</p>
+              )}
             </StoreProvider>
           </BrandProvider>
         </section>
 
         <section className={styles.panel}>
           <h2 className={styles.panelTitle}>Changes against published</h2>
-          {check?.changes.length ? (
-            <ul className={styles.list}>
-              {check.changes.map((change) => (
-                <li key={`${change.kind}:${change.path}`} className={styles.change}>
-                  <span className={styles.badge} data-severity={change.severity}>
-                    {change.severity}
-                  </span>
-                  <span>
-                    <code>{change.path}</code>
-                    <small>{change.reason}</small>
-                  </span>
-                </li>
+          {groups.length ? (
+            <div className={styles.groups}>
+              {groups.map((group) => (
+                <div key={group.name} className={styles.group} data-current={group.name === selected || undefined}>
+                  <button
+                    type="button"
+                    className={styles.groupHead}
+                    disabled={!group.screen}
+                    onClick={() => setSelected(group.name)}
+                  >
+                    {group.name} <span>{group.list.length}</span>
+                  </button>
+                  <ul className={styles.list}>
+                    {group.list.map((change) => (
+                      <li key={`${change.kind}:${change.path}`} className={styles.change}>
+                        <span className={styles.badge} data-severity={change.severity}>
+                          {change.severity}
+                        </span>
+                        <span>
+                          <code>{change.path}</code>
+                          <small>{change.reason}</small>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
-            </ul>
+            </div>
           ) : (
             <p className={styles.empty}>No changes.</p>
           )}
@@ -235,10 +331,43 @@ function Workbench({ brand }: { brand: string }) {
 
       {pipeline.reference ? (
         <Reference
+          key={selected}
           reference={pipeline.reference}
-          inUse={(preview ?? pipeline.layouts.home)?.sections.map((s) => s.type) ?? []}
+          inUse={(preview ?? published)?.sections.map((s) => s.type) ?? []}
         />
       ) : null}
     </>
+  );
+}
+
+/** Renders at desktop width and scales down to fit the panel, so the preview matches the real page. */
+function ScaledFrame({ children }: { children: ReactNode }) {
+  const outer = useRef<HTMLDivElement>(null);
+  const inner = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState<{ scale: number; height: number } | null>(null);
+
+  useEffect(() => {
+    const box = outer.current;
+    const page = inner.current;
+    if (!box || !page || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => {
+      const scale = Math.min(1, box.clientWidth / FRAME_WIDTH);
+      setSize({ scale, height: page.offsetHeight * scale });
+    });
+    observer.observe(box);
+    observer.observe(page);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={outer} className={styles.frame} style={size ? { height: size.height } : undefined}>
+      <div
+        ref={inner}
+        className={styles.frameInner}
+        style={{ width: FRAME_WIDTH, transform: size ? `scale(${size.scale})` : undefined }}
+      >
+        {children}
+      </div>
+    </div>
   );
 }

@@ -9,10 +9,15 @@ const HOME = {
   screen: "home",
   sections: [{ id: "intro", type: "Intro", props: { title: "Published title" } }],
 };
+const BASKET = {
+  schemaVersion: 1,
+  screen: "basket",
+  sections: [{ id: "title", type: "Intro", props: { title: "Your basket" } }],
+};
 const PIPELINE: Pipeline = {
   brand: "clementine",
   versions: [{ version: 2, status: "published", severity: "minor", note: "Layouts" }],
-  layouts: { home: HOME },
+  layouts: { home: HOME, basket: BASKET },
   reference: {
     schemaVersion: 1,
     fits: ["scroll", "viewport"],
@@ -96,6 +101,40 @@ describe("the pipeline page", () => {
     expect(vi.mocked(fetch).mock.calls.length).toBe(calls);
   });
 
+  it("switches the editor and preview between screens and keeps each draft", async () => {
+    render(<PipelinePage />);
+    await screen.findByText("Published title");
+
+    fireEvent.click(screen.getByRole("button", { name: "basket" }));
+    expect(await screen.findByText("Your basket")).toBeTruthy();
+    expect((screen.getByRole("textbox") as HTMLTextAreaElement).value).toContain('"screen": "basket"');
+
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "{" } });
+    expect(await screen.findByText(/Not valid JSON in basket/)).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: /home/ }));
+    expect((screen.getByRole("textbox") as HTMLTextAreaElement).value).toContain('"screen": "home"');
+    fireEvent.click(screen.getByRole("button", { name: /basket/ }));
+    expect((screen.getByRole("textbox") as HTMLTextAreaElement).value).toBe("{");
+  });
+
+  it("sends every screen to the check and counts changes per screen", async () => {
+    respond({
+      verdict: "ready",
+      severity: "minor",
+      comparedTo: 2,
+      changes: [{ path: "layout.basket.added-section", kind: "added", severity: "minor", reason: "section added" }],
+    });
+    render(<PipelinePage />);
+    await screen.findByText("Published title");
+
+    expect(await screen.findByRole("button", { name: "basket, 1 changes" })).toBeTruthy();
+    const body = JSON.parse(
+      vi.mocked(fetch).mock.calls.find(([url]) => String(url).endsWith("/check"))![1]!.body as string,
+    );
+    expect(Object.keys(body.layouts)).toEqual(["home", "basket"]);
+  });
+
   it("says when the API cannot be reached", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 500 })));
     render(<PipelinePage />);
@@ -129,16 +168,16 @@ describe("parseDraft", () => {
 
 describe("the example edits", () => {
   it("do not modify the published layouts", () => {
-    const before = JSON.stringify(PIPELINE.layouts);
-    EXAMPLES.forEach((example) => example.change(PIPELINE.layouts));
-    expect(JSON.stringify(PIPELINE.layouts)).toBe(before);
+    const before = JSON.stringify(HOME);
+    EXAMPLES.forEach((example) => example.change(HOME));
+    expect(JSON.stringify(HOME)).toBe(before);
   });
 
-  it("edit copy changes a section that has a title, not the header", () => {
+  it("edit copy targets a section that has a title, and is off when none does", () => {
     const edit = EXAMPLES.find((example) => example.label === "Edit copy")!;
-    const home = { ...HOME, sections: [{ id: "header", type: "SiteHeader" }, ...HOME.sections] };
-    const edited = edit.change({ home }).home;
-    expect(edited.sections[0].props).toBeUndefined();
-    expect(edited.sections[1].props?.title).toBe("New headline");
+    const withHeader = { ...HOME, sections: [{ id: "header", type: "SiteHeader" }, ...HOME.sections] };
+    expect(edit.change(withHeader).sections[1].props?.title).toBe("New headline");
+    expect(edit.change(withHeader).sections[0].props).toBeUndefined();
+    expect(edit.appliesTo!({ ...HOME, sections: [{ id: "header", type: "SiteHeader" }] })).toBe(false);
   });
 });

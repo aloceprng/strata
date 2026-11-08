@@ -117,54 +117,71 @@ export function parseDraft(
   }
 }
 
-// the first section that takes a title; SiteHeader, usually first, does not
+/** Parse each screen's text, naming the screen whose JSON is broken. */
+export function parseDrafts(
+  texts: Record<string, string>,
+): { ok: true; layouts: Layouts } | { ok: false; error: string; screen: string } {
+  const layouts: Layouts = {};
+  for (const [screen, text] of Object.entries(texts)) {
+    const draft = parseDraft(text);
+    if (!draft.ok) return { ok: false, screen, error: draft.error.replace("Not valid JSON", `Not valid JSON in ${screen}`) };
+    layouts[screen] = draft.layouts as unknown as Screen;
+  }
+  return { ok: true, layouts };
+}
+
+/** Layout change paths look like layout.<screen>.<section>. */
+export function screenOfChange(change: Change): string {
+  const [first, second] = change.path.split(".");
+  return first === "layout" && second ? second : first;
+}
+
 function titledIndex(screen: Screen) {
   return screen.sections.findIndex((section) => typeof section.props?.title === "string");
 }
 
-function editHome(layouts: Layouts, edit: (screen: Screen) => Screen): Layouts {
-  return layouts.home ? { ...layouts, home: edit(layouts.home) } : layouts;
-}
+export type Example = {
+  label: string;
+  change: (screen: Screen) => Screen;
+  appliesTo?: (screen: Screen) => boolean;
+};
 
-export const EXAMPLES: { label: string; change: (layouts: Layouts) => Layouts }[] = [
-  { label: "Reset", change: (layouts) => layouts },
+/** Each example edits the published version of the selected screen. */
+export const EXAMPLES: Example[] = [
+  { label: "Reset", change: (screen) => screen },
   {
     label: "Edit copy",
-    change: (layouts) =>
-      editHome(layouts, (home) => ({
-        ...home,
-        sections: home.sections.map((section, index) =>
-          index === titledIndex(home)
-            ? { ...section, props: { ...section.props, title: "New headline" } }
-            : section,
+    appliesTo: (screen) => titledIndex(screen) >= 0,
+    change: (screen) => {
+      const target = titledIndex(screen);
+      return {
+        ...screen,
+        sections: screen.sections.map((section, index) =>
+          index === target ? { ...section, props: { ...section.props, title: "New headline" } } : section,
         ),
-      })),
+      };
+    },
   },
   {
     label: "Add section",
-    change: (layouts) =>
-      editHome(layouts, (home) => ({
-        ...home,
-        sections: [
-          ...home.sections,
-          {
-            id: "added-section",
-            type: "Intro",
-            props: { title: "A section added by data", body: "No frontend deploy needed." },
-          },
-        ],
-      })),
+    change: (screen) => ({
+      ...screen,
+      sections: [
+        ...screen.sections,
+        {
+          id: "added-section",
+          type: "Intro",
+          props: { title: "A section added by data", body: "No frontend deploy needed." },
+        },
+      ],
+    }),
   },
-  {
-    label: "Remove section",
-    change: (layouts) => editHome(layouts, (home) => ({ ...home, sections: [] })),
-  },
+  { label: "Remove sections", change: (screen) => ({ ...screen, sections: [] }) },
   {
     label: "Use unknown section",
-    change: (layouts) =>
-      editHome(layouts, (home) => ({
-        ...home,
-        sections: [...home.sections, { id: "carousel", type: "Carousel" }],
-      })),
+    change: (screen) => ({
+      ...screen,
+      sections: [...screen.sections, { id: "carousel", type: "Carousel" }],
+    }),
   },
 ];
