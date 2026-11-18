@@ -10,7 +10,7 @@ of brands, using design tokens authored in Figma. Each brand's pages and styling
 as data, so changes go live without a redeploy, and every change is checked before it's allowed
 to ship.
 
-It's demonstrated with two fictitious brands: clementine, a grocery shop, and pomelo, a
+It's demonstrated with two fictitious brands: clementine (柑橘), a grocery shop, and pomelo, a
 furniture shop. Each has a home, shop, product and basket screen, all built from the same
 components.
 
