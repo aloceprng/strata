@@ -41,6 +41,7 @@ def reference(latest: TokenSet | None) -> dict:
     """What a layout may contain: the section contract plus this brand's token choices."""
     contract = load_contract(settings.COMPONENT_CONTRACT)
     available = token_paths(latest.tokens.get("semantic", {})) if latest else []
+    have = set(available)
     groups = {
         rule["group"]
         for section in contract["sections"].values()
@@ -52,6 +53,11 @@ def reference(latest: TokenSet | None) -> dict:
         "fits": list(SCREEN_FITS),
         "products": sorted((latest.catalogue or {}).get("products", {})) if latest else [],
         "sections": contract["sections"],
+        # section types this brand fully supports, for the editor
+        "supported": [
+            name for name, section in contract["sections"].items()
+            if all(token in have for token in section.get("tokens", []))
+        ],
         "tokenOptions": {
             group: [p for p in available if p.startswith(f"{group}.")] for group in sorted(groups)
         },

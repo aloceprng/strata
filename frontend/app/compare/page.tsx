@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { BrandProvider, BrandStylesheet, type Bundle, type TokenEntry } from "../components/BrandProvider";
+import { StrataLogo } from "../components/StrataLogo";
 import {
   Avatar,
   BasketButton,
@@ -162,7 +163,7 @@ export default function Compare() {
       <div className={styles.page}>
         <header className={styles.masthead}>
           <div>
-            <p className={styles.eyebrow}>strata · compare</p>
+            <p className={`${styles.eyebrow} ${styles.eyebrowRow}`}><StrataLogo height={10} /> · compare</p>
             <h1 className={styles.title}>
               <BrandPicker value={left} onChange={setLeft} label="Left brand" />
               <span className={styles.vs}>vs</span>

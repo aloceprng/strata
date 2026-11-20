@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 import { BrandProvider, BrandStylesheet } from "../components/BrandProvider";
+import { StrataLogo } from "../components/StrataLogo";
 import { tokenVariable } from "../sections/Intro";
-import { ScreenRenderer, type Screen } from "../sections/ScreenRenderer";
+import { SECTIONS, type Screen } from "../sections/ScreenRenderer";
 import type { Catalogue } from "../store/catalogue";
 import { StoreProvider } from "../store/StoreProvider";
+import { inDraftOrder, issuesOf, knownAssets, labelOf, linkableScreens } from "./editor";
 import {
   EXAMPLES,
   outcomeOf,
@@ -18,6 +20,7 @@ import {
 } from "./model";
 import styles from "./pipeline.module.css";
 import { Reference } from "./Reference";
+import { SectionEditor } from "./SectionEditor";
 
 const BRANDS = ["clementine", "pomelo"];
 const CHECK_DELAY_MS = 250;
@@ -28,6 +31,15 @@ const SCREEN_ORDER = ["home", "shop", "product", "basket"];
 const rank = (screen: string) => (SCREEN_ORDER.includes(screen) ? SCREEN_ORDER.indexOf(screen) : SCREEN_ORDER.length);
 
 const pretty = (screen: Screen) => JSON.stringify(screen, null, 2);
+
+function parseScreen(text: string | undefined): Screen | null {
+  try {
+    const screen = JSON.parse(text ?? "");
+    return screen && typeof screen === "object" && Array.isArray(screen.sections) ? screen : null;
+  } catch {
+    return null;
+  }
+}
 
 export default function PipelinePage() {
   const [brand, setBrand] = useState(BRANDS[0]);
@@ -40,12 +52,8 @@ export default function PipelinePage() {
       <div className={styles.page}>
         <header className={styles.header}>
           <div>
-            <p className={styles.eyebrow}>strata</p>
+            <p className={styles.eyebrow}><StrataLogo height={11} /></p>
             <h1 className={styles.title}>Publish pipeline</h1>
-            <p className={styles.lead}>
-              Edit any screen and see what publishing it would do. These are the real publish
-              checks, run as a dry run against every screen: nothing here is saved.
-            </p>
           </div>
           <nav className={styles.tabs} aria-label="Brand">
             {BRANDS.map((b) => (
@@ -77,6 +85,8 @@ function Workbench({ brand }: { brand: string }) {
   const [previews, setPreviews] = useState<Layouts | null>(null);
   const [catalogue, setCatalogue] = useState<Catalogue | undefined>(undefined);
   const [product, setProduct] = useState<string | null>(null);
+  const [mode, setMode] = useState<"cards" | "json">("cards");
+  const [section, setSection] = useState<string | null>(null);
 
   // the preview needs the catalogue to resolve product ids
   useEffect(() => {
@@ -152,6 +162,22 @@ function Workbench({ brand }: { brand: string }) {
     };
   }, [brand, texts]);
 
+  const draft = useMemo(() => parseScreen(texts[selected]), [texts, selected]);
+  // client-side checks across every screen in the publish
+  const localIssue = useMemo(() => {
+    const rules = pipeline?.reference?.sections ?? {};
+    for (const [name, text] of Object.entries(texts)) {
+      for (const s of parseScreen(text)?.sections ?? []) {
+        const definition = rules[s.type];
+        const issue = definition ? issuesOf(s.props ?? {}, definition.props)[0] : undefined;
+        if (definition && issue) {
+          return `${name} › ${labelOf(s.type, definition)} › ${issue.path.join(" › ")} ${issue.message}`;
+        }
+      }
+    }
+    return null;
+  }, [texts, pipeline]);
+
   if (loadError) {
     return (
       <p className={styles.notice} role="alert">
@@ -170,14 +196,28 @@ function Workbench({ brand }: { brand: string }) {
     ...screens.map((name) => ({ name, list: changesOn(name), screen: true })),
     { name: "other", list: changes.filter((change) => !screens.includes(screenOfChange(change))), screen: false },
   ].filter((group) => group.list.length);
-  const preview = previews?.[selected] ?? null;
-  const outcome = check ? outcomeOf(check) : null;
+  const preview = inDraftOrder(previews?.[selected] ?? null, draft);
+  const outcome = localIssue
+    ? { tone: "bad" as const, title: "Not ready to publish", detail: localIssue }
+    : check
+      ? outcomeOf(check)
+      : null;
   const refused = check?.verdict === "refused";
   const products = Object.entries(catalogue?.products ?? {});
   const current = selected === "product" ? product : null;
 
   const apply = (change: (screen: Screen) => Screen) => {
-    setTexts((draft) => ({ ...draft, [selected]: pretty(change(published)) }));
+    setTexts((current) => ({ ...current, [selected]: pretty(change(published)) }));
+  };
+  const edit = (screen: Screen) => setTexts((current) => ({ ...current, [selected]: pretty(screen) }));
+  const draftLayouts = Object.fromEntries(
+    Object.entries(texts).map(([name, text]) => [name, parseScreen(text) ?? pipeline.layouts[name]]),
+  );
+  const fieldContext = {
+    tokens: pipeline.reference.tokenOptions,
+    screens: linkableScreens(draftLayouts),
+    assets: knownAssets(pipeline.layouts, catalogue),
+    catalogue,
   };
 
   return (
@@ -197,7 +237,10 @@ function Workbench({ brand }: { brand: string }) {
               className={styles.screenTab}
               aria-pressed={name === selected}
               data-broken={name === brokenScreen || undefined}
-              onClick={() => setSelected(name)}
+              onClick={() => {
+                setSelected(name);
+                setSection(null);
+              }}
             >
               {name}
               {count ? (
@@ -214,9 +257,19 @@ function Workbench({ brand }: { brand: string }) {
 
       <main className={styles.grid}>
         <section className={styles.panel}>
-          <h2 className={styles.panelTitle}>Draft · {selected}</h2>
+          <div className={styles.panelHead}>
+            <h2 className={styles.panelTitle}>Draft · {selected}</h2>
+            <div className={styles.modes} role="group" aria-label="Editor">
+              <button type="button" aria-pressed={mode === "cards"} onClick={() => setMode("cards")}>
+                Sections
+              </button>
+              <button type="button" aria-pressed={mode === "json"} onClick={() => setMode("json")}>
+                Edit as JSON
+              </button>
+            </div>
+          </div>
           <div className={styles.examples}>
-            {EXAMPLES.map((example) => (
+            {(mode === "cards" ? EXAMPLES.slice(0, 1) : EXAMPLES).map((example) => (
               <button
                 key={example.label}
                 type="button"
@@ -224,20 +277,45 @@ function Workbench({ brand }: { brand: string }) {
                 disabled={example.appliesTo ? !example.appliesTo(published) : false}
                 onClick={() => apply(example.change)}
               >
-                {example.label}
+                {mode === "cards" ? "Reset to published" : example.label}
               </button>
             ))}
           </div>
-          <textarea
-            className={styles.editor}
-            aria-label={`${brand} ${selected} draft layout JSON`}
-            spellCheck={false}
-            value={texts[selected] ?? ""}
-            onChange={(event) => {
-              const value = event.target.value;
-              setTexts((draft) => ({ ...draft, [selected]: value }));
-            }}
-          />
+          {mode === "json" ? (
+            <textarea
+              className={styles.editor}
+              aria-label={`${brand} ${selected} draft layout JSON`}
+              spellCheck={false}
+              value={texts[selected] ?? ""}
+              onChange={(event) => {
+                const value = event.target.value;
+                setTexts((current) => ({ ...current, [selected]: value }));
+              }}
+            />
+          ) : draft ? (
+            <SectionEditor
+              key={selected}
+              brand={brand}
+              screen={draft}
+              reference={pipeline.reference}
+              published={pipeline.layouts}
+              catalogue={catalogue}
+              context={fieldContext}
+              selected={section}
+              onSelect={setSection}
+              onChange={edit}
+            />
+          ) : (
+            <div className={styles.notice} role="alert">
+              <p>This screen&apos;s JSON has an error, so it can&apos;t be shown as sections.</p>
+              <button type="button" className={styles.example} onClick={() => setMode("json")}>
+                Fix it in JSON
+              </button>{" "}
+              <button type="button" className={styles.example} onClick={() => apply((screen) => screen)}>
+                Reset to published
+              </button>
+            </div>
+          )}
         </section>
 
         <section className={styles.panel}>
@@ -259,14 +337,14 @@ function Workbench({ brand }: { brand: string }) {
           <BrandProvider brand={brand}>
             <StoreProvider key={current ?? "screen"} brand={brand} catalogue={catalogue} current={current}>
               {preview ? (
-                <ScaledFrame>
+                <ScaledFrame highlight={mode === "cards" ? section : null}>
                   <div
                     className="strata-screen"
                     data-fit={preview.fit ?? "scroll"}
                     data-screen={selected}
                     style={preview.gap ? { gap: tokenVariable(preview.gap) } : undefined}
                   >
-                    <ScreenRenderer screen={preview} />
+                    <PreviewSections screen={preview} />
                   </div>
                 </ScaledFrame>
               ) : (
@@ -329,7 +407,7 @@ function Workbench({ brand }: { brand: string }) {
         </section>
       </main>
 
-      {pipeline.reference ? (
+      {mode === "json" && pipeline.reference ? (
         <Reference
           key={selected}
           reference={pipeline.reference}
@@ -341,10 +419,39 @@ function Workbench({ brand }: { brand: string }) {
 }
 
 /** Renders at desktop width and scales down to fit the panel, so the preview matches the real page. */
-function ScaledFrame({ children }: { children: ReactNode }) {
+function ScaledFrame({ children, highlight = null }: { children: ReactNode; highlight?: string | null }) {
   const outer = useRef<HTMLDivElement>(null);
   const inner = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<{ scale: number; height: number } | null>(null);
+  const [box, setBox] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
+
+  // outline the selected section: union of its boxes, unscaled
+  useEffect(() => {
+    const page = inner.current;
+    const frame = outer.current;
+    const wrapper = highlight
+      ? [...(page?.querySelectorAll<HTMLElement>("[data-section-id]") ?? [])].find((el) => el.dataset.sectionId === highlight)
+      : null;
+    const parts = wrapper ? [...wrapper.children] : [];
+    if (!page || !frame || !parts.length || !size) {
+      setBox(null);
+      return;
+    }
+    const origin = page.getBoundingClientRect();
+    const rects = parts.map((part) => part.getBoundingClientRect());
+    const top = Math.min(...rects.map((r) => r.top));
+    const left = Math.min(...rects.map((r) => r.left));
+    const bottom = Math.max(...rects.map((r) => r.bottom));
+    const right = Math.max(...rects.map((r) => r.right));
+    const next = {
+      top: (top - origin.top) / size.scale,
+      left: (left - origin.left) / size.scale,
+      width: (right - left) / size.scale,
+      height: (bottom - top) / size.scale,
+    };
+    setBox(next);
+    frame.scrollTo?.({ top: Math.max(0, next.top * size.scale - 24), behavior: "smooth" });
+  }, [highlight, size, children]);
 
   useEffect(() => {
     const box = outer.current;
@@ -367,7 +474,27 @@ function ScaledFrame({ children }: { children: ReactNode }) {
         style={{ width: FRAME_WIDTH, transform: size ? `scale(${size.scale})` : undefined }}
       >
         {children}
+        {box ? (
+          <div
+            className={styles.highlight}
+            aria-hidden
+            style={{ top: box.top, left: box.left, width: box.width, height: box.height }}
+          />
+        ) : null}
       </div>
     </div>
   );
+}
+
+/** like ScreenRenderer, but wraps each section so the preview can outline it */
+function PreviewSections({ screen }: { screen: Screen }) {
+  return screen.sections.map((section) => {
+    const Component = SECTIONS[section.type];
+    if (!Component) return null;
+    return (
+      <div key={section.id} data-section-id={section.id} style={{ display: "contents" }}>
+        <Component {...section.props} />
+      </div>
+    );
+  });
 }

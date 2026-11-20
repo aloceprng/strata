@@ -2,5 +2,5 @@
 
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-strata), Arial, Helvetica, sans-serif;
 }

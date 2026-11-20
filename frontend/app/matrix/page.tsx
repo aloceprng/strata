@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { BrandProvider, BrandStylesheet, useBrand } from "../components/BrandProvider";
+import { StrataLogo } from "../components/StrataLogo";
 import { COMPONENTS } from "./gallery";
 import {
   ColourGrid,
@@ -36,7 +37,7 @@ export default function DesignSystem() {
           <Section
             id="primitives"
             title="Primitives"
-            lead="Raw values, pointed to by semantics."
+            lead="Core tokens"
           >
             <Block label="colour">
               <ColourGrid layer="primitive" />
@@ -58,7 +59,7 @@ export default function DesignSystem() {
           <Section
             id="semantics"
             title="Semantic tokens"
-            lead="Defined values by function."
+            lead="Functional tokens pointing to primitives"
           >
             <Block label="colour">
               <ColourGrid layer="semantic" />
@@ -136,7 +137,7 @@ function Masthead() {
   return (
     <header className={styles.masthead}>
       <div>
-        <p className={styles.eyebrow}>strata</p>
+        <p className={styles.eyebrow}><StrataLogo height={10} /></p>
         <h1 className={styles.mastheadTitle}>{brand}</h1>
       </div>
       <dl className={styles.stats}>

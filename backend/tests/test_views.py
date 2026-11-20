@@ -72,6 +72,14 @@ class TestPipeline:
         ref = client.get("/api/brands/pomelo/pipeline").json()["reference"]
         assert ref["tokenOptions"] == {"space.stack": ["space.stack.gap"]}
 
+    def test_lists_only_the_section_types_the_brands_tokens_support(self, client, published):
+        ref = client.get("/api/brands/pomelo/pipeline").json()["reference"]
+        assert ref["supported"] == ["Intro"]
+
+    def test_with_nothing_published_no_section_type_is_supported(self, client, brand):
+        ref = client.get("/api/brands/pomelo/pipeline").json()["reference"]
+        assert ref["supported"] == [name for name, s in ref["sections"].items() if not s.get("tokens")]
+
     def test_with_nothing_published_token_options_are_empty(self, client, brand):
         ref = client.get("/api/brands/pomelo/pipeline").json()["reference"]
         assert ref["tokenOptions"] == {"space.stack": []}

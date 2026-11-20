@@ -1,3 +1,9 @@
+import { StrataLogo } from "./components/StrataLogo";
+
 export default function Page() {
-  return <main>strata</main>;
+  return (
+    <main>
+      <StrataLogo height={16} />
+    </main>
+  );
 }

@@ -15,7 +15,7 @@ product and basket screens.
 | --- | --- | --- | --- |
 | Atoms | `Button`, `Input`, `Badge`, `Grid`, `Illustration`, `Price` | React | Code |
 | Composites | `ProductCard`, `SectionHeader`, `SiteHeader`, `JourneyField`, `QuantityStepper`, `CartLineItem` | React | Code |
-| Sections | `PromoHero`, `CategoryTiles`, `DealRow`, `ProductFigures`, `RouteList`, `ProductGallery`, `ProductSummary`, `ProductDetails`, `CartItems`, `OrderSummary` | React | Code |
+| Sections | `SiteHeader`, `Intro`, `PromoHero`, `WordmarkHero`, `PageTitle`, `Breadcrumb`, `ProductRow`, `CategoryCarousel`, `ProductGrid`, `CatalogueGrid`, `CatalogueRail`, `ProductFigures`, `ProductOverview`, `ProductShowcase`, `Basket`, `SiteFooter` | React | Code |
 | Screens | Each brand's home, product details and cart | `layout.json` | Published data |
 
 A screen built from existing pieces is a data change. A new piece is code and a
@@ -124,10 +124,113 @@ logged, so an older frontend survives newer data.
 
 Clementine is a grocery shop and Pomelo a furniture shop. See [DESIGN_BRIEF.md](DESIGN_BRIEF.md) for the design work.
 
+## Layout editor
+
+Decided 2026-11-12 after a test of `/pipeline`. Built 2026-11-15; the re-test
+below has not been run yet.
+
+**Why.** Non-technical testers, standing in for designers who don't write code,
+were asked to edit a layout in the JSON editor. They got stuck on:
+
+- JSON syntax itself.
+- The keys: `type`, `props` and token names meant nothing to them.
+- Adding a section such as a header: nothing showed how.
+- Picturing where a section would land without being able to move it there.
+- They said fixing it in Figma and re-exporting would be easier.
+
+**What replaces the JSON editor.** A section list editor on `/pipeline`. The
+preview, the diff and the major/minor/patch verdict stay as they are.
+
+| Finding | Editor behaviour |
+| --- | --- |
+| JSON syntax | No JSON. Each section is a card in a list; its props are form fields |
+| Confusing keys | Plain labels: "Promo banner", not `PromoHero`; "Title", not `props.title` |
+| Can't add a section | An "Add section" menu with a thumbnail per section type, limited to types the brand's tokens support and, for `"context": "product"` types (`ProductOverview`, `ProductShowcase`), to the product screen |
+| Can't picture placement | Drag a card to reorder, preview updating as you drag; selecting a card highlights its section in the preview |
+| (keyboard access) | Move up / move down buttons on each card do everything dragging does |
+
+Each card also has a delete button, with an undo.
+
+As built:
+
+- Dragging uses pointer events, not HTML drag and drop, so it also works by
+  touch. The preview shows a pure reorder at once instead of waiting for the
+  check.
+- The JSON editor is still there behind "Edit as JSON", on the same draft. The
+  example edits and the key reference appear only in that mode; the cards keep
+  "Reset to published". A screen whose JSON is broken can't be shown as cards
+  until it is fixed or reset.
+- Empty required fields, out-of-range numbers and bad image paths show on the
+  card and turn the verdict to "Not ready to publish" before the server is asked.
+- `GET /api/brands/<brand>/pipeline` returns `reference.supported`, the section
+  types the brand has every token for, which the add menu uses.
+- Screen-level settings (`fit`, `gap`) are editable only as JSON.
+
+**Fields come from the contract.** `contracts/components.json` already types every
+prop, so the form is generated from it:
+
+| Prop type | Field |
+| --- | --- |
+| `string` | Text input; `required` props can't be left empty |
+| `enum` | Select with its `values` |
+| `token` | Select of the brand's tokens in that `group`, shown by plain name |
+| `number` | Number input, bounded by the rule's `min`/`max` |
+| `boolean` | Checkbox |
+| `asset` | Select of every image the brand's layouts and catalogue already use, with a thumbnail, plus "Custom path…" for a typed path. No uploads |
+| `link` | Select of the version's screens by plain name ("Shop", "Basket"), plus "A product…", which opens the product picker and stores `product/<id>` |
+| `products` | Product picker: search the version's catalogue by name and image, add, remove and reorder; stores catalogue ids |
+| `list` | Repeatable rows (see below) |
+
+Link and product pickers offer only what the version holds, so the two
+catalogue refusals at publish (an unknown product id, a link to a missing
+screen) can't be reached from the editor.
+
+**List props.** Every `list` in the contract is a list of objects with its own
+typed fields, for example `SiteHeader.links`: required, 1 to 8 items, each a
+label, a link and an active flag. Each row is a small sub-form built from the
+`items` rules with the same field table. Rows have add, delete and move up/down
+buttons, no drag. Add is disabled at `max` and delete at `min`, and the reason
+is shown beside the button rather than only in the verdict.
+
+**New sections start filled.** A section added from the menu is a copy of an
+instance of that type from the brand's current version, if one exists, so a
+new header already has the brand's links. Otherwise it gets `sampleProps` from
+`frontend/app/pipeline/model.ts`, with placeholder text and assets the card
+flags for replacement. Either way it validates the moment it lands.
+
+Display names live in the contract: a `label` per section type, per prop and
+per list item field (for example `"PromoHero": {"label": "Promo banner"}`),
+not hard-coded in the frontend. Section `id`s are generated on
+add and never shown, so the diff can still tell a move from a removal.
+
+Because the editor offers only valid types, props and tokens, an invalid layout
+can only come from an empty required field or a mistyped custom image path, and
+the card flags both; publish validation stays as the backstop.
+
+**Options considered.**
+
+- A. Section list editor with drag to reorder. **Chosen**: it answers every
+  finding. Estimated three to five days: 16 thumbnails, list sub-forms, link
+  and product pickers, drag with a live preview, keyboard parity and preview
+  highlighting.
+- B. Free drag-and-drop canvas onto the preview. Rejected: it implies free
+  placement, but a screen is an ordered list with no nesting; it needs a second
+  keyboard path anyway; it needs all of A's forms and pickers on top of the
+  canvas.
+- C. Layouts edited in Figma and exported by a plugin. Deferred: closest to
+  "I'd rather fix it in Figma", but it revives the Figma sync cut from scope and
+  is a week or more.
+
+**Done when.** A tester who has never seen Strata can add a header, move the
+promo banner to the top and change its title without help, using the keyboard
+only or the mouse only. Re-test with the original tasks and one or two new
+people, and record what still trips them up.
+
 ## Out of scope for now
 
 Nested layouts, mobile, personalization, real product data, checkout, accounts,
 payments, a server-side cart, and any forms or actions beyond the planned list.
 
 Deferred until after the demo: the Celery build pipeline and SSE progress, the
-Figma variable sync, and a drag editor.
+Figma variable sync, and a free-form drag canvas (the section list editor
+above replaces it).

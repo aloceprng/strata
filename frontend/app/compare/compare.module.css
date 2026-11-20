@@ -2,7 +2,7 @@
   max-width: 1180px;
   margin: 0 auto;
   padding: 0 28px 80px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-strata), Arial, Helvetica, sans-serif;
   color: #14141a;
 }
 
@@ -14,7 +14,8 @@
   padding: 40px 0 24px;
   border-bottom: 1px solid #e4e4e7;
 }
-.eyebrow { margin: 0; font: 600 10px/1 Arial, Helvetica, sans-serif; letter-spacing: 0.02em; color: #8a8a96; }
+.eyebrow { margin: 0; font: 600 10px/1 var(--font-strata), Arial, Helvetica, sans-serif; letter-spacing: 0.02em; color: #8a8a96; }
+.eyebrowRow { display: flex; align-items: center; gap: 4px; }
 .title { display: flex; align-items: baseline; gap: 10px; margin: 8px 0 0; font-size: 32px; font-weight: 700; letter-spacing: -0.03em; }
 .vs { font-size: 16px; font-weight: 500; color: #9a9aa4; }
 .picker {
@@ -36,11 +37,11 @@
 
 .columnsHead,
 .row { display: grid; grid-template-columns: 220px 1fr 1fr; gap: 16px; }
-.columnsHead { padding-bottom: 8px; font: 600 10px/1 Arial, Helvetica, sans-serif; letter-spacing: 0.02em; color: #9a9aa4; text-transform: uppercase; }
+.columnsHead { padding-bottom: 8px; font: 600 10px/1 var(--font-strata), Arial, Helvetica, sans-serif; letter-spacing: 0.02em; color: #9a9aa4; text-transform: uppercase; }
 .row { padding: 16px 0; border-top: 1px solid #f0f0f2; align-items: stretch; }
 .rowHead h3 { margin: 0 0 8px; font-size: 14px; font-weight: 650; }
 .tags { display: flex; flex-wrap: wrap; gap: 3px; }
-.tags code { padding: 2px 5px; border-radius: 3px; background: #f3f3f5; font: 10px/1.4 Arial, Helvetica, sans-serif; color: #7a7a84; }
+.tags code { padding: 2px 5px; border-radius: 3px; background: #f3f3f5; font: 10px/1.4 var(--font-strata), Arial, Helvetica, sans-serif; color: #7a7a84; }
 
 .stage {
   display: flex;
@@ -63,7 +64,7 @@
   padding: 8px 10px;
   border-bottom: 1px solid #e4e4e7;
   text-align: left;
-  font: 600 10px/1 Arial, Helvetica, sans-serif;
+  font: 600 10px/1 var(--font-strata), Arial, Helvetica, sans-serif;
   letter-spacing: 0.02em;
   color: #9a9aa4;
   text-transform: uppercase;
@@ -73,7 +74,7 @@
 .table tr[data-same] td { color: #b0b0b8; }
 .table tr[data-same] code { color: #b0b0b8; }
 .value { display: inline-flex; align-items: center; gap: 8px; }
-.value code { font: 11px/1.4 Arial, Helvetica, sans-serif; color: #14141a; }
+.value code { font: 11px/1.4 var(--font-strata), Arial, Helvetica, sans-serif; color: #14141a; }
 .swatch { width: 16px; height: 16px; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12); flex: none; }
 .alias { color: #9a9aa4 !important; }
 

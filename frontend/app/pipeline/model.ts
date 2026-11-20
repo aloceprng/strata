@@ -17,6 +17,7 @@ export type Version = {
 };
 
 export type PropRule = {
+  label?: string;
   type: "string" | "enum" | "boolean" | "number" | "asset" | "token" | "list" | "products" | "link";
   required?: boolean;
   values?: string[];
@@ -26,11 +27,20 @@ export type PropRule = {
   items?: Record<string, PropRule>;
 };
 
+export type SectionRule = {
+  label?: string;
+  context?: string;
+  tokens?: string[];
+  props: Record<string, PropRule>;
+};
+
 export type Reference = {
   schemaVersion: number;
   fits: string[];
-  sections: Record<string, { tokens?: string[]; props: Record<string, PropRule> }>;
+  sections: Record<string, SectionRule>;
   tokenOptions: Record<string, string[]>;
+  /** section types this brand fully supports */
+  supported?: string[];
   products?: string[];
 };
 
@@ -41,7 +51,8 @@ export type Pipeline = {
   reference: Reference;
 };
 
-const SAMPLE_ASSET = "/products/brand/name.png";
+export const SAMPLE_ASSET = "/products/brand/name.png";
+export const SAMPLE_TEXT = "Text";
 
 /** A placeholder value that passes the rule, so a pasted snippet validates. */
 export function sampleValue(rule: PropRule, tokens: Record<string, string[]> = {}): unknown {
@@ -63,7 +74,7 @@ export function sampleValue(rule: PropRule, tokens: Record<string, string[]> = {
     case "list":
       return Array.from({ length: Math.max(rule.min ?? 1, 1) }, () => sampleProps(rule.items ?? {}, tokens));
     default:
-      return "Text";
+      return SAMPLE_TEXT;
   }
 }
 

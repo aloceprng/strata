@@ -798,6 +798,8 @@ a.strata-nav-link[href]:hover { color: var(--colour-text-primary); }
 
 /* screen fitting */
 
+/* brand screens use the brand body font, not poppins */
+.strata-screen { font-family: var(--font-body-family); }
 .strata-screen[data-fit="viewport"] {
   height: 100dvh;
   min-height: 0;
